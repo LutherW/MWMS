@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>会员登录 - {site.name}</title>
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/icons.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/af.ui.base.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+<!--jqMobi主JS-->
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/jq.appframework.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/ui/appframework.ui.js"></script>
+<!--jqMobi插件-->
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/plugins/jq.slidemenu.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/base.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/login_validate.js"></script>
+</head>
+
+<body>
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-footer="main_footer">
+      <header>
+        <a href="javascript:;" onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>会员登录</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      <div class="form-box">
+        <form id="loginform" name="loginform" url="{config.webpath}tools/submit_ajax.ashx?action=user_login&site={site.build_path}">
+          <input id="txtUserName" name="txtUserName" type="text" placeholder="用户名">
+          <input id="txtPassword" name="txtPassword" type="password" placeholder="登录密码">
+          <input id="btnSubmit" name="btnSubmit" type="submit" value="登录" class="btn red full">
+        </form>
+      </div>
+      <div id="msgtips" style="display:none;text-align:center;color:#F00;font-size:12px;line-height:1.5em;"></div>
+      <div class="link-box">
+        <a href="<%linkurl("register")%>" data-ignore="true">用户注册</a>
+      </div>
+      <input id="turl" name="turl" type="hidden" value="{turl}" />
+      <div class="oauth-list">
+        <h2>合作网站登录</h2>
+        <%set DataTable oauth_list=get_oauth_app_list(0, "is_mobile=0 or is_mobile=2")%> <!--取得一个DataTable-->
+        <%foreach(DataRow dr in oauth_list.Rows)%>
+        <a href="{config.webpath}api/oauth/{dr[api_path]}/index.aspx" data-ignore="true"><img src="{dr[img_url]}" alt="{dr[title]}" /></a>
+        <%/foreach%>
+      </div>
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+    
+	</div>
+    
+    <!--底部导航-->
+    <%template src="_footer.html"%>
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    <%template src="_nav.html"%>
+    <!--/左侧导航-->
+      
+  </div>
+</div>
+</body>
+</html>

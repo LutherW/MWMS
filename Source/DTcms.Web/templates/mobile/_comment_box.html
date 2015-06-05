@@ -1,0 +1,40 @@
+﻿      <%set int comment_count=get_comment_count(model.id, "is_lock=0")%><!--取得评论总数-->
+      <script type="text/javascript" src="{config.webpath}scripts/jquery/Validform_v5.3.2_min.js"></script>
+      <script type="text/javascript" src="{config.webpath}scripts/lhgdialog/lhgdialog.js?skin=idialog"></script>
+      <script type="text/javascript">
+        //初始化评论列表
+		function InitCommentList(){
+			CommentAjaxList('#btnLoadComment','#comment_list',10,{comment_count},'{config.webpath}tools/submit_ajax.ashx?action=comment_list&article_id={model.id}');
+		}
+		//页面加载完毕事件
+		$(document).ready(function(){
+			//初始化评论列表
+			InitCommentList(); //加载第一页评论列表
+			//初始化发表评论表单
+			AjaxInitForm('#comment_form', '#btnSubmit', 1);
+        });
+		
+      </script>
+      <div class="section">
+        <h1><span>共{comment_count}条评论</span>网友评论</h1>
+      </div>
+      <div>
+        <div class="comment-add">
+          <form id="comment_form" name="comment_form" url="{config.webpath}tools/submit_ajax.ashx?action=comment_add&article_id={model.id}">
+            <div><textarea id="txtContent" name="txtContent" rows="3" placeholder="吐槽一下" datatype="*" nullmsg="请填写评论内容" errormsg="请填写评论内容" sucmsg=" "></textarea></div>
+            <div class="btn-list">
+              <input id="btnSubmit" name="submit" type="submit" value="发表" class="btn" />
+              <input id="txtCode" name="txtCode" type="text" class="code" maxlength="4" placeholder="验证码" datatype="s4-4" nullmsg="请填写验证码" errormsg="请填写4位验证码" sucmsg=" " />
+              <a href="javascript:;" onclick="ToggleCode(this, '{config.webpath}tools/verify_code.ashx');return false;"><img src="{config.webpath}tools/verify_code.ashx" width="80" height="25" style="vertical-align:middle;" /> 看不清楚？</a>
+            </div>
+          </form>
+        </div>
+        <ol id="comment_list" class="comment-list">
+          <p class="nodata">暂无评论，快来抢沙发吧！</p>
+        </ol>
+      </div>
+      <%if({comment_count}>0)%>
+      <div class="more-comment">
+        <input id="btnLoadComment" type="button" value="加载更多评论" class="btn" onclick="InitCommentList();">
+      </div>
+      <%/if%>

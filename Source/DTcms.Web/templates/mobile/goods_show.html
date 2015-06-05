@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<%set string category_title=get_category_title(model.category_id,"商品介绍")%>
+<title>{model.title} - {category_title} - {site.name}</title>
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/icons.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/af.ui.base.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/idangerous.swiper.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+<link rel="stylesheet" type="text/css" href="{config.webpath}scripts/artdialog/ui-dialog.css" />
+<!--jqMobi主JS-->
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/jq.appframework.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/ui/appframework.ui.js"></script>
+<!--jqMobi插件-->
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/plugins/jq.slidemenu.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/idangerous.swiper-2.1.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/artdialog/dialog-plus-min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/base.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/cart.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+      //初始化幻灯片插件
+	  var mySwiper = new Swiper('.swiper-container',{
+		calculateHeight:true,
+		resizeReInit:true,
+		pagination:".pagination",
+		autoplay:5000,
+		paginationClickable:true
+	  });
+	  //初始化规格事件
+	  initGoodsSpec('{config.webpath}tools/submit_ajax.ashx?action=get_article_goods_info');
+	});
+</script>
+</head>
+
+<body>
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-header="main_header" data-footer="main_footer">
+      <!--幻灯片-->
+      <div id="slider" class="swiper-container">
+        <div class="swiper-wrapper">
+          <%if(model.albums!=null)%>
+          <%foreach(DTcms.Model.article_albums modelt in model.albums)%>
+          <div class="swiper-slide"><img src="{modelt.thumb_path}"/></div>
+          <%/foreach%>
+          <%/if%>
+        </div>
+        <div class="pagination"></div>
+      </div>
+      <!--/幻灯片-->
+      
+      <!--商品信息-->
+      <script type="text/javascript" src="{config.webpath}tools/submit_ajax.ashx?action=view_article_click&id={model.id}&click=1&hide=1"></script>
+      <div class="goods-btn">
+		<h1>{model.title}</h1>
+        <div class="price-box">
+          <div>市场价：<s id="commodityMarketPrice">¥{model.fields[market_price]}</s></div>
+          <div>销售价：<b id="commoditySellPrice">¥{model.fields[sell_price]}</b></div>
+        </div>
+        
+        <div id="goodsSpecBox" class="spec-box">
+          <!--商品规格-->
+          <%set List<DTcms.Model.article_goods_spec> specList=get_article_goods_spec(model.id, "parent_id=0")%>
+          <%if(specList!=null)%>
+          <%foreach(DTcms.Model.article_goods_spec modelt1 in specList)%>
+          <dl>
+            <dt>{modelt1.title}</dt>
+            <dd>
+              <ul class="items">
+                <!--规格选项-->
+                <%set List<DTcms.Model.article_goods_spec> itemList=get_article_goods_spec(model.id, "parent_id="+modelt1.spec_id)%>
+                <%if(itemList!=null)%>
+                <%foreach(DTcms.Model.article_goods_spec modelt2 in itemList)%>
+                <li>
+                  <a specid="{modelt2.spec_id}" title="{modelt2.title}" href="javascript:;">
+                    <%if(modelt2.img_url!=null&&modelt2.img_url!="")%>
+                    <img src="{modelt2.img_url}" />
+                    <%else%>
+                    <span>{modelt2.title}</span>
+                    <%/if%>
+                  </a>
+                </li>
+                <%/foreach%>
+                <%/if%>
+                <!--/规格选项-->
+              </ul>
+            </dd>
+          </dl>
+          <%/foreach%>
+          <%/if%>
+          <!--/商品规格-->
+        </div>
+        
+        <div class="input-box">
+            购买数量：
+            <div class="listbox">
+              <a class="min" onclick="addCartNum(-1);">-</a>
+              <input id="commodityArticleId" type="hidden" value="{model.id}" />
+              <input id="commodityGoodsId" type="hidden" value="0" />
+              <input id="commoditySelectNum" name="commoditySelectNum" type="text" value="1" readonly />
+              <a class="max" onclick="addCartNum(1);">+</a>
+            </div>
+        </div>
+        <div id="buyButton" class="btn-box">
+          <div class="col">
+            <button class="btn buy over" onclick="cartAdd(this,'{config.webpath}',1,'<%linkurl("shopping")%>');" disabled="disabled">立即购买</button>
+          </div>
+          <div class="col">
+            <button class="btn add over" onclick="cartAdd(this,'{config.webpath}',0,'<%linkurl("cart")%>');" disabled="disabled">加入购物车</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="goods-item">
+        <h2>商品参数</h2>
+        <dl>
+          <dt>商品货号：</dt>
+          <dd id="commodityGoodsNo">{model.fields[goods_no]}</dd>
+        </dl>
+        <dl>
+          <dt>库存情况：</dt>
+          <dd id="commodityStockNum">{model.fields[stock_quantity]}件</dd>
+        </dl>
+        <dl>
+          <dt>上架时间：</dt>
+          <dd>{model.add_time}</dd>
+        </dl>
+      </div>
+      
+      <div>
+        <ul class="list inset listview">
+          <li><a href="#contentPanel" data-refresh-ajax="true">图文介绍</a></li>
+          <li><a href="#commentPanel">商品评论(<script type="text/javascript" src="{config.webpath}tools/submit_ajax.ashx?action=view_comment_count&id={model.id}"></script>条)</a></li>
+        </ul>
+      </div>
+      <!--/商品信息-->
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+    
+	</div>
+    
+    <!--页面头部-->
+    <%template src="_header.html"%>
+    <!--/页面头部-->
+    
+    <!--底部导航-->
+    <%template src="_footer.html"%>
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    <%template src="_nav.html"%>
+    <!--/左侧导航-->
+    
+    <!--商品介绍-->
+    <div id="contentPanel" class="panel" data-footer="none">
+      <header>
+        <a onclick="$.ui.goBack();" class="backButton">返回</a>
+        <h1>商品介绍</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      <div class="meta">
+        <h1 class="meta-tit">{model.title}</h1>
+      </div>
+      <div class="entry">
+        {model.content}
+      </div>
+    </div>
+    <!--/商品介绍-->
+    
+    <!--评论-->
+    <div id="commentPanel" class="panel" data-footer="none">
+      <header>
+        <a onclick="$.ui.goBack();" class="backButton">返回</a>
+        <h1>商品评论</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      <%template src="_comment_box.html"%>
+    </div>
+    <!--/评论-->
+      
+  </div>
+</div>
+</body>
+</html>

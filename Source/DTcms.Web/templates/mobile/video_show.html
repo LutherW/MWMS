@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<%set string category_title=get_category_title(model.category_id,"新闻资讯")%>
+<title>{model.title} - {category_title} - {site.name}</title>
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/icons.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/af.ui.base.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+<!--jqMobi主JS-->
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/jq.appframework.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/ui/appframework.ui.js"></script>
+<!--jqMobi插件-->
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/plugins/jq.slidemenu.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/ckplayer/ckplayer.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/base.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(e) {
+		//设置视频容器大小
+		winResize();
+		$(window).resize(function() {
+			winResize();
+		});
+		//初始化视频容器
+		initCKPlayer('video-box', '{model.fields[video_src]}', '{config.webpath}scripts/ckplayer/ckplayer.swf');
+    });
+	//改变大小函数
+	function winResize(){
+		var w = $(".video-box").parent().width();
+		var h = w*9/16;
+		$(".video-box").width(w).height(h);
+	}
+</script>
+</head>
+
+<body>
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-header="main_header" data-footer="main_footer">
+      <!--视频容器-->
+      <div id="video-box" class="video-box"></div>
+      <!--/视频容器-->
+      
+      <!--视频详细-->
+      <div class="meta">
+        <h1 class="meta-tit">{model.title}</h1>
+        <p class="meta-info">
+          <span class="time">{model.add_time}</span>
+          <span class="view"><script type="text/javascript" src="{config.webpath}tools/submit_ajax.ashx?action=view_article_click&id={model.id}&click=1"></script>次浏览</span>
+          分类：{category_title}
+        </p>
+      </div>
+      
+      <div class="entry">
+        {model.content}
+      </div>
+      <!--/视频详细-->
+      
+      <!--相关资讯-->
+      <div class="section">
+        <h1>相关视频</h1>
+      </div>
+      <div>
+        <ul class="photo-list">
+          <%set DataTable redVideo=get_article_list(channel, model.category_id, 3, "is_red=1 and id<>"+model.id)%>
+          <%foreach(DataRow dr in redVideo.Rows)%>
+          <li>
+            <a href="<%linkurl("video_show",{dr[id]})%>" data-ignore="true">
+              <img src="{dr[img_url]}" alt="{dr[title]}" />
+              <h2>{dr[title]}</h2>
+            </a>
+          </li>
+          <%/foreach%>
+          <%if(redVideo.Rows.Count<1)%>
+          <p class="nodata">同类下暂无推荐视频...</p>
+          <%/if%>
+        </ul>
+      </div>
+      <!--/相关视频-->
+      
+      <!--评论-->
+      <%template src="_comment_box.html"%>
+      <!--/评论-->
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+    
+	</div>
+    
+    <!--页面头部-->
+    <%template src="_header.html"%>
+    <!--/页面头部-->
+    
+    <!--底部导航-->
+    <%template src="_footer.html"%>
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    <%template src="_nav.html"%>
+    <!--/左侧导航-->
+      
+  </div>
+</div>
+</body>
+</html>

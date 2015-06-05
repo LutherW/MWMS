@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>我的订单 - {site.name}</title>
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/icons.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/af.ui.base.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+<link rel="stylesheet" type="text/css" href="{config.webpath}scripts/artdialog/ui-dialog.css" />
+<!--jqMobi主JS-->
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/jq.appframework.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/ui/appframework.ui.js"></script>
+<!--jqMobi插件-->
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/plugins/jq.slidemenu.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/artdialog/dialog-plus-min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/base.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(e) {
+        $(".page-list a").attr("data-ignore",true);
+    });
+</script>
+</head>
+
+<body>
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-footer="main_footer">
+      <%if {action}=="list"%>
+      <!--交易订单-->
+      <header>
+        <a href="javascript:;" onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>交易订单</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      
+      <%set DataTable list=get_order_list(10, page, "user_id="+userModel.id+" and status<=3", out totalcount)%>
+      <%set string pagelist=get_page_link(10, page, totalcount, "userorder", action, "__id__")%> <!--取得分页页码列表-->
+      <%foreach(DataRow dr in list.Rows)%>
+      <div class="wrap-box">
+        <h2><span><%=get_order_status({strtoint({dr[id]})})%></span>订单号：{dr[order_no]}</h2>
+        <a href="<%linkurl("userorder_show",{dr[id]})%>" class="img-list" data-ignore="true">
+          <%set List<DTcms.Model.article> ls=get_order_goods_list({strtoint({dr[id]})})%>
+          <%if(ls!=null)%>
+          <%foreach(DTcms.Model.article modelt in ls)%>
+          <img src="{modelt.img_url}" />
+          <%/foreach%>
+          <%/if%>
+        </a>
+        <div class="note">
+          <p>时间：{dr[add_time]}</p>
+          <p>金额：<b class="red">￥{dr[order_amount]}</b></p>
+        </div>
+      </div>
+      <%/foreach%>
+      
+      <%if(totalcount<1)%>
+      <div style="margin:0 10px;line-height:50px;text-align:center;">暂无记录</div>
+      <%/if%>
+      
+      <!--分页页码-->
+      <div class="page-list">{pagelist}</div>
+      <!--/分页页码-->
+      
+      <!--/交易订单-->
+      
+      <%else if(action=="close")%>
+      <!--已关闭订单-->
+      <header>
+        <a href="javascript:;" onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>已关闭订单</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      
+      <%set DataTable list=get_order_list(10, page, "user_id="+userModel.id+" and status>3", out totalcount)%>
+      <%set string pagelist=get_page_link(10, page, totalcount, "userorder", action, "__id__")%> <!--取得分页页码列表-->
+      <%foreach(DataRow dr in list.Rows)%>
+      <div class="wrap-box">
+        <h2><span><%=get_order_status({strtoint({dr[id]})})%></span>订单号：{dr[order_no]}</h2>
+        <a href="<%linkurl("userorder_show",{dr[id]})%>" class="img-list" data-ignore="true">
+          <%set List<DTcms.Model.article> ls=get_order_goods_list({strtoint({dr[id]})})%>
+          <%if(ls!=null)%>
+          <%foreach(DTcms.Model.article modelt in ls)%>
+          <img src="{modelt.img_url}" />
+          <%/foreach%>
+          <%/if%>
+        </a>
+        <div class="note">
+          <p>时间：{dr[add_time]}</p>
+          <p>金额：<b class="red">￥{dr[order_amount]}</b></p>
+        </div>
+      </div>
+      <%/foreach%>
+      
+      <%if(totalcount<1)%>
+      <div style="margin:0 10px;line-height:50px;text-align:center;">暂无记录</div>
+      <%/if%>
+      
+      <!--分页页码-->
+      <div class="page-list">{pagelist}</div>
+      <!--/分页页码-->
+      
+      <!--已关闭订单-->
+      <%/if%>
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+    
+	</div>
+  
+    <!--底部导航-->
+    <%template src="_footer.html"%>
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    <%template src="_nav.html"%>
+    <!--/左侧导航-->
+      
+  </div>
+</div>
+</body>
+</html>

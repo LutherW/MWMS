@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>图片分享 - {site.name}</title>
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/icons.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/af.ui.base.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+<!--jqMobi主JS-->
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/jq.appframework.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/ui/appframework.ui.js"></script>
+<!--jqMobi插件-->
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/plugins/jq.slidemenu.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/base.js"></script>
+</head>
+
+<body>
+<div id="afui">
+  <div id="content">
+    
+	<div id="mainPanel" class="panel" data-header="main_header" data-footer="main_footer">
+      <!--筛选按钮-->
+      <div class="select-bar">
+        <div class="col">
+          <a href="javascript:;" class="icon-back" onclick="history.back(-1)">返回上一页</a>
+        </div>
+        <div class="col">
+          <a href="#categoryPanel" class="icon-carat-r">图片类别</a>
+        </div>
+      </div>
+      <!--/筛选按钮-->
+      
+      <!--推荐图片-->
+      <div>
+        <ul class="album-list">
+          <%set DataTable redphoto=get_article_list(channel, 0, 3, "status=0 and is_red=1")%>
+          <%foreach(DataRow dr in redphoto.Rows)%>
+          <li>
+            <a href="<%linkurl("photo_show",{dr[id]})%>" data-ignore="true">
+              <img src="{dr[img_url]}" alt="{dr[title]}" />
+              <div class="info">
+                <h2>{dr[title]}</h2>
+                <p>{dr[zhaiyao]}</p>
+              </div>
+            </a>
+          </li>
+          <%/foreach%>
+        </ul>
+      </div>
+      <!--/推荐图片-->
+      
+      <!--最新图片-->
+      <div class="section">
+        <h1>最新图片</h1>
+      </div>
+      <div>
+        <ul class="photo-list">
+          <%set DataTable newPhoto=get_article_list(channel, 0, 9, "status=0")%>
+          <%foreach(DataRow dr in newPhoto.Rows)%>
+          <li>
+            <a href="<%linkurl("photo_show",{dr[id]})%>" data-ignore="true">
+              <img src="{dr[img_url]}" alt="{dr[title]}" />
+              <h2>{dr[title]}</h2>
+            </a>
+          </li>
+          <%/foreach%>
+        </ul>
+      </div>
+      <!--/最新图片-->
+      
+      <!--人气排行-->
+      <div class="section">
+        <h1>人气排行</h1>
+      </div>
+      <div>
+        <ul class="list listview">
+          <%set DataTable hotPhoto=get_article_list(channel, 0, 10, "status=0", "click desc")%>
+          <%loop hotdr hotPhoto%>
+          <li>
+            <a href="<%linkurl("photo_show",{hotdr[id]})%>" data-ignore="true">
+              <i class="number">{hotdr__loop__id}</i><span class="text">{hotdr[title]}</span>
+            </a>
+          </li>
+          <%/loop%>
+        </ul>
+      </div>
+      <!--人气排行-->
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+    
+	</div>
+    
+    <!--页面头部-->
+    <%template src="_header.html"%>
+    <!--/页面头部-->
+    
+    <!--底部导航-->
+    <%template src="_footer.html"%>
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    <%template src="_nav.html"%>
+    <!--/左侧导航-->
+    
+    <!--分类筛选-->
+    <div id="categoryPanel" class="panel" data-footer="none">
+      <header>
+        <a onclick="$.ui.goBack();" class="backButton">返回</a>
+        <h1>图片类别</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+    
+      <ul class="category-bar">
+        <!--大类-->
+        <%set DataTable category_list1=get_category_child_list(channel, 0)%>
+        <%loop cdr1 category_list1%>
+        <li>
+          <h2><a href="<%linkurl("photo_list",{cdr1[id]})%>" data-ignore="true">{cdr1[title]}</a></h2>
+          <p>
+            <!--小类-->
+            <%set DataTable category_list2=get_category_child_list(channel, {strtoint({cdr1[id]})})%>
+            <%loop cdr2 category_list2%>
+            <a href="<%linkurl("photo_list",{cdr2[id]})%>" data-ignore="true">{cdr2[title]}</a>
+            <%/loop%>
+            <!--/小类-->
+          </p>
+        </li>
+        <%/loop%>
+        <!--/大类-->
+      </ul>
+    </div>
+    <!--/分类筛选-->
+      
+  </div>
+</div>
+</body>
+</html>

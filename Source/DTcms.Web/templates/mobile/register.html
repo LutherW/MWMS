@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>会员注册 - {site.name}</title>
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/icons.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/af.ui.base.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+<link rel="stylesheet" type="text/css" href="{config.webpath}scripts/artdialog/ui-dialog.css" />
+<!--jqMobi主JS-->
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/jq.appframework.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/ui/appframework.ui.js"></script>
+<!--jqMobi插件-->
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/plugins/jq.slidemenu.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/artdialog/dialog-plus-min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/base.js"></script>
+</head>
+
+<body>
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-footer="main_footer">
+      <header>
+        <a href="javascript:;" onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>会员注册</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      <%if(action=="")%>
+      <!--用户注册-->
+      <script type="text/javascript" src="{config.webpath}scripts/jquery/Validform_v5.3.2_min.js"></script>
+      <script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/register_validate.js"></script>
+      <div class="form-box">
+        <form id="regform" name="regform" url="{config.webpath}tools/submit_ajax.ashx?action=user_register">
+          <%if(uconfig.regstatus==4)%>
+          <!--开启邀请注册-->
+            <div>
+              <input id="txtCode" name="txtCode" placeholder="请输入邀请码" type="text" datatype="*" sucmsg=" " />
+            </div>
+          <!--/开启邀请注册-->
+          <%/if%>
+          <div>
+            <input id="txtUserName" name="txtUserName" type="text" placeholder="用户名" datatype="s3-50" nullmsg="请输入用户名" sucmsg=" " ajaxurl="{config.webpath}tools/submit_ajax.ashx?action=validate_username" />
+          </div>
+          <div>
+            <input id="txtPassword" name="txtPassword" type="password" placeholder="登录密码" datatype="*6-20" nullmsg="请输入密码" errormsg="密码范围在6-20位之间" sucmsg=" " />
+          </div>
+          <div>
+            <input id="txtPassword1" name="txtPassword1" type="password" placeholder="再次输入密码" datatype="*" recheck="txtPassword" nullmsg="请再次输入密码" errormsg="两次输入的密码不一致" sucmsg=" " />
+          </div>
+          
+          <%if(uconfig.regstatus==1||uconfig.regstatus==2)%>
+          <!--开放注册及手机注册-->
+            <div>
+              <input id="txtMobile" name="txtMobile" type="text" placeholder="手机号码" datatype="m" nullmsg="请输入手机号码" sucmsg=" " />
+            </div>
+          <!--/开放注册及手机注册-->
+          <%/if%>
+          
+          <%if(uconfig.regstatus==1||uconfig.regstatus==3||uconfig.regstatus==4)%>
+          <!--开放注册及邮箱邀请注册-->
+          <div>
+            <input id="txtEmail" name="txtEmail" type="text" placeholder="电子邮箱" datatype="e" nullmsg="请输入邮箱地址" sucmsg=" " />
+          </div>
+          <!--/开放注册及邮箱邀请注册-->
+          <%/if%>
+          
+          <%if(uconfig.regstatus==2)%>
+          <!--开启手机注册-->
+            <div>
+              <input id="txtCode" name="txtCode" class="input code" type="text" placeholder="请输入手机收到的确认码" datatype="s4-20" />
+              <a class="send" href="javascript:;" onclick="sendSMS(this,'#txtMobile','{config.webpath}tools/submit_ajax.ashx?action=user_verify_smscode&site={site.build_path}');">发送确认码</a>
+            </div>
+          <!--/开启手机注册-->
+          <%/if%>
+          
+          <%if(uconfig.regstatus==1)%>
+          <!--开放注册-->
+            <div>
+              <input id="txtCode" name="txtCode" type="text" placeholder="验证码" class="input code"  datatype="s4-20" nullmsg="请输入验证码" sucmsg=" ">
+              <a id="verifyCode" href="javascript:;" onclick="ToggleCode(this, '{config.webpath}tools/verify_code.ashx');return false;">
+                <img src="{config.webpath}tools/verify_code.ashx" width="80" height="24" style="display:inline-block;vertical-align:middle;font-size:12px;" /> 看不清楚？
+              </a>
+            </div>
+          <!--开放注册-->
+          <%/if%>
+          
+          <div>
+            <input id="btnSubmit" name="btnSubmit" type="submit" value="注册" class="btn orange full">
+          </div>
+        </form>
+      </div>
+      <!--/用户注册-->
+      <%/if%>
+      
+      <%if(action=="close")%>
+      <!--关闭会员注册-->
+      <div class="wrap-box">
+        <h2>系统暂停注册会员</h2>
+        <div class="tip">
+          <span class="icon info"></span>
+          <p>如对您造成不便，我们深感遗憾！</p>
+          <p>如需了解开放时间，请联系本站客服或管理员。</p>
+          <p>您可以点击这里返回 <a href="<%linkurl("index")%>" data-ignore="true">网站首页</a></p>
+        </div>
+      </div>
+      <!--/关闭会员注册-->
+      <%/if%>
+      
+      <%if(action=="sendmail")%>
+      <!--发送邮箱验证-->
+      <div class="wrap-box">
+        <h2>发送邮箱验证</h2>
+        <div class="tip">
+          <span class="icon check"></span>
+          <p>注册成功，您的账户目前处于未验证状态！</p>
+          <p>请尽快登录您的注册邮箱激活该会员账户。</p>
+          <p>系统已为您发送了验证邮件，如长时间未收到，请点击这里<a href="javascript:;" onclick="sendEmail('{username}', '{config.webpath}tools/submit_ajax.ashx?action=user_verify_email&site={site.build_path}');">重新发送邮件</a>！</p>
+          <p>温馨提示：邮件验证有效期为
+          <%if {uconfig.regemailexpired}>0%>
+          {uconfig.regemailexpired}天
+          <%else%>
+          无限制
+          <%/if%>
+          </p>
+        </div>
+      </div>
+      <!--/发送邮箱验证-->
+      <%/if%>
+      
+      <%if(action=="checkmail")%>
+      <!--邮箱验证成功-->
+      <div class="wrap-box">
+        <h2>邮箱验证成功</h2>
+        <div class="tip">
+          <span class="icon check"></span>
+          <p>恭喜您{username}，已通过邮件激活会员账户</p>
+          <p>您的会员账户已经激活啦。</p>
+          <p>点击这里返回 <a href="<%linkurl("index")%>" data-ignore="true">首页</a> 或 <a href="<%linkurl("login")%>" data-ignore="true">会员中心</a> </p>
+        </div>
+      </div>
+      <!--/邮箱验证成功-->
+      <%/if%>
+      
+      <%if(action=="checkerror")%>
+      <!--注册验证失败-->
+      <div class="wrap-box">
+        <h2>注册验证失败</h2>
+        <div class="tip">
+          <span class="icon error"></span>
+          <p>用户不存在或验证已过期！</p>
+          <p>用户名不存在或者验证码已经过期。</p>
+          <p>您可以点击这里 <a href="<%linkurl("login")%>" data-ignore="true">登录</a> </p>
+        </div>
+      </div>
+      <!--/注册验证失败-->
+      <%/if%>
+      
+      <%if(action=="verify")%>
+      <!--人工审核-->
+      <div class="wrap-box">
+        <h2>等待人工审核通过</h2>
+        <div class="tip">
+          <span class="icon info"></span>
+          <p>会员账户还没有审核通过呢，再等等吧！</p>
+          <p>本站开启人工审核，如对您造成不便敬请原谅。</p>
+          <p>您可以点击这里 <a href="<%linkurl("index")%>" data-ignore="true">返回网站首页</a> </p>
+        </div>
+      </div>
+      <!--/人工审核-->
+      <%/if%>
+      
+      <%if(action=="succeed")%>
+      <!--注册成功-->
+      <div class="wrap-box">
+        <h2>恭喜您，注册成功</h2>
+        <div class="tip">
+          <span class="icon check"></span>
+          <p>恭喜您{username}成为本站会员！</p>
+          <p>从现在起，你可以享受更多的会员服务。</p>
+          <p>点击这里返回 <a href="<%linkurl("index")%>" data-ignore="true">首页</a> 或 <a href="<%linkurl("login")%>" data-ignore="true">登录</a> 会员中心吧！</p>
+        </div>
+      </div>
+      <!--/注册成功-->
+      <%/if%>
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+    
+	</div>
+    
+    <!--底部导航-->
+    <%template src="_footer.html"%>
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    <%template src="_nav.html"%>
+    <!--/左侧导航-->
+      
+  </div>
+</div>
+</body>
+</html>

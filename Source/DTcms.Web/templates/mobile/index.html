@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>{site.seo_title}</title>
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/icons.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/af.ui.base.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/idangerous.swiper.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+<!--jqMobi主JS-->
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/jq.appframework.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/ui/appframework.ui.js"></script>
+<!--jqMobi插件-->
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/plugins/jq.slidemenu.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/idangerous.swiper-2.1.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/base.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var mySwiper = new Swiper('.swiper-container',{
+			calculateHeight:true,
+			resizeReInit:true,
+			pagination:".pagination",
+			autoplay:5000,
+			paginationClickable:true
+		});
+		$("#afui #navbar a.home").addClass("pressed");
+	});
+</script>
+</head>
+
+<body>
+<div id="afui">
+  <div id="content">
+    
+	<div id="mainPanel" class="panel" data-header="main_header" data-footer="main_footer">
+      <!--首页幻灯片-->
+      <div id="slider" class="swiper-container">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="<%templateskin%>/images/banner1.jpg"/></div>
+          <div class="swiper-slide"><img src="<%templateskin%>/images/banner2.jpg"/></div>
+          <div class="swiper-slide"><img src="<%templateskin%>/images/banner3.jpg"/></div>
+        </div>
+        <div class="pagination"></div>
+      </div>
+      <!--/首页幻灯片-->
+      <!--首页图标导航-->
+      <div class="nav-list">
+        <ul>
+          <li>
+            <a href="<%linkurl("news")%>" data-ignore="true">
+              <img src="<%templateskin%>/images/icons/news.png">
+              <span>新闻资讯</span>
+            </a>
+          </li>
+          <li>
+            <a href="<%linkurl("goods")%>" data-ignore="true">
+              <img src="<%templateskin%>/images/icons/buy.png">
+              <span>购物商城</span>
+            </a>
+          </li>
+          <li>
+            <a href="<%linkurl("video")%>" data-ignore="true">
+              <img src="<%templateskin%>/images/icons/video.png">
+              <span>视频专区</span>
+            </a>
+          </li>
+          <li>
+            <a href="<%linkurl("photo")%>" data-ignore="true">
+              <img src="<%templateskin%>/images/icons/photo.png">
+              <span>图片分享</span>
+            </a>
+          </li>
+          <li>
+            <a href="<%linkurl("down")%>" data-ignore="true">
+              <img src="<%templateskin%>/images/icons/down.png">
+              <span>资源下载</span>
+            </a>
+          </li>
+          <li>
+            <a href="<%linkurl("usercenter","index")%>" data-ignore="true">
+              <img src="<%templateskin%>/images/icons/user.png">
+              <span>会员中心</span>
+            </a>
+          </li>
+          <li>
+            <a href="<%linkurl("mfeedback")%>" data-ignore="true">
+              <img src="<%templateskin%>/images/icons/msg.png">
+              <span>留言反馈</span>
+            </a>
+          </li>
+          <li>
+            <a href="<%linkurl("content","contact")%>" data-ignore="true">
+              <img src="<%templateskin%>/images/icons/tel.png">
+              <span>联系我们</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!--/首页图标导航-->
+      
+      <!--新闻资讯-->
+      <div class="section">
+        <h1>新闻资讯</h1>
+      </div>
+      <div>
+        <ul class="list listview">
+          <%set DataTable newsList=get_article_list("news", 0, 8, "status=0")%>
+          <%loop newsdr newsList%>
+          <%if(newsdr__loop__id<3)%>
+          <li>
+            <a href="<%linkurl("news_show",{newsdr[id]})%>" data-ignore="true">
+              <%if({newsdr[img_url]}!="")%>
+              <img src="{newsdr[img_url]}" />
+              <%/if%>
+              <h2>{newsdr[title]}</h2>
+              <p class="intro">{newsdr[zhaiyao]}</p>
+            </a>
+          </li>
+          <%else%>
+          <li>
+            <a href="<%linkurl("news_show",{newsdr[id]})%>" data-ignore="true">{newsdr[title]}</a>
+          </li>
+          <%/if%>
+          <%/loop%>
+        </ul>
+      </div>
+      <!--/新闻资讯-->
+      
+      <!--购物商城-->
+      <div class="section">
+        <h1>商品推荐</h1>
+      </div>
+      <div>
+        <ul class="list listview">
+          <%set DataTable redGoods=get_article_list("goods", 0, 5, "status=0 and is_red=1")%>
+          <%foreach(DataRow dr in redGoods.Rows)%>
+          <li>
+            <a href="<%linkurl("goods_show",{dr[id]})%>" data-ignore="true">
+              <img src="{dr[img_url]}" />
+              <h2>{dr[title]}</h2>
+              <div class="note">
+                <p>{dr[zhaiyao]}</p>
+                <p><i class="hot">{dr[click]}次</i><i class="price">￥{dr[sell_price]}</i>元</p>
+              </div>
+            </a>
+          </li>
+          <%/foreach%>
+        </ul>
+      </div>
+      <!--/购物商城-->
+      
+      <!--视频专区-->
+      <div class="section">
+        <h1>视频专区</h1>
+      </div>
+      <div>
+        <ul class="photo-list">
+          <%set DataTable redVideo=get_article_list("video", 0, 6, "is_red=1 and img_url<>''")%>
+          <%foreach(DataRow dr in redVideo.Rows)%>
+          <li>
+            <a href="<%linkurl("video_show",{dr[id]})%>" data-ignore="true">
+              <img src="{dr[img_url]}" alt="{dr[title]}" />
+              <h2>{dr[title]}</h2>
+            </a>
+          </li>
+          <%/foreach%>
+        </ul>
+      </div>
+      <!--视频专区-->
+      
+      <!--图片分享-->
+      <div class="section">
+        <h1>图片分享</h1>
+      </div>
+      <div>
+        <ul id="photo" class="photo-list">
+          <%set DataTable redPhoto=get_article_list("photo", 0, 9, "status=0")%>
+          <%foreach(DataRow dr in redPhoto.Rows)%>
+          <li>
+            <a href="<%linkurl("photo_show",{dr[id]})%>" data-ignore="true">
+              <img src="{dr[img_url]}" alt="{dr[title]}" />
+            </a>
+          </li>
+          <%/foreach%>
+        </ul>
+      </div>
+      <!--图片分享-->
+      
+      <!--资源下载-->
+      <div class="section">
+        <h1>资源下载</h1>
+      </div>
+      <div>
+        <ul class="list listview">
+          <%set DataTable redDown=get_article_list("down", 0, 5, "is_red=1 and img_url<>''")%>
+          <%foreach(DataRow dr in redDown.Rows)%>
+          <li>
+            <a href="<%linkurl("down_show",{dr[id]})%>" data-ignore="true">
+              <img src="{dr[img_url]}" />
+              <h2>{dr[title]}</h2>
+              <div class="note">
+                <p>{dr[zhaiyao]}</p>
+                <p><i class="hot">{dr[click]}次</i><i class="date">时间：<%datetostr({dr[add_time]},yyyy-MM-dd)%></i></p>
+              </div>
+            </a>
+          </li>
+          <%/foreach%>
+        </ul>
+      </div>
+      <!--资源下载-->
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+    
+	</div>
+    
+    <!--页面头部-->
+    <%template src="_header.html"%>
+    <!--/页面头部-->
+    
+    <!--底部导航-->
+    <%template src="_footer.html"%>
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    <%template src="_nav.html"%>
+    <!--/左侧导航-->
+      
+  </div>
+</div>
+</body>
+</html>

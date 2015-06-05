@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>站内短信息 - {site.name}</title>
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/icons.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/af.ui.base.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+<link rel="stylesheet" type="text/css" href="{config.webpath}scripts/artdialog/ui-dialog.css" />
+<!--jqMobi主JS-->
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/jq.appframework.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/ui/appframework.ui.js"></script>
+<!--jqMobi插件-->
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/plugins/jq.slidemenu.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/artdialog/dialog-plus-min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/base.js"></script>
+<script type="text/javascript">
+	function ExecPostBack(checkValue) {
+		if (arguments.length == 1) {
+			ExecDelete('{config.webpath}tools/submit_ajax.ashx?action=user_message_delete', checkValue, '#turl');
+		}else{
+			var valueArr = '';
+			$("input[name='checkId']:checked").each(function(i){
+				valueArr += $(this).val();
+				if(i < $("input[name='checkId']:checked").length - 1){
+					valueArr += ","
+				}
+			});
+			ExecDelete('{config.webpath}tools/submit_ajax.ashx?action=user_message_delete', valueArr, '#turl');
+		}
+    }
+	//分页链接不使用异步
+	$(document).ready(function(e) {
+        $(".page-list a").attr("data-ignore",true);
+    });
+</script>
+</head>
+
+<body>
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel">
+      <%if(action=="add")%>
+      <!--写短消息-->
+      <script type="text/javascript" src="{config.webpath}scripts/jquery/Validform_v5.3.2_min.js"></script>
+	  <script type="text/javascript">
+        $(function(){
+          //初始化表单
+          AjaxInitForm('#add_form', '#btnSubmit', 1, '#turl');
+        });
+      </script>
+      <header>
+        <a href="javascript:;" onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>写短消息</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      <form id="add_form" name="add_form" url="{config.webpath}tools/submit_ajax.ashx?action=user_message_add">
+        <div class="form-box">
+          <div><input name="txtUserName" id="txtUserName" type="text" placeholder="收件人用户名" datatype="s1-50"  nullmsg="请填写收件人用户名" sucmsg=" " /></div>
+          <div><input name="txtTitle" id="txtTitle" type="text" placeholder="短消息标题" datatype="*1-50" sucmsg=" " /></div>
+          <div><textarea name="txtContent" rows="3" placeholder="短消息内容" datatype="*" sucmsg=" "></textarea></div>
+          <div><input id="sendSave" name="sendSave" type="checkbox" value="true" checked="checked" /><label for="sendSave">保存到发件箱</label></div>
+          <div><input id="txtCode" name="txtCode" type="text" placeholder="验证码" style="width:100px;" datatype="*" sucmsg=" " />
+          <a id="verifyCode" href="javascript:;" onclick="ToggleCode(this, '{config.webpath}tools/verify_code.ashx');return false;" style="display:inline-block;"><img src="{config.webpath}tools/verify_code.ashx" width="80" height="30" style="vertical-align:middle;" /> 看不清楚？</a>
+          </div>
+          <div><input id="btnSubmit" name="btnSubmit" type="submit" value="确认发布" class="btn orange full" /></div>
+        </div>
+      </form>
+      <input id="turl" type="hidden" value="<%linkurl("usermessage","add")%>" />
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+      
+      <footer>
+        <a href="<%linkurl("usermessage","add")%>" data-ignore="true" class="icon pencil pressed">写消息</a>
+        <a href="<%linkurl("usermessage","system")%>" data-ignore="true" class="icon mail">系统消息</a>
+        <a href="<%linkurl("usermessage","accept")%>" data-ignore="true" class="icon message">收件箱</a>
+        <a href="<%linkurl("usermessage","send")%>" data-ignore="true" class="icon target">发件箱</a>
+      </footer>
+      <!--/写短消息-->
+      
+      <%else if(action=="system")%>
+      <!--系统消息-->
+      <header>
+        <a href="javascript:;" onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>系统消息</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      <!--操作按钮-->
+      <div class="select-bar">
+        <div class="col">
+          <a href="javascript:;" onclick="checkAll(this);" class="icon-check">全选</a>
+        </div>
+        <div class="col">
+          <a href="javascript:;" onclick="ExecPostBack();" class="icon-trash">删除</a>
+        </div>
+      </div>
+      <!--/操作按钮-->
+      
+      <div>
+        <ul class="detail-list">
+          <%set DataTable list=get_user_message_list(10, page, "accept_user_name='"+userModel.user_name+"' and type=1", out totalcount)%>
+          <%set string pagelist=get_page_link(10, page, totalcount, "usermessage", action, "__id__")%> <!--取得分页页码列表-->
+          <%foreach(DataRow dr in list.Rows)%>
+          <li>
+            <input id="checkId-{dr[id]}" name="checkId" class="checkall" type="checkbox" value="{dr[id]}" >
+            <label for="checkId-{dr[id]}">
+              <a href="<%linkurl("usermessage_show",{dr[id]})%>"  data-ignore="true">
+                <h4>{dr[title]}</h4>
+                <p><span>
+                <%if({dr[is_read]}=="1")%>
+                已阅读
+                <%else%>
+                未阅读
+                <%/if%>
+                </span>{dr[post_time]}</p>
+              </a>
+            </label>
+          </li>
+          <%/foreach%>
+          <%if(list.Rows.Count<1)%>
+          <div class="nodata">暂无记录</div>
+          <%/if%>
+        </ul>
+      </div>
+      <input id="turl" type="hidden" value="<%linkurl("usermessage","system")%>" />
+      
+      <!--分页页码-->
+      <div class="page-list">{pagelist}</div>
+      <!--/分页页码-->
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+      
+      <footer>
+        <a href="<%linkurl("usermessage","add")%>" data-ignore="true" class="icon pencil">写消息</a>
+        <a href="<%linkurl("usermessage","system")%>" data-ignore="true" class="icon mail pressed">系统消息</a>
+        <a href="<%linkurl("usermessage","accept")%>" data-ignore="true" class="icon message">收件箱</a>
+        <a href="<%linkurl("usermessage","send")%>" data-ignore="true" class="icon target">发件箱</a>
+      </footer>
+      <!--/系统消息-->
+      
+      <%else if(action=="accept")%>
+      <!--收件箱-->
+      <header>
+        <a onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>收件箱</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      <!--操作按钮-->
+      <div class="select-bar">
+        <div class="col">
+          <a href="javascript:;" onclick="checkAll(this);" class="icon-check">全选</a>
+        </div>
+        <div class="col">
+          <a href="javascript:;" onclick="ExecPostBack();" class="icon-trash">删除</a>
+        </div>
+      </div>
+      <!--/操作按钮-->
+      
+      <div>
+        <ul class="detail-list">
+          <%set DataTable list=get_user_message_list(10, page, "accept_user_name='"+userModel.user_name+"' and type=2", out totalcount)%>
+          <%set string pagelist=get_page_link(10, page, totalcount, "usermessage", action, "__id__")%> <!--取得分页页码列表-->
+          <%foreach(DataRow dr in list.Rows)%>
+          <li>
+            <input id="checkId-{dr[id]}" name="checkId" class="checkall" type="checkbox" value="{dr[id]}" >
+            <label for="checkId-{dr[id]}">
+              <a href="<%linkurl("usermessage_show",{dr[id]})%>"  data-ignore="true">
+                <h4><span>{dr[post_user_name]}</span>{dr[title]}</h4>
+                <p><span>
+                <%if({dr[is_read]}=="1")%>
+                已阅读
+                <%else%>
+                未阅读
+                <%/if%>
+                </span>{dr[post_time]}</p>
+              </a>
+            </label>
+          </li>
+          <%/foreach%>
+          <%if(list.Rows.Count<1)%>
+          <div class="nodata">暂无记录</div>
+          <%/if%>
+        </ul>
+      </div>
+      <input id="turl" type="hidden" value="<%linkurl("usermessage","accept")%>" />
+      
+      <!--分页页码-->
+      <div class="page-list">{pagelist}</div>
+      <!--/分页页码-->
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+      
+      <footer>
+        <a href="<%linkurl("usermessage","add")%>" data-ignore="true" class="icon pencil">写消息</a>
+        <a href="<%linkurl("usermessage","system")%>" data-ignore="true" class="icon mail">系统消息</a>
+        <a href="<%linkurl("usermessage","accept")%>" data-ignore="true" class="icon message pressed">收件箱</a>
+        <a href="<%linkurl("usermessage","send")%>" data-ignore="true" class="icon target">发件箱</a>
+      </footer>
+      <!--/收件箱-->
+      
+      <%else if(action=="send")%>
+      <!--发件箱-->
+      <header>
+        <a onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>发件箱</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      <!--操作按钮-->
+      <div class="select-bar">
+        <div class="col">
+          <a href="javascript:;" onclick="checkAll(this);" class="icon-check">全选</a>
+        </div>
+        <div class="col">
+          <a href="javascript:;" onclick="ExecPostBack();" class="icon-trash">删除</a>
+        </div>
+      </div>
+      <!--/操作按钮-->
+      
+      <div>
+        <ul class="detail-list">
+          <%set DataTable list=get_user_message_list(10, page, "post_user_name='"+userModel.user_name+"' and type=3", out totalcount)%>
+          <%set string pagelist=get_page_link(10, page, totalcount, "usermessage", action, "__id__")%> <!--取得分页页码列表-->
+          <%foreach(DataRow dr in list.Rows)%>
+          <li>
+            <input id="checkId-{dr[id]}" name="checkId" class="checkall" type="checkbox" value="{dr[id]}" >
+            <label for="checkId-{dr[id]}">
+              <a href="<%linkurl("usermessage_show",{dr[id]})%>"  data-ignore="true">
+                <h4><span>{dr[accept_user_name]}</span>{dr[title]}</h4>
+                <p><span>
+                <%if({dr[is_read]}=="1")%>
+                已阅读
+                <%else%>
+                未阅读
+                <%/if%>
+                </span>{dr[post_time]}</p>
+              </a>
+            </label>
+          </li>
+          <%/foreach%>
+          <%if(list.Rows.Count<1)%>
+          <div class="nodata">暂无记录</div>
+          <%/if%>
+        </ul>
+      </div>
+      <input id="turl" type="hidden" value="<%linkurl("usermessage","send")%>" />
+      
+      <!--分页页码-->
+      <div class="page-list">{pagelist}</div>
+      <!--/分页页码-->
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+      
+      <footer>
+        <a href="<%linkurl("usermessage","add")%>" data-ignore="true" class="icon pencil">写消息</a>
+        <a href="<%linkurl("usermessage","system")%>" data-ignore="true" class="icon mail">系统消息</a>
+        <a href="<%linkurl("usermessage","accept")%>" data-ignore="true" class="icon message">收件箱</a>
+        <a href="<%linkurl("usermessage","send")%>" data-ignore="true" class="icon target pressed">发件箱</a>
+      </footer>
+      <!--/发件箱-->
+      <%/if%>
+	</div>
+    
+    <!--左侧导航-->
+    <%template src="_nav.html"%>
+    <!--/左侧导航-->
+      
+  </div>
+</div>
+</body>
+</html>

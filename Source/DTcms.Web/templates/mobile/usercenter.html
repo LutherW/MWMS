@@ -1,0 +1,260 @@
+﻿<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>会员中心 - {site.name}</title>
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/icons.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/af.ui.base.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+<link rel="stylesheet" type="text/css" href="{config.webpath}scripts/artdialog/ui-dialog.css" />
+<!--jqMobi主JS-->
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/jq.appframework.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/ui/appframework.ui.js"></script>
+<!--jqMobi插件-->
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/plugins/jq.slidemenu.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/artdialog/dialog-plus-min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/base.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(e) {
+		$("#main_footer a.user").addClass("pressed");
+    });
+</script>
+</head>
+
+<body>
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-footer="main_footer">
+      <%if(action=="index")%>
+      <!--会员中心-->
+      <header>
+        <a href="javascript:;" onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>会员中心</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      
+      <div class="head-box">
+        <div class="avatar-box">
+          <%if(userModel.avatar!="")%>
+          <img src="{userModel.avatar}" />
+          <%else%>
+          <img src="<%templateskin%>/images/user_avatar.png" alt="求真像" />
+          <%/if%>
+          <h3>{userModel.user_name}</h3>
+          <p><span>会员等级：{groupModel.title}</span></p>
+          <p><span>个人成长值：{userModel.exp}点</span></p>
+        </div>
+        <div class="tip-box">
+          <dl>
+            <dt>余额</dt>
+            <dd>￥{userModel.amount}</dd>
+          </dl>
+          <dl>
+            <dt>积分</dt>
+            <dd>{userModel.point}</dd>
+          </dl>
+          <dl>
+            <dt>订单</dt>
+            <dd><%=get_user_order_count("status<3 and user_id="+userModel.id)%></dd>
+          </dl>
+          <dl>
+            <dt>短消息</dt>
+            <dd><%=get_user_message_count("type<3 and is_read=0 and accept_user_name='"+userModel.user_name+"'")%></dd>
+          </dl>
+        </div>
+      </div>
+      
+      <div>
+        <ul class="list inset listview">
+          <li><a href="<%linkurl("userorder","list")%>" data-ignore="true">交易订单</a></li>
+          <li><a href="<%linkurl("userorder","close")%>" data-ignore="true">已关闭订单</a></li>
+        </ul>
+        <ul class="list inset listview">
+          <li><a href="<%linkurl("useramount","recharge")%>" data-ignore="true">账户余额</a></li>
+          <li><a href="<%linkurl("userpoint","convert")%>" data-ignore="true">我的积分</a></li>
+          <li><a href="<%linkurl("usermessage","system")%>" data-ignore="true">站内短信</a></li>
+        </ul>
+        <ul class="list inset listview">
+          <li><a href="<%linkurl("usercenter","proinfo")%>" data-ignore="true">个人资料</a></li>
+          <li><a href="<%linkurl("usercenter","password")%>" data-ignore="true">修改密码</a></li>
+          <li><a href="<%linkurl("usercenter","exit")%>" data-ignore="true">退出登录</a></li>
+        </ul>
+      </div>
+      <!--/会员中心-->
+      
+      <%else if(action=="password")%>
+      <!--修改密码-->
+      <script type="text/javascript" src="{config.webpath}scripts/jquery/Validform_v5.3.2_min.js"></script>
+	  <script type="text/javascript">
+        $(function(){
+          //初始化表单
+          AjaxInitForm('#pwd_form', '#btnSubmit', 1);
+        });
+      </script>
+      <header>
+        <a onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>修改密码</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      <form name="pwd_form" id="pwd_form" url="{config.webpath}tools/submit_ajax.ashx?action=user_password_edit">
+        <div class="form-box">
+          <dl>
+            <dt>用户名</dt>
+            <dd>{userModel.user_name}</dd>
+          </dl>
+          <div><input name="txtOldPassword" id="txtOldPassword" type="password" placeholder="请输入旧密码" datatype="*6-20" nullmsg="请输入旧密码" errormsg="密码范围在6-20位之间" sucmsg=" " /></div>
+          <div><input name="txtPassword" id="txtPassword" type="password" placeholder="请输入新密码" datatype="*6-20" nullmsg="请输入密码" errormsg="密码范围在6-20位之间" sucmsg=" " /></div>
+          <div><input name="txtPassword1" id="txtPassword1" type="password" placeholder="请再次输入新密码" datatype="*" recheck="txtPassword" nullmsg="请再输入一次密码" errormsg="两次输入的密码不一致" sucmsg=" " /></div>
+          <div><input id="btnSubmit" name="btnSubmit" type="submit" value="确认修改" class="btn orange full" /></div>
+        </div>
+      </form>
+      <!--/修改密码-->
+      
+      <%else if(action=="proinfo")%>
+      <!--修改资料-->
+      <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/mobiscroll.custom-2.6.2.min.css" />
+	  <script type="text/javascript" src="<%templateskin%>/js/mobiscroll.custom-2.6.2.min.js"></script>
+      <script type="text/javascript" src="{config.webpath}scripts/jquery/Validform_v5.3.2_min.js"></script>
+      <script type="text/javascript" src="{config.webpath}scripts/jquery/PCASClass.js"></script>
+	  <script type="text/javascript">
+        $(document).ready(function() {
+          //初始化表单
+          AjaxInitForm('#info_form', '#btnSubmit', 1);
+		  //初始化地区
+		  var mypcas = new PCAS("txtProvince,所属省份", "txtCity,所属城市", "txtArea,所属地区");
+		  var areaArr = ("{userModel.area}").split(",");
+		  if (areaArr.length == 3) {
+			mypcas.SetValue(areaArr[0], areaArr[1], areaArr[2]);
+		  }
+		  //初始化日期选择控件
+		  var opt = {
+			preset: 'date', //日期
+			display: 'modal', //显示方式 
+			mode: 'scroller', //日期选择模式
+			dateFormat: 'yy-mm-dd', // 日期格式
+			setText: '确定', //确认按钮名称
+			cancelText: '取消',//取消按钮名籍我
+			dateOrder: 'yymmdd', //面板中日期排列格式
+			dayText: '日', monthText: '月', yearText: '年', //面板中年月日文字
+			endYear: new Date().getFullYear() //结束年份
+		  };
+		  $("#txtBirthday").mobiscroll(opt).date(opt);
+        });
+	  </script>
+      <header>
+        <a onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>个人资料</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      <form id="info_form" name="info_form" url="{config.webpath}tools/submit_ajax.ashx?action=user_info_edit">
+        <div class="form-box">
+          <dl>
+            <dt>用户名</dt>
+            <dd>{userModel.user_name}</dd>
+          </dl>
+          <dl>
+            <dt>邮箱</dt>
+            <dd><input name="txtEmail" id="txtEmail" type="text" maxlength="50" value="{userModel.email}" readonly datatype="e" sucmsg=" " /></dd>
+          </dl>
+          <dl>
+            <dt>昵称</dt>
+            <dd><input name="txtNickName" id="txtNickName" type="text" value="{userModel.nick_name}" datatype="*" sucmsg=" " /></dd>
+          </dl>
+          <dl>
+            <dt>性别</dt>
+            <dd>
+              <select name="rblSex">
+                <%if(userModel.sex=="保密")%>
+                <option value="保密" selected>保密</option>
+                <%else%>
+                <option value="保密">保密</option>
+                <%/if%>
+                <%if(userModel.sex=="男")%>
+                <option value="男" selected>男</option>
+                <%else%>
+                <option value="男">男</option>
+                <%/if%>
+                <%if(userModel.sex=="女")%>
+                <option value="女" selected>女</option>
+                <%else%>
+                <option value="女">女</option>
+                <%/if%>
+              </select>
+            </dd>
+          </dl>
+          <dl>
+            <dt>生日</dt>
+            <dd>
+              <%if {userModel.birthday}==null%>
+              <input name="txtBirthday" id="txtBirthday" type="text" />
+              <%else%>
+              <input name="txtBirthday" id="txtBirthday" type="text" value="<%datetostr({userModel.birthday},yyyy-M-d)%>" />
+              <%/if%>
+            </dd>
+          </dl>
+          <dl>
+            <dt>手机号码：</dt>
+            <dd><input name="txtMobile" id="txtMobile" type="text" maxlength="20" value="{userModel.mobile}" datatype="*" sucmsg=" " /></dd>
+          </dl>
+          <dl>
+            <dt>联系电话：</dt>
+            <dd><input name="txtTelphone" id="txtTelphone" type="text" maxlength="50" value="{userModel.telphone}" /></dd>
+          </dl>
+          <dl>
+            <dt>在线QQ：</dt>
+            <dd><input name="txtQQ" id="txtQQ" type="text" maxlength="20" value="{userModel.qq}" /></dd>
+          </dl>
+          <dl>
+            <dt>所属地区：</dt>
+            <dd>
+              <select id="txtProvince" name="txtProvince" class="select"></select>
+            </dd>
+          </dl>
+          <dl>
+            <dt>&nbsp;</dt>
+            <dd>
+              <select id="txtCity" name="txtCity" class="select"></select>
+            </dd>
+          </dl>
+          <dl>
+            <dt>&nbsp;</dt>
+            <dd>
+              <select id="txtArea" name="txtArea" class="select" datatype="*" sucmsg=" "></select>
+            </dd>
+          </dl>
+          <dl>
+            <dt>详细地址：</dt>
+            <dd><input name="txtAddress" id="txtAddress" type="text" maxlength="250" value="{userModel.address}" /></dd>
+          </dl>
+        </div>
+        
+        <div>
+          <input id="btnSubmit" name="btnSubmit" type="submit" value="确认修改" class="btn orange full" />
+        </div>
+      </form>
+      <!--/修改资料-->
+      <%/if%>
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+    
+	</div>
+    
+    <!--底部导航-->
+    <%template src="_footer.html"%>
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    <%template src="_nav.html"%>
+    <!--/左侧导航-->
+      
+  </div>
+</div>
+</body>
+</html>

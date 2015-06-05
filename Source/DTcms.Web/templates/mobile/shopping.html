@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>订单结算－{site.name}</title>
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/icons.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/af.ui.base.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+<link rel="stylesheet" type="text/css" href="{config.webpath}css/validate.css" />
+<link rel="stylesheet" type="text/css" href="{config.webpath}scripts/artdialog/ui-dialog.css" />
+<!--jqMobi主JS-->
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/jq.appframework.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/ui/appframework.ui.js"></script>
+<!--jqMobi插件-->
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/plugins/jq.slidemenu.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/artdialog/dialog-plus-min.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/PCASClass.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/base.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/cart.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(e) {
+		$("#main_footer a.basket").addClass("pressed");
+		//初始化收货地址
+		initUserAddress("#userAddress");
+		//初始化表单
+		 AjaxInitForm('#order_form', '#btnSubmit', 0);
+    });
+</script>
+</head>
+
+<body>
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-footer="main_footer" style="padding-bottom:0;">
+      <header>
+        <a href="javascript:;" onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>订单结算</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      
+      <!--订单结算-->
+      <form name="order_form" id="order_form" url="{config.webpath}tools/submit_ajax.ashx?action=order_save&site={site.build_path}">
+        <div class="wrap-box">
+          <h2>收货地址</h2>
+          <%if(userModel!=null)%>
+            <!--用户地址-->
+            <%set DataTable addrList=get_user_addr_book_list(0, "user_id="+userModel.id)%> <!--取得一个DataTable-->
+            <ul id="userAddress" class="address-list">
+              <%foreach(DataRow dr in addrList.Rows)%>
+                <%if({dr[is_default]}=="1")%>
+                <li class="selected">
+                <%else%>
+                <li>
+                <%/if%>
+                  <span>{dr[area]}{dr[address]} ({dr[accept_name]} 收)</span>
+                  <em>{dr[mobile]}</em>
+                  <input name="user_book_id" type="radio" value="{dr[id]}" />
+                  <input name="user_accept_name" type="hidden" value="{dr[accept_name]}" />
+                  <input name="user_area" type="hidden" value="{dr[area]}" />
+                  <input name="user_address" type="hidden" value="{dr[address]}" />
+                  <input name="user_mobile" type="hidden" value="{dr[mobile]}" />
+                  <input name="user_telphone" type="hidden" value="{dr[telphone]}" />
+                  <input name="user_email" type="hidden" value="{dr[email]}" />
+                  <input name="user_post_code" type="hidden" value="{dr[post_code]}" />
+                </li>
+              <%/foreach%>
+            </ul>
+            <!--/用户地址-->
+          <%/if%>
+          
+          <div>
+            <div>
+              <input name="book_id" id="book_id" type="hidden" value="0" />
+              <input name="accept_name" id="accept_name" type="text" placeholder="收货人姓名" datatype="s2-20" sucmsg=" " />
+            </div>
+            <div>
+              <select id="province" name="province" class="select"></select>
+              <select id="city" name="city" class="select"></select>
+              <select id="area" name="area" class="select" datatype="*" sucmsg=" "></select>
+            </div>
+            <div>
+              <input name="address" id="address" type="text" placeholder="详细地址，除所属省市外的详细地址" datatype="*2-100" sucmsg=" " />
+            </div>
+            <div>
+              <input name="mobile" id="mobile" type="text" placeholder="手机号码，方便短信通知，必填" datatype="m" sucmsg=" " />
+            </div>
+            <div>
+              <input name="telphone" id="telphone" type="text" placeholder="联系电话，非必填" />
+            </div>
+            <div>
+              <input name="email" id="email" type="text" placeholder="电子邮箱，方便邮件通知，非必填" />
+            </div>
+            <div>
+              <input name="post_code" id="post_code" type="text" placeholder="邮政编码，非必填" />
+            </div>
+          </div>
+        </div>
+        
+        <div class="wrap-box">
+          <h2>支付配送</h2>
+          <div>
+            <select name="payment_id" onchange="paymentAmountTotal(this);" datatype="*" sucmsg=" ">
+              <option value="" fee="0">付款方式</option>
+              <%set DataTable paymentList=get_payment_list(0, "is_lock=0 and (is_mobile=0 or is_mobile=2)")%> <!--取得一个DataTable-->
+              <%foreach(DataRow dr in paymentList.Rows)%>
+              <%set (decimal){poundage_amount}=get_payment_poundage_amount({strtoint({dr[id]})},goodsTotal.real_amount)%>
+              <option value="{dr[id]}" fee="{poundage_amount}">{dr[title]}(手续费{poundage_amount}元)</option>
+              <%/foreach%>
+            </select>
+            
+            <select name="express_id" onchange="freightAmountTotal(this);" datatype="*" sucmsg=" ">
+              <option value="" fee="0">配送方式</option>
+              <%set DataTable expressList=get_express_list(0, "is_lock=0")%> <!--取得一个DataTable-->
+              <%foreach(DataRow dr in expressList.Rows)%>
+              <option value="{dr[id]}" fee="{dr[express_fee]}">{dr[title]}(运费{dr[express_fee]}元)</option>
+              <%/foreach%>
+            </select>
+            
+            <input name="taxAmout" id="taxAmout" type="hidden" value="<%=get_order_taxamount(goodsTotal.real_amount)%>" />
+            <select name="is_invoice" id="is_invoice" onchange="taxAmoutTotal(this);">
+              <option value="0" selected>不需要开具发票</option>
+              <option value="1">需要开具发票</option>
+            </select>
+            <div id="invoiceBox" style="display:none;">
+              <input name="invoice_title" id="invoice_title" type="text" placeholder="发票抬头(100字符以内)" />
+            </div>
+            <textarea name="message" rows="2" placeholder="若您对订单有特殊的要求，可在此备注"></textarea>
+          </div>
+        </div>
+        
+        <div>
+          <ul class="car-list inset">
+            <%foreach(DTcms.Model.cart_items modelt in goodsList)%>
+            <li>
+              <a href="<%linkurl("goods_show",{modelt.article_id})%>" data-ignore="true" class="img-box" style="margin-left:0;">
+                <img src="{modelt.img_url}" />
+              </a>
+              <h2>{modelt.title}</h2>
+              <%if({modelt.spec_text}!="")%>
+                <p class="stxt">{modelt.spec_text}</p>
+              <%/if%>
+              <div class="note" style="margin-left:80px;">
+                <span>共{modelt.quantity}件</span>
+                <i class="price">￥<%=(modelt.user_price*modelt.quantity)%></i>
+              </div>
+            </li>
+            <%/foreach%>
+            <%if(goodsList.Count==0)%>
+            <div class="nodata">
+              <h1></h1>
+              <p>购物车暂无商品</p>
+            </div>
+            <%/if%>
+          </ul>
+        </div>
+        
+        <div class="wrap-box">
+          <h2>应付总金额：￥<b id="totalAmount" class="red">{goodsTotal.real_amount}</b></h2>
+          <p>运费：￥<b id="expressFee">0.00</b>元，手续费：￥<b id="paymentFee">0.00</b>元，税费：￥<b id="taxesFee">0.00</b>元</p>
+          <p>商品：￥<b id="goodsAmount">{goodsTotal.real_amount}</b>元，{goodsTotal.total_quantity}件，总积分：{goodsTotal.total_point}分</p>
+        </div>
+        
+        <div>
+          <%if(goodsTotal.total_quantity>0)%>
+            <input id="btnSubmit" name="btnSubmit" type="submit" value="确认提交" class="btn red full" />
+          <%else%>
+            <input id="btnSubmit" name="btnSubmit" type="submit" value="确认提交" class="btn gray full" disabled="disabled" />
+          <%/if%>
+        </div>
+      </form>
+      <!--/订单结算-->
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+	</div>
+  
+    <!--底部导航-->
+    <%template src="_footer.html"%>
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    <%template src="_nav.html"%>
+    <!--/左侧导航-->
+      
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>收货地址 - {site.name}</title>
+<meta name="keywords" content="{site.seo_keyword}" />
+<meta name="description" content="{site.seo_description}" />
+<link href="<%templateskin%>/css/style.css" rel="stylesheet" type="text/css" />
+<link href="{config.webpath}css/pagination.css" rel="stylesheet" type="text/css" />
+<link href="{config.webpath}scripts/artdialog/ui-dialog.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/artdialog/dialog-plus-min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/common.js"></script>
+<script type="text/javascript">
+	function ExecPostBack(checkValue) {
+		if (arguments.length == 1) {
+			ExecDelete('{config.webpath}tools/submit_ajax.ashx?action=user_address_delete', checkValue, '#turl');
+		}else{
+			var valueArr = '';
+			$("input[name='checkId']:checked").each(function(i){
+				valueArr += $(this).val();
+				if(i < $("input[name='checkId']:checked").length - 1){
+					valueArr += ","
+				}
+			});
+			ExecDelete('{config.webpath}tools/submit_ajax.ashx?action=user_address_delete', valueArr, '#turl');
+		}
+    }
+</script>
+</head>
+
+<body>
+<!--Header-->
+<%template src="_header.html"%>
+<!--/Header-->
+
+<div class="section clearfix">
+  <div class="line30"></div>
+
+  <div class="info-wrap">
+    <!--左侧导航-->
+    <%template src="_ucenter_nav.html"%>
+    <!--/左侧导航-->
+    
+    <!--右侧内容-->
+    <div class="home-box">
+      <!--收货地址列表-->
+      <div class="u-tab-head">
+        <p>
+          <a class="selected" href="<%linkurl("useraddress")%>">收货地址</a>
+        </p>
+        <span>
+          <a class="add" href="<%linkurl("useraddress_edit","add")%>">添加新地址</a>
+        </span>
+      </div>
+      <div class="u-tab-content">
+        <div class="title-div">
+          <strong>我的收货地址</strong>
+        </div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ftable">
+          <tr>
+            <th width="30">选择</td>
+            <th align="left">收货地址</td>
+            <th width="18%" align="left">手机</td>
+            <th width="20%" align="left">邮箱</td>
+            <th width="100">操作</td>
+          </tr>
+          <%set DataTable list=get_user_addr_book_list(15, page, "user_id="+userModel.id, out totalcount)%><!--取得一个DataTable-->
+          <%set string pagelist=get_page_link(15, page, totalcount, "useraddress", "__id__")%> <!--取得分页页码列表-->
+          <%foreach(DataRow dr in list.Rows)%>
+            <tr>
+              <td width="20" align="center">
+                <input name="checkId" class="checkall" type="checkbox" value="{dr[id]}" >
+              </td>
+              <td>
+                ({dr[accept_name]}) {dr[area]} {dr[address]}
+              </td>
+              <td>{dr[mobile]}</td>
+              <td>{dr[email]}</td>
+              <td align="center">
+                <a href="<%linkurl("useraddress_edit","edit",{dr[id]})%>">编辑</a> | 
+                <%if({dr[is_default]}=="0")%>
+                <a onclick="clickSubmit('{config.webpath}tools/submit_ajax.ashx?action=user_address_default&id={dr[id]}')" href="javascript:;">设为默认</a>
+                <%else%>
+                已默认
+                <%/if%> 
+              </td>
+            </tr>
+          <%/foreach%>
+          <%if(list.Rows.Count==0)%>
+            <tr><td colspan="5" align="center">暂无记录...</td></tr>
+          <%/if%>
+        </table>
+        <div class="page-foot">
+          <div class="flickr right">{pagelist}</div><!--放置页码列表-->
+          <div class="page-btns">
+            <a onclick="checkAll(this);" href="javascript:;">全选</a>
+            <span class="pipe">|</span>
+            <a onclick="ExecPostBack();" href="javascript:;">删除</a>
+          </div>
+        </div>
+      </div>
+      <input id="turl" type="hidden" value="<%linkurl("useraddress")%>" /><!--存在跳转的URL值-->
+      <!--/收货地址列表-->
+    </div>
+    <!--/右侧内容-->
+  </div>
+</div>
+
+<!--Footer-->
+<%template src="_footer.html"%>
+<!--/Footer-->
+</body>
+</html>

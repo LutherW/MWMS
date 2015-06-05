@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>站内搜索 - {config.webname}</title>
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/icons.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/af.ui.base.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+<!--jqMobi主JS-->
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/jq.appframework.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/ui/appframework.ui.js"></script>
+<!--jqMobi插件-->
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/plugins/jq.slidemenu.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/base.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(e) {
+        $(".page-list a").attr("data-ignore",true);
+		$("#main_footer a.magnifier").addClass("pressed");
+    });
+</script>
+</head>
+
+<body>
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-footer="main_footer">
+      <header>
+        <a href="javascript:;" onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>站内搜索</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      
+      <!--查询按钮-->
+      <div class="search-bar">
+        <div class="col">
+          <input id="keywords" name="keywords" type="search" placeholder="输入关健字" />
+        </div>
+        <div class="col-1">
+          <input type="button" value="查询" class="btn full" onclick="SiteSearch('<%linkurl("search")%>', '#keywords');" />
+        </div>
+      </div>
+      <%set DataTable list=get_search_list(15, out totalcount)%><!--取得一个DataTable-->
+      <%set string pagelist=get_page_link(15, page, totalcount, linkurl("search","?channel="+channel+"&keyword=" + Server.UrlEncode(keyword) + "&page=__id__"))%> <!--取得分页页码列表-->
+      <h4 style="font-weight:normal;font-size:12px;color:#8c8c8c;">搜索关健字： <b class="blue">{keyword}</b> ，共有 <b class="red">{totalcount}</b> 条记录</h4>
+      <!--/查询按钮-->
+      
+      <!--信息列表-->
+      <div>
+        <ul class="list listview listline">
+          <%foreach(DataRow dr in list.Rows)%>
+          <li>
+            <a href="{dr[link_url]}" data-ignore="true">
+              <%if({dr[img_url]}!="")%>
+              <img src="{dr[img_url]}" />
+              <%/if%>
+              <h2>{dr[title]}</h2>
+              <div class="note">
+                <p>{dr[remark]}</p>
+                <p><i class="date">时间：<%datetostr({dr[add_time]},yyyy-MM-dd)%></i></p>
+              </div>
+            </a>
+          </li>
+          <%/foreach%>
+        </ul>
+      </div>
+      <!--/信息列表-->
+      
+      <!--分页页码-->
+      <div class="page-list">{pagelist}</div>
+      <!--/分页页码-->
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+    
+	</div>
+    
+    <!--页面头部-->
+    <%template src="_header.html"%>
+    <!--/页面头部-->
+    
+    <!--底部导航-->
+    <%template src="_footer.html"%>
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    <%template src="_nav.html"%>
+    <!--/左侧导航-->
+      
+  </div>
+</div>
+</body>
+</html>

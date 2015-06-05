@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<%set string category_title=get_category_title(model.category_id,"图片分享")%>
+<title>{model.title} - {category_title} - {site.name}</title>
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/icons.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/af.ui.base.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/photoswipe/photoswipe.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+<!--jqMobi主JS-->
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/jq.appframework.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/ui/appframework.ui.js"></script>
+<!--jqMobi插件-->
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/plugins/jq.slidemenu.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/photoswipe/klass.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/photoswipe/code.photoswipe-3.0.5.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/base.js"></script>
+
+<script type="text/javascript">
+	(function(window, PhotoSwipe){
+		document.addEventListener('DOMContentLoaded', function(){
+			var options = {}, instance = PhotoSwipe.attach( window.document.querySelectorAll('#photoshow a'), options );
+		}, false);
+	}(window, window.Code.PhotoSwipe));
+</script>
+</head>
+
+<body>
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-header="main_header" data-footer="main_footer">
+      <!--图文详细-->
+      <div class="meta">
+        <h1 class="meta-tit">{model.title}</h1>
+        <p class="meta-info">
+          <span class="time">{model.add_time}</span>
+          <span class="view"><script type="text/javascript" src="{config.webpath}tools/submit_ajax.ashx?action=view_article_click&id={model.id}&click=1"></script>次浏览</span>
+          分类：{category_title}
+        </p>
+      </div>
+      
+      <div>
+        <ul id="photoshow" class="photo-list">
+          <%if(model.albums!=null)%>
+          <%foreach(DTcms.Model.article_albums modelt in model.albums)%>
+          <li>
+            <a href="{modelt.original_path}" data-ignore="true">
+              <img src="{modelt.thumb_path}" alt="{modelt.remark}" />
+            </a>
+          </li>
+          <%/foreach%>
+          <%/if%>
+        </ul>
+      </div>
+      
+      <div class="entry">
+        {model.content}
+      </div>
+      <!--/图文详细-->
+      
+      <!--相关图片-->
+      <div class="section">
+        <h1>相关图片</h1>
+      </div>
+      <div>
+        <ul class="photo-list">
+          <%set DataTable redphoto1=get_article_list(channel, model.category_id, 3, "is_red=1 and id<>"+model.id)%>
+          <%foreach(DataRow dr in redphoto1.Rows)%>
+          <li>
+            <a href="<%linkurl("photo_show",{dr[id]})%>" data-ignore="true">
+              <img src="{dr[img_url]}" alt="{dr[title]}" />
+              <h2>{dr[title]}</h2>
+            </a>
+          </li>
+          <%/foreach%>
+          <%if(redphoto1.Rows.Count<1)%>
+          <p class="nodata">同类下暂无推荐的图片...</p>
+          <%/if%>
+        </ul>
+      </div>
+      <!--/相关图片-->
+      
+      <!--评论-->
+      <%template src="_comment_box.html"%>
+      <!--/评论-->
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+    
+	</div>
+    
+    <!--页面头部-->
+    <%template src="_header.html"%>
+    <!--/页面头部-->
+    
+    <!--底部导航-->
+    <%template src="_footer.html"%>
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    <%template src="_nav.html"%>
+    <!--/左侧导航-->
+      
+  </div>
+</div>
+</body>
+</html>

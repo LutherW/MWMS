@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>购物车－{site.name}</title>
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/icons.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/jqmobi/css/af.ui.base.css" />
+<link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+<link rel="stylesheet" type="text/css" href="{config.webpath}scripts/artdialog/ui-dialog.css" />
+<!--jqMobi主JS-->
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/jq.appframework.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/ui/appframework.ui.js"></script>
+<!--jqMobi插件-->
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/jqmobi/plugins/jq.slidemenu.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/artdialog/dialog-plus-min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/base.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/cart.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(e) {
+		$("#main_footer a.basket").addClass("pressed");
+    });
+</script>
+</head>
+
+<body>
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-footer="main_footer" style="padding-bottom:0;">
+      <header>
+        <a href="javascript:;" onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>购物车</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+
+      <!--购物车-->
+      <div>
+        <ul class="car-list">
+          <%foreach(DTcms.Model.cart_items modelt in goodsList)%>
+          <li>
+            <input type="checkbox" id="checkId-{modelt.article_id}" class="checkall" onclick="selectCart();" />
+            <label class="select" for="checkId-{modelt.article_id}"></label>
+            <input name="hideArticleId" type="hidden" value="{modelt.article_id}" />
+            <input name="hideGoodsId" type="hidden" value="{modelt.goods_id}" />
+            <input name="hideStockQuantity" type="hidden" value="{modelt.stock_quantity}" />
+            <input name="hideGoodsPrice" type="hidden" value="{modelt.user_price}" />
+            <input name="hidePoint" type="hidden" value="{modelt.point}" />
+            <a href="<%linkurl("goods_show",{modelt.article_id})%>" class="img-box" data-ignore="true" style="margin-left:35px;">
+              <img src="{modelt.img_url}" />
+            </a>
+            <h2>{modelt.title}</h2>
+            <%if({modelt.spec_text}!="")%>
+            <p class="stxt">{modelt.spec_text}</p>
+            <%/if%>
+            <div class="note" style="margin-left:110px;">
+                <div class="btn-list">
+                  <a href="javascript:;" onclick="updateCart(this, '{config.webpath}', -1);">-</a>
+                  <input name="goodsQuantity" type="text" value="{modelt.quantity}" readonly />
+                  <a href="javascript:;" onclick="updateCart(this, '{config.webpath}', 1);">+</a>
+                  <a href="javascript:;" class="del" onclick="deleteCart('{config.webpath}', this);">删除</a>
+                </div>
+                <i class="price">￥{modelt.user_price}</i>
+            </div>
+          </li>
+          <%/foreach%>
+          <%if(goodsList.Count<1)%>
+          <div class="nodata">
+            <h1></h1>
+            <p>购物车暂无商品</p>
+          </div>
+          <%/if%>
+        </ul>
+      </div>
+      
+      <%if(goodsList.Count>0)%>
+      <div class="car-total">
+        <div class="btn-list">
+          <input id="jsondata" name="jsondata" type="hidden" />
+          <button class="btn orange" onclick="formSubmit(this, '{config.webpath}', '<%linkurl("shopping")%>');">去结算</button>
+        </div>
+        <div class="note">
+          <h3>总计(不含运费)：</h3>
+          <p>
+            已选择商品<b id="totalQuantity">0</b>件，
+            共计：￥<b id="totalAmount">0</b>元
+          </p>
+        </div>
+      </div>
+      <%/if%>
+      
+      <!--版权信息-->
+      <%template src="_copyright.html"%>
+      <!--/版权信息-->
+	</div>
+  
+    <!--底部导航-->
+    <%template src="_footer.html"%>
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    <%template src="_nav.html"%>
+    <!--/左侧导航-->
+      
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{model.title} - {site.name}</title>
+<meta name="keywords" content="{model.seo_keywords}" />
+<meta name="description" content="{model.seo_description}" />
+<link href="{config.webpath}css/pagination.css" rel="stylesheet" />
+<link href="<%templateskin%>/css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/common.js"></script>
+</head>
+
+<body>
+<!--Header-->
+<%template src="_header.html"%>
+<!--/Header-->
+
+<div class="section clearfix">
+
+  <div class="wrapper auto clearfix">
+    <%set string category_nav=get_category_menu("goods_list", category_id)%>
+    <div class="curr-nav">当前位置：<a href="<%linkurl("index")%>">首页</a> &gt; <a href="<%linkurl("goods")%>">购物商城</a>{category_nav}</div>
+    <!--C#代码-->
+    <%csharp%>
+      string orderby="add_time desc,id asc";
+      string strBy=DTRequest.GetQueryString("orderby");
+      if(strBy=="click"){
+        orderby="click desc";
+      }else if(strBy=="min"){
+        orderby="sell_price asc";
+      }else if(strBy=="max"){
+        orderby="sell_price desc";
+      }
+      string strwhere="status=0";
+      int minPrice=DTRequest.GetQueryInt("min_price",0);
+      if(minPrice>0){
+        strwhere+="and sell_price>="+minPrice;
+      }
+      int maxPrice=DTRequest.GetQueryInt("max_price",0);
+      if(maxPrice>0){
+        strwhere+="and sell_price<="+maxPrice;
+      }
+      Dictionary<string,string> dicSpecIds=new Dictionary<string,string>();
+      for (int i = 0; i < Request.QueryString.AllKeys.Length; i++)
+      {
+        string paramKey=Request.QueryString.GetKey(i).ToString();
+        int paramValue=Utils.StrToInt(Request.QueryString[i].ToString(),0);
+        if(paramKey.StartsWith("s_") && paramValue>0)
+        {
+          dicSpecIds.Add(paramKey,paramValue.ToString());
+        }
+      }
+    <%/csharp%>
+    <!--/C#代码-->
+    <div class="screen-box">
+      <dl>
+        <dt>分类：</dt>
+        <dd>
+          <%if(category_id==0)%>
+            <a class="selected" href="<%linkurl("gsearch")%>">全部</a>
+          <%else%>
+            <a href="<%linkurl("gsearch")%>">全部</a>
+          <%/if%>
+          <%set DataTable categoryList=get_category_child_list(channel,0)%>
+          <%foreach(DataRow cdr in categoryList.Rows)%>
+            <%if(category_id=={strtoint({cdr[id]})})%>
+              <a class="selected" href="<%linkurl("gsearch","?category_id="+{cdr[id]})%>">{cdr[title]}</a>
+            <%else%>
+              <a href="<%linkurl("gsearch","?category_id="+{cdr[id]})%>">{cdr[title]}</a>
+            <%/if%>
+          <%/foreach%>
+        </dd>
+      </dl>
+      
+      <!--规格列表-->
+      <%set DataTable specList=get_article_spec_parent(channel, model.id)%>
+      <%foreach(DataRow dr1 in specList.Rows)%>
+      <dl>
+        <dt>{dr1[title]}：</dt>
+        <dd>
+          <%set DataTable subList=get_article_spec_child({strtoint({dr1[id]})})%>
+          <%set string tempKey="s_"+{dr1[id]}%>
+          <%if(!dicSpecIds.ContainsKey(tempKey))%>
+          <a class="selected" href="<%linkurl("gsearch","?category_id="+category_id+"&min_price="+minPrice+"&max_price="+maxPrice+"&orderby="+strBy+get_article_spec_param(dicSpecIds,"s_"+{dr1[id]}+"=0"))%>">全部</a>
+          <%else%>
+          <a href="<%linkurl("gsearch","?category_id="+category_id+"&min_price="+minPrice+"&max_price="+maxPrice+"&orderby="+strBy+get_article_spec_param(dicSpecIds,"s_"+{dr1[id]}+"=0"))%>">全部</a>
+          <%/if%>
+          
+          <%foreach(DataRow dr2 in subList.Rows)%>
+            <%if(dicSpecIds.ContainsValue({dr2[id]}))%>
+              <a class="selected" href="<%linkurl("gsearch","?category_id="+category_id+"&min_price="+minPrice+"&max_price="+maxPrice+"&orderby="+strBy+get_article_spec_param(dicSpecIds,"s_"+{dr1[id]}+"="+{dr2[id]}))%>">{dr2[title]}</a>
+            <%else%>
+              <a href="<%linkurl("gsearch","?category_id="+category_id+"&min_price="+minPrice+"&max_price="+maxPrice+"&orderby="+strBy+get_article_spec_param(dicSpecIds,"s_"+{dr1[id]}+"="+{dr2[id]}))%>">{dr2[title]}</a>
+            <%/if%>
+          <%/foreach%>
+        </dd>
+      </dl>
+      <%/foreach%>
+      <!--/规格列表-->
+      
+      <!--价格区间-->
+      <dl>
+        <dt>价格：</dt>
+        <dd>
+          <%if(minPrice==0&&maxPrice==0)%>
+          <a class="selected" href="<%linkurl("gsearch","?category_id="+category_id+"&orderby="+strBy+get_article_spec_param(dicSpecIds,""))%>">全部</a>
+          <%else%>
+          <a href="<%linkurl("gsearch","?category_id="+category_id+"&orderby="+strBy+get_article_spec_param(dicSpecIds,""))%>">全部</a>
+          <%/if%>
+          
+          <%if(minPrice==0&&maxPrice==100)%>
+          <a class="selected" href="<%linkurl("gsearch","?category_id="+category_id+"&min_price=0&max_price=100&orderby="+strBy+get_article_spec_param(dicSpecIds,""))%>">0-100元</a>
+          <%else%>
+          <a href="<%linkurl("gsearch","?category_id="+category_id+"&min_price=0&max_price=100&orderby="+strBy+get_article_spec_param(dicSpecIds,""))%>">0-100元</a>
+          <%/if%>
+          
+          <%if(minPrice==101&&maxPrice==500)%>
+          <a class="selected" href="<%linkurl("gsearch","?category_id="+category_id+"&min_price=101&max_price=500&orderby="+strBy+get_article_spec_param(dicSpecIds,""))%>">101-500元</a>
+          <%else%>
+          <a href="<%linkurl("gsearch","?category_id="+category_id+"&min_price=101&max_price=500&orderby="+strBy+get_article_spec_param(dicSpecIds,""))%>">101-500元</a>
+          <%/if%>
+          
+          <%if(minPrice==501&&maxPrice==1000)%>
+          <a class="selected" href="<%linkurl("gsearch","?category_id="+category_id+"&min_price=501&max_price=1000&orderby="+strBy+get_article_spec_param(dicSpecIds,""))%>">501-1000元</a>
+          <%else%>
+          <a href="<%linkurl("gsearch","?category_id="+category_id+"&min_price=501&max_price=1000&orderby="+strBy+get_article_spec_param(dicSpecIds,""))%>">501-1000元</a>
+          <%/if%>
+          
+          <%if(minPrice==1001&&maxPrice==2000)%>
+          <a class="selected" href="<%linkurl("gsearch","?category_id="+category_id+"&min_price=1001&max_price=2000&orderby="+strBy+get_article_spec_param(dicSpecIds,""))%>">1001-2000元</a>
+          <%else%>
+          <a href="<%linkurl("gsearch","?category_id="+category_id+"&min_price=1001&max_price=2000&orderby="+strBy+get_article_spec_param(dicSpecIds,""))%>">1001-2000元</a>
+          <%/if%>
+          
+          <%if(minPrice==2000&&maxPrice==0)%>
+          <a class="selected" href="<%linkurl("gsearch","?category_id="+category_id+"&min_price=2000&orderby="+strBy+get_article_spec_param(dicSpecIds,""))%>">2000以上</a>
+          <%else%>
+          <a href="<%linkurl("gsearch","?category_id="+category_id+"&min_price=2000&orderby="+strBy+get_article_spec_param(dicSpecIds,""))%>">2000以上</a>
+          <%/if%>
+        </dd>
+      </dl>
+      <!--价格区间-->
+    </div>
+    
+    <div class="line15"></div>
+    <!--列表排序-->
+    <div class="sort-box">
+      <%if(strBy==""||strBy=="time")%>
+      <a class="first selected" href="<%linkurl("gsearch","?category_id="+category_id+"&min_price="+minPrice+"&max_price="+maxPrice+"&orderby=time"+get_article_spec_param(dicSpecIds,""))%>">上架时间</a>
+      <%else%>
+      <a class="first" href="<%linkurl("gsearch","?category_id="+category_id+"&min_price="+minPrice+"&max_price="+maxPrice+"&orderby=time"+get_article_spec_param(dicSpecIds,""))%>">上架时间</a>
+      <%/if%>
+      
+      <%if(strBy=="click")%>
+      <a class="selected" href="<%linkurl("gsearch","?category_id="+category_id+"&min_price="+minPrice+"&max_price="+maxPrice+"&orderby=click"+get_article_spec_param(dicSpecIds,""))%>">按人气</a>
+      <%else%>
+      <a href="<%linkurl("gsearch","?category_id="+category_id+"&min_price="+minPrice+"&max_price="+maxPrice+"&orderby=click"+get_article_spec_param(dicSpecIds,""))%>">按人气</a>
+      <%/if%>
+      
+      <%if(strBy=="max")%>
+      <a class="selected" href="<%linkurl("gsearch","?category_id="+category_id+"&min_price="+minPrice+"&max_price="+maxPrice+"&orderby=max"+get_article_spec_param(dicSpecIds,""))%>">价格从高到低</a>
+      <%else%>
+      <a href="<%linkurl("gsearch","?category_id="+category_id+"&min_price="+minPrice+"&max_price="+maxPrice+"&orderby=max"+get_article_spec_param(dicSpecIds,""))%>">价格从高到低</a>
+      <%/if%>
+      
+      <%if(strBy=="min")%>
+      <a class="selected" href="<%linkurl("gsearch","?category_id="+category_id+"&min_price="+minPrice+"&max_price="+maxPrice+"&orderby=min"+get_article_spec_param(dicSpecIds,""))%>">价格从低到高</a>
+      <%else%>
+      <a href="<%linkurl("gsearch","?category_id="+category_id+"&min_price="+minPrice+"&max_price="+maxPrice+"&orderby=min"+get_article_spec_param(dicSpecIds,""))%>">价格从低到高</a>
+      <%/if%>
+    </div>
+    <!--/列表排序-->
+    
+    <div class="img-list2">
+      <ul>
+        <%set DataTable goodsList=get_article_list(channel,category_id,dicSpecIds,pagesize,page,strwhere,orderby,out totalcount)%><!--数据-->
+        <%set pagelist = Utils.OutPageList(pagesize, page, totalcount, linkurl("gsearch", "?category_id="+category_id+"&min_price="+minPrice+"&max_price="+maxPrice+"&orderby="+strBy+"&page=__id__"+get_article_spec_param(dicSpecIds,"")), 8)%><!--分页-->
+        <%foreach(DataRow dr in goodsList.Rows)%>
+        <li>
+          <div class="wrap-box">
+            <div class="img-box">
+              <a title="{dr[title]}" href="<%linkurl("goods_show",{dr[id]})%>">
+                <%if({dr[is_red]}=="1")%>
+                <div class="abs-txt">推荐</div>
+                <%/if%>
+                <img src="{dr[img_url]}" />
+              </a>
+            </div>
+            <div class="info">
+              <h3><a title="{dr[title]}" href="<%linkurl("goods_show",{dr[id]})%>">{dr[title]}</a></h3>
+              <div class="col">
+                <b>￥{dr[sell_price]}</b>元
+              </div>
+              <div class="col">
+                <i>库存：{dr[stock_quantity]}件</i>
+                市场价：<s>{dr[market_price]}</s>
+              </div>
+            </div>
+          </div>
+        </li>
+        <%/foreach%>
+        <%if(goodsList.Rows.Count==0)%>
+        <div class="nodata">暂时无法找到您想要的商品！</div>
+        <%/if%>
+      </ul>
+    </div>
+    
+    <!--页码列表-->
+    <div class="page-box">
+      <div class="digg">{pagelist}</div>
+    </div>
+    <!--/页码列表-->
+    
+  </div>
+</div>
+
+<!--Footer-->
+<%template src="_footer.html"%>
+<!--/Footer-->
+</body>
+</html>

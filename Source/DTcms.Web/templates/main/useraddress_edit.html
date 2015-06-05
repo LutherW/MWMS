@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>收货地址 - {site.name}</title>
+<meta name="keywords" content="{site.seo_keyword}" />
+<meta name="description" content="{site.seo_description}" />
+<link href="<%templateskin%>/css/style.css" rel="stylesheet" type="text/css" />
+<link href="{config.webpath}css/validate.css" rel="stylesheet" type="text/css" />
+<link href="{config.webpath}scripts/artdialog/ui-dialog.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery.form.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/PCASClass.js"></script>
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/artdialog/dialog-plus-min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/common.js"></script>
+</head>
+
+<body>
+<!--Header-->
+<%template src="_header.html"%>
+<!--/Header-->
+
+<div class="section clearfix">
+  <div class="line30"></div>
+
+  <div class="info-wrap">
+    <!--左侧导航-->
+    <%template src="_ucenter_nav.html"%>
+    <!--/左侧导航-->
+    
+    <!--右侧内容-->
+    <div class="home-box">
+      <script type="text/javascript">
+		$(function(){
+		  //初始化表单
+		  AjaxInitForm('#editForm', '#btnSubmit', 1, '#turl');
+		});
+	  </script>
+      <div class="u-tab-head">
+        <p>
+          <a class="selected" href="<%linkurl("useraddress")%>">收货地址</a>
+        </p>
+        <span>
+          <a class="add" href="javascript:history.back();">返回</a>
+        </span>
+      </div>
+      
+      <%if(action=="edit")%>
+      <!--编辑地址-->
+      <script type="text/javascript">
+	    $(function(){
+			//初始化地区
+            var mypcas = new PCAS("txtProvince,所属省份", "txtCity,所属城市", "txtArea,所属地区");
+			var areaArr = ("{model.area}").split(",");
+			if (areaArr.length == 3) {
+              mypcas.SetValue(areaArr[0], areaArr[1], areaArr[2]);
+            }
+		});
+	  </script>
+      <div class="u-tab-content">
+        <div class="title-div">
+          <strong>编辑地址</strong>
+        </div>
+        <form id="editForm" name="editForm" url="{config.webpath}tools/submit_ajax.ashx?action=user_address_edit&id={model.id}">
+          <div class="form-box">
+            <dl>
+              <dt>收件人姓名：</dt>
+              <dd>
+                <input name="txtAcceptName" id="txtAcceptName" type="text" class="input txt" value="{model.accept_name}" datatype="s1-50"  nullmsg="请填写收件人用户名" sucmsg=" " />
+              </dd>
+            </dl>
+            <dl>
+              <dt>所属地区：</dt>
+              <dd>
+                <select id="txtProvince" name="txtProvince" class="select"></select>
+                <select id="txtCity" name="txtCity" class="select"></select>
+                <select id="txtArea" name="txtArea" class="select" datatype="*" nullmsg="请选择所属地区" sucmsg=" "></select>
+              </dd>
+            </dl>
+            <dl>
+              <dt>详细地址：</dt>
+              <dd>
+                <input name="txtAddress" id="txtAddress" type="text" class="input wide" value="{model.address}" datatype="*1-255" nullmsg="请填写详细地址" sucmsg=" " />
+              </dd>
+            </dl>
+            <dl>
+              <dt>手机号码：</dt>
+              <dd>
+                <input name="txtMobile" id="txtMobile" type="text" class="input txt" value="{model.mobile}" datatype="m" nullmsg="请填写手机号码" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt>联系电话：</dt>
+              <dd>
+                <input name="txtTelphone" id="txtTelphone" type="text" class="input txt" value="{model.telphone}" maxlength="30" datatype="*0-20" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt>电子邮箱：</dt>
+              <dd>
+                <input name="txtEmail" id="txtEmail" type="text" class="input txt" value="{model.email}" datatype="*0-20" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt>邮政编码：</dt>
+              <dd>
+                <input name="txtPostCode" id="txtPostCode" type="text" class="input txt" value="{model.post_code}" datatype="n0-10" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt></dt>
+              <dd>
+                <input id="txtCode" name="txtCode" class="input small" type="text" datatype="*" sucmsg=" " style="ime-mode:disabled;text-transform:uppercase;">
+                <a id="verifyCode" href="javascript:;" onclick="ToggleCode(this, '{config.webpath}tools/verify_code.ashx');return false;"><img src="{config.webpath}tools/verify_code.ashx" width="80" height="22" style="vertical-align:middle;" /> 看不清楚？</a>
+              </dd>
+            </dl>
+            <dl>
+              <dt></dt>
+              <dd><input name="btnSubmit" id="btnSubmit" type="submit" class="btn btn-success" value="确认提交" /></dd>
+            </dl>
+          </div>
+        </form>
+        <!--编辑地址-->
+        
+      <%else%>
+      <!--添加新地址-->
+      <script type="text/javascript">
+	    $(function(){
+			//初始化地区
+            var mypcas = new PCAS("txtProvince,所属省份", "txtCity,所属城市", "txtArea,所属地区");
+		});
+	  </script>
+      <div class="u-tab-content">
+        <div class="title-div">
+          <strong>添加新地址</strong>
+        </div>
+        <form id="editForm" name="editForm" url="{config.webpath}tools/submit_ajax.ashx?action=user_address_edit">
+          <div class="form-box">
+            <dl>
+              <dt>收件人姓名：</dt>
+              <dd>
+                <input name="txtAcceptName" id="txtAcceptName" type="text" class="input txt" datatype="s1-50"  nullmsg="请填写收件人用户名" sucmsg=" " />
+              </dd>
+            </dl>
+            <dl>
+              <dt>所属地区：</dt>
+              <dd>
+                <select id="txtProvince" name="txtProvince" class="select"></select>
+                <select id="txtCity" name="txtCity" class="select"></select>
+                <select id="txtArea" name="txtArea" class="select" datatype="*" nullmsg="请选择所属地区" sucmsg=" "></select>
+              </dd>
+            </dl>
+            <dl>
+              <dt>详细地址：</dt>
+              <dd>
+                <input name="txtAddress" id="txtAddress" type="text" class="input wide" maxlength="255" datatype="*0-255" nullmsg="请填写详细地址" sucmsg=" " />
+              </dd>
+            </dl>
+            <dl>
+              <dt>手机号码：</dt>
+              <dd>
+                <input name="txtMobile" id="txtMobile" type="text" class="input txt" maxlength="30" datatype="m" nullmsg="请填写手机号码" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt>联系电话：</dt>
+              <dd>
+                <input name="txtTelphone" id="txtTelphone" type="text" class="input txt" maxlength="30" datatype="*0-20" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt>电子邮箱：</dt>
+              <dd>
+                <input name="txtEmail" id="txtEmail" type="text" class="input txt" maxlength="30" datatype="*0-30" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt>邮政编码：</dt>
+              <dd>
+                <input name="txtPostCode" id="txtPostCode" type="text" class="input txt" maxlength="30" datatype="n0-10" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt></dt>
+              <dd>
+                <input id="txtCode" name="txtCode" class="input small" type="text" datatype="*" sucmsg=" " style="ime-mode:disabled;text-transform:uppercase;">
+                <a id="verifyCode" href="javascript:;" onclick="ToggleCode(this, '{config.webpath}tools/verify_code.ashx');return false;"><img src="{config.webpath}tools/verify_code.ashx" width="80" height="22" style="vertical-align:middle;" /> 看不清楚？</a>
+              </dd>
+            </dl>
+            <dl>
+              <dt></dt>
+              <dd><input name="btnSubmit" id="btnSubmit" type="submit" class="btn btn-success" value="确认提交" /></dd>
+            </dl>
+          </div>
+        </form>
+        <!--添加新地址-->
+        <%/if%>
+        <input id="turl" type="hidden" value="<%linkurl("useraddress")%>" />
+      </div>
+      
+    </div>
+    <!--/右侧内容-->
+  </div>
+</div>
+
+<!--Footer-->
+<%template src="_footer.html"%>
+<!--/Footer-->
+</body>
+</html>
