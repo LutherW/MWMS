@@ -203,7 +203,7 @@
     <dt>短信剩余数量</dt>
     <dd>
       <asp:Label ID="labSmsCount" runat="server" />
-      <span class="Validform_checktip">尚未申请？<a href="http://sms.dtcms.net" target="_blank">请点击这里注册</a></span>
+      <span class="Validform_checktip">尚未申请？<a href="http://smsDTcms.net" target="_blank">请点击这里注册</a></span>
     </dd>
   </dl>
   <dl>
@@ -232,7 +232,7 @@
     <dd>
       请不要使用系统默认账户test，因为它是公用的测试账号；<br />
       请在短信平台修改账户资料中绑定签名方可使用短信功能；<br />
-      如果您尚未申请开通，<a href="http://sms.dtcms.net" target="_blank">请点击这里注册</a>成功后填写您的用户名和密码均可正常使用。
+      如果您尚未申请开通，<a href="http://smsDTcms.net" target="_blank">请点击这里注册</a>成功后填写您的用户名和密码均可正常使用。
     </dd>
   </dl>
 </div>

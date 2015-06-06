@@ -1,6 +1,6 @@
 ﻿/*检测是否移动设备来访否则跳转*/
 if(!browserRedirect()){
-	location.href = 'http://demo.dtcms.net';
+	location.href = 'http://demoDTcms.net';
 }
 /*页面加载完毕时运行函数
 -----------------------------------------------------*/

@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AllotGoods.cs" />
+    <Compile Include="AllotOrder.cs" />
     <Compile Include="article.cs" />
     <Compile Include="article_albums.cs" />
     <Compile Include="article_attach.cs" />
@@ -56,10 +58,18 @@
     <Compile Include="article_spec.cs" />
     <Compile Include="article_tags.cs" />
     <Compile Include="article_tags_relation.cs" />
+    <Compile Include="Attach.cs" />
     <Compile Include="channel.cs" />
     <Compile Include="channel_field.cs" />
     <Compile Include="channel_site.cs" />
+    <Compile Include="CheckCost.cs" />
+    <Compile Include="CheckRecord.cs" />
+    <Compile Include="Customer.cs" />
     <Compile Include="express.cs" />
+    <Compile Include="Goods.cs" />
+    <Compile Include="GoodsAttributeValues.cs" />
+    <Compile Include="HandlingMode.cs" />
+    <Compile Include="InvoicedRecord.cs" />
     <Compile Include="mail_template.cs" />
     <Compile Include="manager.cs" />
     <Compile Include="manager_log.cs" />
@@ -72,10 +82,29 @@
     <Compile Include="payment.cs" />
     <Compile Include="plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReceivedMoney.cs" />
+    <Compile Include="ReceivedOfStoreInGoods.cs" />
+    <Compile Include="ReceivedUnitPrice.cs" />
     <Compile Include="shopping_cart.cs" />
     <Compile Include="sms_template.cs" />
+    <Compile Include="Store.cs" />
+    <Compile Include="StoreDomain.cs" />
+    <Compile Include="StoreInCost.cs" />
+    <Compile Include="StoreInGoods.cs" />
+    <Compile Include="StoreInGoodsVehicle.cs" />
+    <Compile Include="StoreInGoodsWithVehicles.cs" />
+    <Compile Include="StoreInOrder.cs" />
+    <Compile Include="StoreInUnitPrice.cs" />
+    <Compile Include="StoreMode.cs" />
+    <Compile Include="StoreOutCost.cs" />
+    <Compile Include="StoreOutGoods.cs" />
+    <Compile Include="StoreOutGoodsVehicle.cs" />
+    <Compile Include="StoreOutGoodsWithVehicles.cs" />
+    <Compile Include="StoreOutOrder.cs" />
+    <Compile Include="StoreOutUnitPrice.cs" />
     <Compile Include="sys_config.cs" />
     <Compile Include="template.cs" />
+    <Compile Include="Unit.cs" />
     <Compile Include="url_rewrite.cs" />
     <Compile Include="users.cs" />
     <Compile Include="user_addr_book.cs" />
@@ -91,6 +120,7 @@
     <Compile Include="user_oauth_app.cs" />
     <Compile Include="user_point_log.cs" />
     <Compile Include="user_recharge.cs" />
+    <Compile Include="Vehicle.cs" />
     <Compile Include="weixin_access_token.cs" />
     <Compile Include="weixin_account.cs" />
     <Compile Include="weixin_request_rule.cs" />

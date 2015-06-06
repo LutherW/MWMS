@@ -16,7 +16,7 @@ override protected void OnInit(EventArgs e)
 	base.OnInit(e);
 	StringBuilder templateBuilder = new StringBuilder(220000);
 
-	templateBuilder.Append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n<head>\r\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\r\n<title>查看站内短信息 - ");
+	templateBuilder.Append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitionalDTd\">\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n<head>\r\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\r\n<title>查看站内短信息 - ");
 	templateBuilder.Append(Utils.ObjectToStr(site.name));
 	templateBuilder.Append("</title>\r\n<meta name=\"keywords\" content=\"");
 	templateBuilder.Append(Utils.ObjectToStr(site.seo_keyword));

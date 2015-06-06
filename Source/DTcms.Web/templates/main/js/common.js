@@ -11,7 +11,7 @@ if(pageurl == '?m2w') {
     addCookie('m2wcookie', '1', 0);
 }
 if(getCookie('m2wcookie') != '1' && browserRedirect()) {
-    location.href = 'http://m.dtcms.net';
+    location.href = 'http://mDTcms.net';
 }
 /*工具类方法
 ------------------------------------------------*/
