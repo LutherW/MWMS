@@ -41,10 +41,10 @@
     <div class="content-tab-ul-wrap">
       <ul>
         <li><a class="selected" href="javascript:;">系统基本信息</a></li>
-        <li><a href="javascript:;">功能权限设置</a></li>
+        <%--<li><a href="javascript:;">功能权限设置</a></li>
         <li><a href="javascript:;">短信平台设置</a></li>
         <li><a href="javascript:;">邮件发送设置</a></li>
-        <li><a href="javascript:;">文件上传设置</a></li>
+        <li><a href="javascript:;">文件上传设置</a></li>--%>
       </ul>
     </div>
   </div>
@@ -53,17 +53,17 @@
 <!--主站基本信息-->
 <div class="tab-content">
   <dl>
-    <dt>主站名称</dt>
+    <dt>系统名称</dt>
     <dd>
       <asp:TextBox ID="webname" runat="server" CssClass="input normal" datatype="*2-255" sucmsg=" " />
       <span class="Validform_checktip">*任意字符，控制在255个字符内</span>
     </dd>
   </dl>
   <dl>
-    <dt>主站域名</dt>
+    <dt>访问域名</dt>
     <dd>
       <asp:TextBox ID="weburl" runat="server" CssClass="input normal" datatype="url" sucmsg=" " />
-      <span class="Validform_checktip">*以“http://”开头，不能绑定到频道分类</span>
+      <span class="Validform_checktip">*以“http://”开头，如：http://www.baidu.com</span>
     </dd>
   </dl>
   <dl>
@@ -79,7 +79,7 @@
     </dd>
   </dl>
   <dl>
-    <dt>客服电话</dt>
+    <dt>联系电话</dt>
     <dd>
       <asp:TextBox ID="webtel" runat="server" CssClass="input normal" />
       <span class="Validform_checktip">*非必填，区号+电话号码</span>
@@ -99,7 +99,7 @@
     </dd>
   </dl>
   <dl>
-    <dt>主站备案号</dt>
+    <dt>系统备案号</dt>
     <dd>
       <asp:TextBox ID="webcrod" runat="server" CssClass="input normal" />
     </dd>

@@ -106,11 +106,12 @@ namespace DTcms.Web.admin.settings
             txtName.Text = model.name;
             txtName.Attributes.Add("ajaxurl", "../../tools/admin_ajax.ashx?action=navigation_validate&old_name=" + Utils.UrlEncode(model.name));
             txtName.Focus(); //设置焦点，防止JS无法提交
-            if (model.is_sys == 1)
-            {
-                ddlParentId.Enabled = false;
-                txtName.ReadOnly = true;
-            }
+            //if (model.is_sys == 1)
+            //{
+            //    ddlParentId.Enabled = false;
+            //    txtName.ReadOnly = true;
+            //}
+
             txtTitle.Text = model.title;
             txtSubTitle.Text = model.sub_title;
             txtIconUrl.Text = model.icon_url;
