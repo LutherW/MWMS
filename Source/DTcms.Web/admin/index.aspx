@@ -56,9 +56,6 @@ $(function () {
           <div class="arrow"></div>
           <ul class="item">
             <li>
-              <a href="../" target="_blank">预览网站</a>
-            </li>
-            <li>
               <a href="center.aspx" target="mainframe">管理中心</a>
             </li>
             <li>

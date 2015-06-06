@@ -64,7 +64,7 @@
   <ItemTemplate>
     <tr>
       <td align="center">
-        <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Enabled='<%#bool.Parse((Convert.ToInt32(Eval("is_sys"))==0 ).ToString())%>' style="vertical-align:middle;" />
+        <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Enabled='true' style="vertical-align:middle;" />
         <asp:HiddenField ID="hidId" Value='<%#Eval("id")%>' runat="server" />
         <asp:HiddenField ID="hidLayer" Value='<%#Eval("class_layer") %>' runat="server" />
       </td>
