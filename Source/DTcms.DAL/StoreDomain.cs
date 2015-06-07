@@ -29,26 +29,26 @@ namespace DTcms.DAL
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public void Add(DTcms.Model.StoreDomain model)
+		public bool Add(DTcms.Model.StoreDomain model)
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("insert into StoreDomain(");			
-            strSql.Append("Id,Name,Remark");
+            strSql.Append("Name,Remark");
 			strSql.Append(") values (");
-            strSql.Append("@Id,@Name,@Remark");            
+            strSql.Append("@Name,@Remark");            
             strSql.Append(") ");            
             		
 			SqlParameter[] parameters = {
-			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
                         new SqlParameter("@Name", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@Remark", SqlDbType.VarChar,254)             
               
             };
 			            
-            parameters[0].Value = model.Id;                        
-            parameters[1].Value = model.Name;                        
-            parameters[2].Value = model.Remark;                        
-			            DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
+                   
+            parameters[0].Value = model.Name;                        
+            parameters[1].Value = model.Remark;  
+                      
+			return DbHelperSQL.ExecuteSql(strSql.ToString(),parameters) > 0;
             			
 		}
 		
@@ -61,7 +61,7 @@ namespace DTcms.DAL
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("update StoreDomain set ");
 			                        
-            strSql.Append(" Id = @Id , ");                                    
+                               
             strSql.Append(" Name = @Name , ");                                    
             strSql.Append(" Remark = @Remark  ");            			
 			strSql.Append(" where Id=@Id  ");
@@ -149,6 +149,22 @@ SqlParameter[] parameters = {
 				return null;
 			}
 		}
+
+        /// <summary>
+        /// 返回标题名称
+        /// </summary>
+        public string GetName(int id)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select top 1 Name from StoreDomain");
+            strSql.Append(" where id=" + id);
+            string name = Convert.ToString(DbHelperSQL.GetSingle(strSql.ToString()));
+            if (string.IsNullOrEmpty(name))
+            {
+                return "";
+            }
+            return name;
+        }
 		
 		
 		/// <summary>

@@ -74,23 +74,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="admin\article\article_edit.aspx" />
-    <Content Include="admin\article\article_list.aspx" />
-    <Content Include="admin\article\category_edit.aspx" />
-    <Content Include="admin\article\category_list.aspx" />
-    <Content Include="admin\article\comment_edit.aspx" />
-    <Content Include="admin\article\comment_list.aspx" />
     <Content Include="admin\center.aspx" />
-    <Content Include="admin\channel\attribute_field_edit.aspx" />
-    <Content Include="admin\channel\attribute_field_list.aspx" />
-    <Content Include="admin\channel\channel_edit.aspx" />
-    <Content Include="admin\channel\channel_list.aspx" />
-    <Content Include="admin\channel\site_edit.aspx" />
-    <Content Include="admin\channel\site_list.aspx" />
-    <Content Include="admin\channel\spec_edit.aspx" />
-    <Content Include="admin\channel\spec_list.aspx" />
-    <Content Include="admin\channel\tags_edit.aspx" />
-    <Content Include="admin\channel\tags_list.aspx" />
+    <Content Include="admin\customer\customer_list.aspx" />
+    <Content Include="admin\customer\customer_edit.aspx" />
     <Content Include="admin\dialog\dialog_accept.aspx" />
     <Content Include="admin\dialog\dialog_attach.aspx" />
     <Content Include="admin\dialog\dialog_channel.aspx" />
@@ -102,6 +88,15 @@
     <Content Include="admin\dialog\dialog_rewrite.aspx" />
     <Content Include="admin\dialog\dialog_spec.aspx" />
     <Content Include="admin\dialog\dialog_spec_item.aspx" />
+    <Content Include="admin\goods\goods_list.aspx" />
+    <Content Include="admin\goods\vehicle_list.aspx" />
+    <Content Include="admin\goods\vehicle_edit.aspx" />
+    <Content Include="admin\goods\unit_edit.aspx" />
+    <Content Include="admin\goods\handling_mode_edit.aspx" />
+    <Content Include="admin\goods\unit_list.aspx" />
+    <Content Include="admin\goods\store_mode_edit.aspx" />
+    <Content Include="admin\goods\handling_mode_list.aspx" />
+    <Content Include="admin\goods\store_mode_list.aspx" />
     <Content Include="admin\ie6update.html" />
     <Content Include="admin\index.aspx" />
     <Content Include="admin\js\common.js" />
@@ -147,6 +142,10 @@
     <Content Include="admin\skin\default\style.css" />
     <Content Include="admin\skin\default\valid_icons.png" />
     <Content Include="admin\skin\layout.css" />
+    <Content Include="admin\store\store_domain_edit.aspx" />
+    <Content Include="admin\store\store_domain_list.aspx" />
+    <Content Include="admin\store\store_list.aspx" />
+    <Content Include="admin\store\store_edit.aspx" />
     <Content Include="admin\users\amount_log.aspx" />
     <Content Include="admin\users\group_edit.aspx" />
     <Content Include="admin\users\group_list.aspx" />
@@ -167,16 +166,6 @@
     <Content Include="admin\users\user_edit.aspx" />
     <Content Include="admin\users\user_list.aspx" />
     <Content Include="admin\users\user_sms.aspx" />
-    <Content Include="admin\weixin\account_edit.aspx" />
-    <Content Include="admin\weixin\menu_edit.aspx" />
-    <Content Include="admin\weixin\picture_edit.aspx" />
-    <Content Include="admin\weixin\picture_list.aspx" />
-    <Content Include="admin\weixin\response_list.aspx" />
-    <Content Include="admin\weixin\sound_edit.aspx" />
-    <Content Include="admin\weixin\sound_list.aspx" />
-    <Content Include="admin\weixin\subscribe_edit.aspx" />
-    <Content Include="admin\weixin\text_edit.aspx" />
-    <Content Include="admin\weixin\text_list.aspx" />
     <Content Include="api\oauth\feixin\index.aspx" />
     <Content Include="api\oauth\feixin\result_json.aspx" />
     <Content Include="api\oauth\feixin\return_url.aspx" />
@@ -735,48 +724,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="admin\article\article_edit.aspx.cs">
-      <DependentUpon>article_edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\article\article_edit.aspx.designer.cs">
-      <DependentUpon>article_edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\article\article_list.aspx.cs">
-      <DependentUpon>article_list.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\article\article_list.aspx.designer.cs">
-      <DependentUpon>article_list.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\article\category_edit.aspx.cs">
-      <DependentUpon>category_edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\article\category_edit.aspx.designer.cs">
-      <DependentUpon>category_edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\article\category_list.aspx.cs">
-      <DependentUpon>category_list.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\article\category_list.aspx.designer.cs">
-      <DependentUpon>category_list.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\article\comment_edit.aspx.cs">
-      <DependentUpon>comment_edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\article\comment_edit.aspx.designer.cs">
-      <DependentUpon>comment_edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\article\comment_list.aspx.cs">
-      <DependentUpon>comment_list.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\article\comment_list.aspx.designer.cs">
-      <DependentUpon>comment_list.aspx</DependentUpon>
-    </Compile>
     <Compile Include="admin\center.aspx.cs">
       <DependentUpon>center.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -784,75 +731,19 @@
     <Compile Include="admin\center.aspx.designer.cs">
       <DependentUpon>center.aspx</DependentUpon>
     </Compile>
-    <Compile Include="admin\channel\attribute_field_edit.aspx.cs">
-      <DependentUpon>attribute_field_edit.aspx</DependentUpon>
+    <Compile Include="admin\customer\customer_list.aspx.cs">
+      <DependentUpon>customer_list.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="admin\channel\attribute_field_edit.aspx.designer.cs">
-      <DependentUpon>attribute_field_edit.aspx</DependentUpon>
+    <Compile Include="admin\customer\customer_list.aspx.designer.cs">
+      <DependentUpon>customer_list.aspx</DependentUpon>
     </Compile>
-    <Compile Include="admin\channel\attribute_field_list.aspx.cs">
-      <DependentUpon>attribute_field_list.aspx</DependentUpon>
+    <Compile Include="admin\customer\customer_edit.aspx.cs">
+      <DependentUpon>customer_edit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="admin\channel\attribute_field_list.aspx.designer.cs">
-      <DependentUpon>attribute_field_list.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\channel\channel_edit.aspx.cs">
-      <DependentUpon>channel_edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\channel\channel_edit.aspx.designer.cs">
-      <DependentUpon>channel_edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\channel\channel_list.aspx.cs">
-      <DependentUpon>channel_list.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\channel\channel_list.aspx.designer.cs">
-      <DependentUpon>channel_list.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\channel\site_edit.aspx.cs">
-      <DependentUpon>site_edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\channel\site_edit.aspx.designer.cs">
-      <DependentUpon>site_edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\channel\site_list.aspx.cs">
-      <DependentUpon>site_list.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\channel\site_list.aspx.designer.cs">
-      <DependentUpon>site_list.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\channel\spec_edit.aspx.cs">
-      <DependentUpon>spec_edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\channel\spec_edit.aspx.designer.cs">
-      <DependentUpon>spec_edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\channel\spec_list.aspx.cs">
-      <DependentUpon>spec_list.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\channel\spec_list.aspx.designer.cs">
-      <DependentUpon>spec_list.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\channel\tags_edit.aspx.cs">
-      <DependentUpon>tags_edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\channel\tags_edit.aspx.designer.cs">
-      <DependentUpon>tags_edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\channel\tags_list.aspx.cs">
-      <DependentUpon>tags_list.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\channel\tags_list.aspx.designer.cs">
-      <DependentUpon>tags_list.aspx</DependentUpon>
+    <Compile Include="admin\customer\customer_edit.aspx.designer.cs">
+      <DependentUpon>customer_edit.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\dialog\dialog_accept.aspx.cs">
       <DependentUpon>dialog_accept.aspx</DependentUpon>
@@ -909,6 +800,69 @@
     </Compile>
     <Compile Include="admin\dialog\dialog_spec_item.aspx.designer.cs">
       <DependentUpon>dialog_spec_item.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\goods\goods_list.aspx.cs">
+      <DependentUpon>goods_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\goods\goods_list.aspx.designer.cs">
+      <DependentUpon>goods_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\goods\vehicle_list.aspx.cs">
+      <DependentUpon>vehicle_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\goods\vehicle_list.aspx.designer.cs">
+      <DependentUpon>vehicle_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\goods\vehicle_edit.aspx.cs">
+      <DependentUpon>vehicle_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\goods\vehicle_edit.aspx.designer.cs">
+      <DependentUpon>vehicle_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\goods\unit_edit.aspx.cs">
+      <DependentUpon>unit_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\goods\unit_edit.aspx.designer.cs">
+      <DependentUpon>unit_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\goods\handling_mode_edit.aspx.cs">
+      <DependentUpon>handling_mode_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\goods\handling_mode_edit.aspx.designer.cs">
+      <DependentUpon>handling_mode_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\goods\unit_list.aspx.cs">
+      <DependentUpon>unit_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\goods\unit_list.aspx.designer.cs">
+      <DependentUpon>unit_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\goods\store_mode_edit.aspx.cs">
+      <DependentUpon>store_mode_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\goods\store_mode_edit.aspx.designer.cs">
+      <DependentUpon>store_mode_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\goods\handling_mode_list.aspx.cs">
+      <DependentUpon>handling_mode_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\goods\handling_mode_list.aspx.designer.cs">
+      <DependentUpon>handling_mode_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\goods\store_mode_list.aspx.cs">
+      <DependentUpon>store_mode_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\goods\store_mode_list.aspx.designer.cs">
+      <DependentUpon>store_mode_list.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>
@@ -1092,6 +1046,34 @@
     <Compile Include="admin\settings\url_rewrite_list.aspx.designer.cs">
       <DependentUpon>url_rewrite_list.aspx</DependentUpon>
     </Compile>
+    <Compile Include="admin\store\store_domain_edit.aspx.cs">
+      <DependentUpon>store_domain_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\store\store_domain_edit.aspx.designer.cs">
+      <DependentUpon>store_domain_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\store\store_domain_list.aspx.cs">
+      <DependentUpon>store_domain_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\store\store_domain_list.aspx.designer.cs">
+      <DependentUpon>store_domain_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\store\store_list.aspx.cs">
+      <DependentUpon>store_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\store\store_list.aspx.designer.cs">
+      <DependentUpon>store_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\store\store_edit.aspx.cs">
+      <DependentUpon>store_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\store\store_edit.aspx.designer.cs">
+      <DependentUpon>store_edit.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\users\amount_log.aspx.cs">
       <DependentUpon>amount_log.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1231,76 +1213,6 @@
     </Compile>
     <Compile Include="admin\users\user_sms.aspx.designer.cs">
       <DependentUpon>user_sms.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\weixin\account_edit.aspx.cs">
-      <DependentUpon>account_edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\weixin\account_edit.aspx.designer.cs">
-      <DependentUpon>account_edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\weixin\menu_edit.aspx.cs">
-      <DependentUpon>menu_edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\weixin\menu_edit.aspx.designer.cs">
-      <DependentUpon>menu_edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\weixin\picture_edit.aspx.cs">
-      <DependentUpon>picture_edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\weixin\picture_edit.aspx.designer.cs">
-      <DependentUpon>picture_edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\weixin\picture_list.aspx.cs">
-      <DependentUpon>picture_list.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\weixin\picture_list.aspx.designer.cs">
-      <DependentUpon>picture_list.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\weixin\response_list.aspx.cs">
-      <DependentUpon>response_list.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\weixin\response_list.aspx.designer.cs">
-      <DependentUpon>response_list.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\weixin\sound_edit.aspx.cs">
-      <DependentUpon>sound_edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\weixin\sound_edit.aspx.designer.cs">
-      <DependentUpon>sound_edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\weixin\sound_list.aspx.cs">
-      <DependentUpon>sound_list.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\weixin\sound_list.aspx.designer.cs">
-      <DependentUpon>sound_list.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\weixin\subscribe_edit.aspx.cs">
-      <DependentUpon>subscribe_edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\weixin\subscribe_edit.aspx.designer.cs">
-      <DependentUpon>subscribe_edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\weixin\text_edit.aspx.cs">
-      <DependentUpon>text_edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\weixin\text_edit.aspx.designer.cs">
-      <DependentUpon>text_edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\weixin\text_list.aspx.cs">
-      <DependentUpon>text_list.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\weixin\text_list.aspx.designer.cs">
-      <DependentUpon>text_list.aspx</DependentUpon>
     </Compile>
     <Compile Include="api\oauth\feixin\index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>

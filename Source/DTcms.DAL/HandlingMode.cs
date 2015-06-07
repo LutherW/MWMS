@@ -29,26 +29,26 @@ namespace DTcms.DAL
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public void Add(DTcms.Model.HandlingMode model)
+		public bool Add(DTcms.Model.HandlingMode model)
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("insert into HandlingMode(");			
-            strSql.Append("Id,Name,Remark");
+            strSql.Append("Name,Remark");
 			strSql.Append(") values (");
-            strSql.Append("@Id,@Name,@Remark");            
+            strSql.Append("@Name,@Remark");            
             strSql.Append(") ");            
             		
 			SqlParameter[] parameters = {
-			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
+       
                         new SqlParameter("@Name", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@Remark", SqlDbType.VarChar,254)             
               
             };
 			            
-            parameters[0].Value = model.Id;                        
-            parameters[1].Value = model.Name;                        
-            parameters[2].Value = model.Remark;                        
-			            DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
+                   
+            parameters[0].Value = model.Name;                        
+            parameters[1].Value = model.Remark;                        
+			    return        DbHelperSQL.ExecuteSql(strSql.ToString(),parameters) > 0;
             			
 		}
 		
@@ -60,8 +60,7 @@ namespace DTcms.DAL
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("update HandlingMode set ");
-			                        
-            strSql.Append(" Id = @Id , ");                                    
+                               
             strSql.Append(" Name = @Name , ");                                    
             strSql.Append(" Remark = @Remark  ");            			
 			strSql.Append(" where Id=@Id  ");
