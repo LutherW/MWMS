@@ -21,8 +21,24 @@
         $(function () {
             //初始化表单验证
             $("#form1").initValidform();
+
+            //创建上传附件
+            $(".attach-btn").click(function () {
+                var liHtml = '<li>'
+                + '<a href="javascript:;" onclick="delAttributeNode(this);" class="del" title="删除属性"></a>'
+                + '<div class="btns">属性名：<input type="text" name="AttributeName" value="" style="width:70%;"/></div>'
+                + '<div class="btns">属性值：<input type="text" name="AttributeValue" value="" style="width:70%;"/></div>'
+                + '<div class="btns">备&nbsp;&nbsp;&nbsp;注：<input type="text" name="AttributeRemark" value="" style="width:70%;"/></div>'
+                + '</li>';
+
+                $("#showAttachList ul").append(liHtml);
+            });
         });
-</script>
+
+        function delAttributeNode(obj) {
+            $(obj).parent().remove();
+        }
+    </script>
 </head>
 
 <body class="mainbody">
@@ -50,7 +66,7 @@
             </div>
         </div>
 
-        <div class="tab-content" style="min-height:800px;">
+        <div class="tab-content" style="min-height: 800px;">
             <dl>
                 <dt>所属客户</dt>
                 <dd>
@@ -58,6 +74,12 @@
                         <asp:DropDownList ID="ddlCustomer" runat="server" datatype="*" errormsg="请选择客户" sucmsg=" "></asp:DropDownList>
                     </div>
                 </dd>
+            </dl>
+            <dl>
+                <dt>货物名称</dt>
+                <dd>
+                    <asp:TextBox ID="txtName" runat="server" CssClass="input normal" datatype="*2-100" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
                 <dt>存储方式</dt>
@@ -83,15 +105,33 @@
                     </div>
                 </dd>
             </dl>
-            <dl>
-                <dt>货物名称</dt>
+            <dl id="div_attach_container">
+                <dt>货物属性</dt>
                 <dd>
-                    <asp:TextBox ID="txtName" runat="server" CssClass="input normal" datatype="*2-100" sucmsg=" "></asp:TextBox>
-                    <span class="Validform_checktip">*</span></dd>
+                    <a class="icon-btn add attach-btn"><span>添加属性</span></a>
+                    <div id="showAttachList" class="attach-list">
+                        <ul>
+                            <asp:Repeater ID="rptAttributeList" runat="server">
+                                <ItemTemplate>
+                                    <li>
+                                        <a href="javascript:;" onclick="delAttributeNode(this);" class="del" title="删除属性"></a>
+                                        <div class="btns">
+                                            属性名：<input type="text" name="AttributeName" value="<%#Eval("AttributeName") %>" style="width: 70%;" />
+                                        </div>
+                                        <div class="btns">
+                                            属性值：<input type="text" name="AttributeValue" value="<%#Eval("AttributeValue") %>" style="width: 70%;" />
+                                        </div>
+                                        <div class="btns">
+                                            备&nbsp;&nbsp;&nbsp;注：<input type="text" name="AttributeRemark" value="<%#Eval("Remark") %>" style="width: 70%;" />
+                                        </div>
+                                    </li>
+                                </ItemTemplate>
+                            </asp:Repeater>
+                        </ul>
+                    </div>
+                </dd>
             </dl>
-            
         </div>
-
         <!--/内容-->
 
         <!--工具栏-->

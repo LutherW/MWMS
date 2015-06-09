@@ -31,6 +31,15 @@ namespace DTcms.Web.admin.goods {
         protected global::System.Web.UI.WebControls.DropDownList ddlCustomer;
         
         /// <summary>
+        /// txtName 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtName;
+        
+        /// <summary>
         /// ddlStoreMode 控件。
         /// </summary>
         /// <remarks>
@@ -58,13 +67,13 @@ namespace DTcms.Web.admin.goods {
         protected global::System.Web.UI.WebControls.DropDownList ddlUnit;
         
         /// <summary>
-        /// txtName 控件。
+        /// rptAttributeList 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtName;
+        protected global::System.Web.UI.WebControls.Repeater rptAttributeList;
         
         /// <summary>
         /// btnSubmit 控件。

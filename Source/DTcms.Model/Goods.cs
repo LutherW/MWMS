@@ -60,8 +60,22 @@ namespace DTcms.Model{
         {
             get{ return _name; }
             set{ _name = value; }
-        }        
-		   
+        }
+
+        /// <summary>
+        /// 属性值
+        /// </summary>
+        private IList<GoodsAttributeValues> _attributeValues = new List<GoodsAttributeValues>();
+        public IList<GoodsAttributeValues> AttributeValues
+        {
+            private set { _attributeValues = value; }
+            get { return _attributeValues; }
+        }
+
+        public void AddAttributeValues(GoodsAttributeValues attributeValue) 
+        {
+            _attributeValues.Add(attributeValue);
+        }
 	}
 }
 

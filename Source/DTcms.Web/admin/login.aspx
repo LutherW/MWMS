@@ -41,7 +41,7 @@
 </div>
 
 <div class="copy-right">
-  <p>版权所有 深圳市动力启航软件有限公司 Copyright © 2009 - 2015 dtsoft.net Inc. All Rights Reserved.</p>
+  <p>版权所有 宏盛创达软件有限公司 Copyright © 2009 - 2015 dtsoft.net Inc. All Rights Reserved.</p>
 </div>
 </form>
 </body>

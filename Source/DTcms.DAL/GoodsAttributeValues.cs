@@ -117,8 +117,11 @@ SqlParameter[] parameters = {
 				return false;
 			}
 		}
-		
-				
+
+        public void DeleteList(SqlConnection conn, SqlTransaction trans, int goodsId)
+        {
+            int rows = DbHelperSQL.ExecuteSql(conn, trans, "delete from GoodsAttributeValues where GoodsId=" + goodsId.ToString()); 
+        }		
 		
 		/// <summary>
 		/// 得到一个对象实体

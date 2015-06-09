@@ -55,31 +55,79 @@ namespace DTcms.DAL
         /// </summary>
         public bool Add(DTcms.Model.Goods model)
         {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("insert into Goods(");
-            strSql.Append("UnitId,CustomerId,StoreModeId,HandlingModeId,Name");
-            strSql.Append(") values (");
-            strSql.Append("@UnitId,@CustomerId,@StoreModeId,@HandlingModeId,@Name");
-            strSql.Append(") ");
+            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
+            {
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        StringBuilder strSql = new StringBuilder();
+                        strSql.Append("insert into Goods(");
+                        strSql.Append("UnitId,CustomerId,StoreModeId,HandlingModeId,Name");
+                        strSql.Append(") values (");
+                        strSql.Append("@UnitId,@CustomerId,@StoreModeId,@HandlingModeId,@Name");
+                        strSql.Append(") ");
 
-            SqlParameter[] parameters = {
-       
-                        new SqlParameter("@UnitId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@CustomerId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@StoreModeId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@HandlingModeId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@Name", SqlDbType.VarChar,254)             
+                        SqlParameter[] parameters = {
+                                    new SqlParameter("@UnitId", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@CustomerId", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@StoreModeId", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@HandlingModeId", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@Name", SqlDbType.VarChar,254)             
+                        };
+
+                        parameters[0].Value = model.UnitId;
+                        parameters[1].Value = model.CustomerId;
+                        parameters[2].Value = model.StoreModeId;
+                        parameters[3].Value = model.HandlingModeId;
+                        parameters[4].Value = model.Name;
+
+                        object obj = DbHelperSQL.GetSingle(conn, trans, strSql.ToString(), parameters); //带事务
+                        model.Id = Convert.ToInt32(obj);
+
+                        #region 添加属性====================
+                        if (model.AttributeValues.Count > 0)
+                        {
+                            StringBuilder strSql2;
+                            foreach (Model.GoodsAttributeValues attribute in model.AttributeValues)
+                            {
+                                strSql2 = new StringBuilder();
+                                strSql2.Append("insert into GoodsAttributeValues(");
+                                strSql2.Append("GoodsId,AttributeName,AttributeValue,Remark");
+                                strSql2.Append(") values (");
+                                strSql2.Append("@GoodsId,@AttributeName,@AttributeValue,@Remark");
+                                strSql2.Append(") ");
+
+                                SqlParameter[] attributeParameters = {
+			                                new SqlParameter("@GoodsId", SqlDbType.Int,4) ,            
+                                            new SqlParameter("@AttributeName", SqlDbType.VarChar,254) ,            
+                                            new SqlParameter("@AttributeValue", SqlDbType.VarChar,254) ,            
+                                            new SqlParameter("@Remark", SqlDbType.VarChar,254)             
               
-            };
+                                };
 
-            parameters[0].Value = model.UnitId;
-            parameters[1].Value = model.CustomerId;
-            parameters[2].Value = model.StoreModeId;
-            parameters[3].Value = model.HandlingModeId;
-            parameters[4].Value = model.Name;
+                                attributeParameters[0].Value = model.Id;
+                                attributeParameters[1].Value = attribute.AttributeName;
+                                attributeParameters[2].Value = attribute.AttributeValue;
+                                attributeParameters[3].Value = attribute.Remark;
+                                DbHelperSQL.ExecuteSql(conn, trans, strSql2.ToString(), attributeParameters); //带事务
+                            }
+                        }
+                        #endregion
 
-           return  DbHelperSQL.ExecuteSql(strSql.ToString(), parameters) >0;
 
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
+                }
+            }
+
+            return model.Id > 0;
         }
 
 
@@ -88,40 +136,84 @@ namespace DTcms.DAL
         /// </summary>
         public bool Update(DTcms.Model.Goods model)
         {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("update Goods set ");
-            strSql.Append(" UnitId = @UnitId , ");
-            strSql.Append(" CustomerId = @CustomerId , ");
-            strSql.Append(" StoreModeId = @StoreModeId , ");
-            strSql.Append(" HandlingModeId = @HandlingModeId , ");
-            strSql.Append(" Name = @Name  ");
-            strSql.Append(" where Id=@Id and UnitId=@UnitId and CustomerId=@CustomerId and StoreModeId=@StoreModeId and HandlingModeId=@HandlingModeId  ");
+            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
+            {
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction())
+                { 
+                    try
+                    {
+                        StringBuilder strSql = new StringBuilder();
+                        strSql.Append("update Goods set ");
+                        strSql.Append(" UnitId = @UnitId , ");
+                        strSql.Append(" CustomerId = @CustomerId , ");
+                        strSql.Append(" StoreModeId = @StoreModeId , ");
+                        strSql.Append(" HandlingModeId = @HandlingModeId , ");
+                        strSql.Append(" Name = @Name  ");
+                        strSql.Append(" where Id=@Id ");
 
-            SqlParameter[] parameters = {
-			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@UnitId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@CustomerId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@StoreModeId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@HandlingModeId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@Name", SqlDbType.VarChar,254)             
+                        SqlParameter[] parameters = {
+			                        new SqlParameter("@Id", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@UnitId", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@CustomerId", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@StoreModeId", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@HandlingModeId", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@Name", SqlDbType.VarChar,254)             
+                        };
+
+                        parameters[0].Value = model.Id;
+                        parameters[1].Value = model.UnitId;
+                        parameters[2].Value = model.CustomerId;
+                        parameters[3].Value = model.StoreModeId;
+                        parameters[4].Value = model.HandlingModeId;
+                        parameters[5].Value = model.Name;
+
+                        DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+                        new GoodsAttributeValues().DeleteList(conn, trans, model.Id);
+
+                        #region 添加属性====================
+                        if (model.AttributeValues.Count > 0)
+                        {
+                            StringBuilder strSql2;
+                            foreach (Model.GoodsAttributeValues attribute in model.AttributeValues)
+                            {
+                                strSql2 = new StringBuilder();
+                                strSql2.Append("insert into GoodsAttributeValues(");
+                                strSql2.Append("GoodsId,AttributeName,AttributeValue,Remark");
+                                strSql2.Append(") values (");
+                                strSql2.Append("@GoodsId,@AttributeName,@AttributeValue,@Remark");
+                                strSql2.Append(") ");
+
+                                SqlParameter[] attributeParameters = {
+			                                new SqlParameter("@GoodsId", SqlDbType.Int,4) ,            
+                                            new SqlParameter("@AttributeName", SqlDbType.VarChar,254) ,            
+                                            new SqlParameter("@AttributeValue", SqlDbType.VarChar,254) ,            
+                                            new SqlParameter("@Remark", SqlDbType.VarChar,254)             
               
-            };
+                                };
 
-            parameters[0].Value = model.Id;
-            parameters[1].Value = model.UnitId;
-            parameters[2].Value = model.CustomerId;
-            parameters[3].Value = model.StoreModeId;
-            parameters[4].Value = model.HandlingModeId;
-            parameters[5].Value = model.Name;
-            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
-            if (rows > 0)
-            {
-                return true;
+                                attributeParameters[0].Value = model.Id;
+                                attributeParameters[1].Value = attribute.AttributeName;
+                                attributeParameters[2].Value = attribute.AttributeValue;
+                                attributeParameters[3].Value = attribute.Remark;
+                                DbHelperSQL.ExecuteSql(conn, trans, strSql2.ToString(), attributeParameters); //带事务
+                            }
+                        }
+                        #endregion
+
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+
+                        return false;
+                    }
+                }
             }
-            else
-            {
-                return false;
-            }
+
+            return true;
         }
 
 

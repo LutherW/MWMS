@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DTcms.Common;
+using DTcms.Model;
 
 namespace DTcms.Web.admin.goods
 {
@@ -99,6 +100,11 @@ namespace DTcms.Web.admin.goods
             ddlHandlingMode.SelectedValue = model.HandlingModeId.ToString();
             ddlUnit.SelectedValue = model.UnitId.ToString();
             txtName.Text = model.Name;
+
+            BLL.GoodsAttributeValues attributeBLL = new BLL.GoodsAttributeValues();
+            DataTable attributeDT = attributeBLL.GetList(" GoodsId = " + _id + "").Tables[0];
+            this.rptAttributeList.DataSource = attributeDT;
+            this.rptAttributeList.DataBind();
         }
         #endregion
 
@@ -115,6 +121,17 @@ namespace DTcms.Web.admin.goods
             model.UnitId = int.Parse(ddlUnit.SelectedValue);
             model.Name = txtName.Text;
 
+            string[] attributeNames = Request.Form.GetValues("AttributeName");
+            string[] attributeValues = Request.Form.GetValues("AttributeValue");
+            string[] attributeRemarks = Request.Form.GetValues("AttributeRemark");
+            if (attributeNames != null && attributeValues != null && attributeRemarks != null
+                && attributeNames.Length > 0 && attributeValues.Length > 0 && attributeRemarks.Length > 0)
+            {
+                for (int i = 0; i < attributeNames.Length; i++)
+                {
+                    model.AddAttributeValues(new GoodsAttributeValues(attributeNames[i], attributeValues[i], attributeRemarks[i]));
+                }
+            }
             if (bll.Add(model))
             {
                 AddAdminLog(DTEnums.ActionEnum.Add.ToString(), "添加客户:" + model.Name); //记录日志
@@ -136,6 +153,18 @@ namespace DTcms.Web.admin.goods
             model.HandlingModeId = int.Parse(ddlHandlingMode.SelectedValue);
             model.UnitId = int.Parse(ddlUnit.SelectedValue);
             model.Name = txtName.Text;
+
+            string[] attributeNames = Request.Form.GetValues("AttributeName");
+            string[] attributeValues = Request.Form.GetValues("AttributeValue");
+            string[] attributeRemarks = Request.Form.GetValues("AttributeRemark");
+            if (attributeNames != null && attributeValues != null && attributeRemarks != null
+                && attributeNames.Length > 0 && attributeValues.Length > 0 && attributeRemarks.Length > 0)
+            {
+                for (int i = 0; i < attributeNames.Length; i++)
+                {
+                    model.AddAttributeValues(new GoodsAttributeValues(attributeNames[i], attributeValues[i], attributeRemarks[i]));
+                }
+            }
 
             if (bll.Update(model))
             {
