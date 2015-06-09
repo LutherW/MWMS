@@ -15,23 +15,57 @@ namespace DTcms.Web.admin.goods
         protected int page;
         protected int pageSize;
 
-        protected int status;
-        protected int payment_status;
-        protected int express_status;
+        protected int customer_id;
+        protected int store_mode_id;
+        protected int handling_mode_id;
         protected string keywords = string.Empty;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            this.status = DTRequest.GetQueryInt("status");
-            this.payment_status = DTRequest.GetQueryInt("payment_status");
-            this.express_status = DTRequest.GetQueryInt("express_status");
+            this.customer_id = DTRequest.GetQueryInt("customer_id");
+            this.store_mode_id = DTRequest.GetQueryInt("store_mode_id");
+            this.handling_mode_id = DTRequest.GetQueryInt("handling_mode_id");
             this.keywords = DTRequest.GetQueryString("keywords");
 
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
             {
                 ChkAdminLevel("goods_manage", DTEnums.ActionEnum.View.ToString()); //检查权限
-                RptBind("id>0" + CombSqlTxt(this.status, this.payment_status, this.express_status, this.keywords), "status asc,add_time desc,id desc");
+                TreeBind("");
+                RptBind(CombSqlTxt(this.customer_id, this.store_mode_id, this.handling_mode_id, this.keywords), "g.Id desc");
+            }
+        }
+
+        private void TreeBind(string strWhere)
+        {
+            BLL.Customer customerBLL = new BLL.Customer();
+            DataTable customerDT = customerBLL.GetList(0, strWhere, "Id desc").Tables[0];
+
+            this.ddlCustomer.Items.Clear();
+            this.ddlCustomer.Items.Add(new ListItem("所属客户", ""));
+            foreach (DataRow dr in customerDT.Rows)
+            {
+                this.ddlCustomer.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
+            }
+
+            BLL.StoreMode storeModeBLL = new BLL.StoreMode();
+            DataTable storeModeDT = storeModeBLL.GetList(0, strWhere, "Id desc").Tables[0];
+
+            this.ddlStoreMode.Items.Clear();
+            this.ddlStoreMode.Items.Add(new ListItem("存储方式", ""));
+            foreach (DataRow dr in storeModeDT.Rows)
+            {
+                this.ddlStoreMode.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
+            }
+
+            BLL.HandlingMode handlingModeBLL = new BLL.HandlingMode();
+            DataTable handlingModeDT = handlingModeBLL.GetList(0, strWhere, "Id desc").Tables[0];
+
+            this.ddlHandlingMode.Items.Clear();
+            this.ddlHandlingMode.Items.Add(new ListItem("装卸方式", ""));
+            foreach (DataRow dr in handlingModeDT.Rows)
+            {
+                this.ddlHandlingMode.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
             }
         }
 
@@ -39,51 +73,51 @@ namespace DTcms.Web.admin.goods
         private void RptBind(string _strWhere, string _goodsby)
         {
             this.page = DTRequest.GetQueryInt("page", 1);
-            if (this.status > 0)
+            if (this.customer_id > 0)
             {
-                this.ddlStatus.SelectedValue = this.status.ToString();
+                this.ddlCustomer.SelectedValue = this.customer_id.ToString();
             }
-            if (this.payment_status > 0)
+            if (this.store_mode_id > 0)
             {
-                this.ddlPaymentStatus.SelectedValue = this.payment_status.ToString();
+                this.ddlStoreMode.SelectedValue = this.store_mode_id.ToString();
             }
-            if (this.express_status > 0)
+            if (this.handling_mode_id > 0)
             {
-                this.ddlExpressStatus.SelectedValue = this.express_status.ToString();
+                this.ddlHandlingMode.SelectedValue = this.handling_mode_id.ToString();
             }
             txtKeywords.Text = this.keywords;
-            BLL.goodss bll = new BLL.goodss();
+            BLL.Goods bll = new BLL.Goods();
             this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _goodsby, out this.totalCount);
             this.rptList.DataBind();
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("goods_list.aspx", "status={0}&payment_status={1}&express_status={2}&keywords={3}&page={4}",
-                this.status.ToString(), this.payment_status.ToString(), this.express_status.ToString(), this.keywords, "__id__");
+            string pageUrl = Utils.CombUrlTxt("goods_list.aspx", "customer_id={0}&store_mode_id={1}&handling_mode_id={2}&keywords={3}&page={4}",
+                this.customer_id.ToString(), this.store_mode_id.ToString(), this.handling_mode_id.ToString(), this.keywords, "__id__");
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
         }
         #endregion
 
         #region 组合SQL查询语句==========================
-        protected string CombSqlTxt(int _status, int _payment_status, int _express_status, string _keywords)
+        protected string CombSqlTxt(int _customer_id, int _store_mode_id, int _handling_mode_id, string _keywords)
         {
             StringBuilder strTemp = new StringBuilder();
-            if (_status > 0)
+            if (_customer_id > 0)
             {
-                strTemp.Append(" and status=" + _status);
+                strTemp.Append(" and g.CustomerId=" + _customer_id);
             }
-            if (_payment_status > 0)
+            if (_store_mode_id > 0)
             {
-                strTemp.Append(" and payment_status=" + _payment_status);
+                strTemp.Append(" and g.StoreModeId=" + _store_mode_id);
             }
-            if (_express_status > 0)
+            if (_handling_mode_id > 0)
             {
-                strTemp.Append(" and express_status=" + _express_status);
+                strTemp.Append(" and g.HandlingModeId=" + _handling_mode_id);
             }
             _keywords = _keywords.Replace("'", "");
             if (!string.IsNullOrEmpty(_keywords))
             {
-                strTemp.Append(" and (goods_no like '%" + _keywords + "%' or user_name like '%" + _keywords + "%' or accept_name like '%" + _keywords + "%')");
+                strTemp.Append(" and (g.Name like '%" + _keywords + "%' )");
             }
             return strTemp.ToString();
         }
@@ -104,74 +138,33 @@ namespace DTcms.Web.admin.goods
         }
         #endregion
 
-        #region 返回货物状态=============================
-        protected string GetgoodsStatus(int _id)
-        {
-            string _title = string.Empty;
-            Model.goodss model = new BLL.goodss().GetModel(_id);
-            switch (model.status)
-            {
-                case 1: //如果是线下支付，支付状态为0，如果是线上支付，支付成功后会自动改变货物状态为已确认
-                    if (model.payment_status > 0)
-                    {
-                        _title = "待付款";
-                    }
-                    else
-                    {
-                        _title = "待确认";
-                    }
-                    break;
-                case 2: //如果货物为已确认状态，则进入发货状态
-                    if (model.express_status > 1)
-                    {
-                        _title = "已发货";
-                    }
-                    else
-                    {
-                        _title = "待发货";
-                    }
-                    break;
-                case 3:
-                    _title = "交易完成";
-                    break;
-                case 4:
-                    _title = "已取消";
-                    break;
-                case 5:
-                    _title = "已作废";
-                    break;
-            }
-
-            return _title;
-        }
-        #endregion
 
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("goods_list.aspx", "status={0}&payment_status={1}&express_status={2}&keywords={3}",
-                this.status.ToString(), this.payment_status.ToString(), this.express_status.ToString(), txtKeywords.Text));
+            Response.Redirect(Utils.CombUrlTxt("goods_list.aspx", "customer_id={0}&store_mode_id={1}&handling_mode_id={2}&keywords={3}",
+                this.customer_id.ToString(), this.store_mode_id.ToString(), this.handling_mode_id.ToString(), txtKeywords.Text));
         }
 
         //货物状态
-        protected void ddlStatus_SelectedIndexChanged(object sender, EventArgs e)
+        protected void ddlCustomer_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("goods_list.aspx", "status={0}&payment_status={1}&express_status={2}&keywords={3}",
-                ddlStatus.SelectedValue, this.payment_status.ToString(), this.express_status.ToString(), this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("goods_list.aspx", "customer_id={0}&store_mode_id={1}&handling_mode_id={2}&keywords={3}",
+                ddlCustomer.SelectedValue, this.store_mode_id.ToString(), this.handling_mode_id.ToString(), this.keywords));
         }
 
         //支付状态
-        protected void ddlPaymentStatus_SelectedIndexChanged(object sender, EventArgs e)
+        protected void ddlStoreMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("goods_list.aspx", "status={0}&payment_status={1}&express_status={2}&keywords={3}",
-                this.status.ToString(), ddlPaymentStatus.SelectedValue, this.express_status.ToString(), this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("goods_list.aspx", "customer_id={0}&store_mode_id={1}&handling_mode_id={2}&keywords={3}",
+                this.customer_id.ToString(), ddlStoreMode.SelectedValue, this.handling_mode_id.ToString(), this.keywords));
         }
 
         //发货状态
-        protected void ddlExpressStatus_SelectedIndexChanged(object sender, EventArgs e)
+        protected void ddlHandlingMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("goods_list.aspx", "status={0}&payment_status={1}&express_status={2}&keywords={3}",
-                this.status.ToString(), this.payment_status.ToString(), ddlExpressStatus.SelectedValue, this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("goods_list.aspx", "customer_id={0}&store_mode_id={1}&handling_mode_id={2}&keywords={3}",
+                this.customer_id.ToString(), this.store_mode_id.ToString(), ddlHandlingMode.SelectedValue, this.keywords));
         }
 
         //设置分页数量
@@ -185,8 +178,8 @@ namespace DTcms.Web.admin.goods
                     Utils.WriteCookie("goods_list_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("user_list.aspx", "status={0}&payment_status={1}&express_status={2}&keywords={3}",
-                this.status.ToString(), this.payment_status.ToString(), this.express_status.ToString(), this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("user_list.aspx", "customer_id={0}&store_mode_id={1}&handling_mode_id={2}&keywords={3}",
+                this.customer_id.ToString(), this.store_mode_id.ToString(), this.handling_mode_id.ToString(), this.keywords));
         }
 
         //批量删除
@@ -195,7 +188,7 @@ namespace DTcms.Web.admin.goods
             ChkAdminLevel("goods_", DTEnums.ActionEnum.Delete.ToString()); //检查权限
             int sucCount = 0;
             int errorCount = 0;
-            BLL.goodss bll = new BLL.goodss();
+            BLL.Goods bll = new BLL.Goods();
             for (int i = 0; i < rptList.Items.Count; i++)
             {
                 int id = Convert.ToInt32(((HiddenField)rptList.Items[i].FindControl("hidId")).Value);
@@ -213,8 +206,8 @@ namespace DTcms.Web.admin.goods
                 }
             }
             AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除货物成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
-            JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("goods_list.aspx", "status={0}&payment_status={1}&express_status={2}&keywords={3}",
-                this.status.ToString(), this.payment_status.ToString(), this.express_status.ToString(), this.keywords));
+            JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("goods_list.aspx", "customer_id={0}&store_mode_id={1}&handling_mode_id={2}&keywords={3}",
+                this.customer_id.ToString(), this.store_mode_id.ToString(), this.handling_mode_id.ToString(), this.keywords));
         }
 
     }

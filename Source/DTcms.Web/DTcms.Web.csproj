@@ -89,6 +89,7 @@
     <Content Include="admin\dialog\dialog_spec.aspx" />
     <Content Include="admin\dialog\dialog_spec_item.aspx" />
     <Content Include="admin\goods\goods_list.aspx" />
+    <Content Include="admin\goods\goods_edit.aspx" />
     <Content Include="admin\goods\vehicle_list.aspx" />
     <Content Include="admin\goods\vehicle_edit.aspx" />
     <Content Include="admin\goods\unit_edit.aspx" />
@@ -807,6 +808,13 @@
     </Compile>
     <Compile Include="admin\goods\goods_list.aspx.designer.cs">
       <DependentUpon>goods_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\goods\goods_edit.aspx.cs">
+      <DependentUpon>goods_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\goods\goods_edit.aspx.designer.cs">
+      <DependentUpon>goods_edit.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\goods\vehicle_list.aspx.cs">
       <DependentUpon>vehicle_list.aspx</DependentUpon>
