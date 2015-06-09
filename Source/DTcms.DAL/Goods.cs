@@ -60,14 +60,14 @@ namespace DTcms.DAL
                 conn.Open();
                 using (SqlTransaction trans = conn.BeginTransaction())
                 {
-                    try
-                    {
+                    //try
+                    //{
                         StringBuilder strSql = new StringBuilder();
                         strSql.Append("insert into Goods(");
                         strSql.Append("UnitId,CustomerId,StoreModeId,HandlingModeId,Name");
                         strSql.Append(") values (");
                         strSql.Append("@UnitId,@CustomerId,@StoreModeId,@HandlingModeId,@Name");
-                        strSql.Append(") ");
+                        strSql.Append(");select @@IDENTITY");
 
                         SqlParameter[] parameters = {
                                     new SqlParameter("@UnitId", SqlDbType.Int,4) ,            
@@ -118,12 +118,12 @@ namespace DTcms.DAL
 
 
                         trans.Commit();
-                    }
-                    catch
-                    {
-                        trans.Rollback();
-                        return false;
-                    }
+                    //}
+                    //catch
+                    //{
+                    //    trans.Rollback();
+                    //    return false;
+                    //}
                 }
             }
 
@@ -252,23 +252,36 @@ namespace DTcms.DAL
 
         public bool Delete(int Id)
         {
-
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("delete from Goods ");
-            strSql.Append(" where Id=@Id ");
-            SqlParameter[] parameters = {
-					new SqlParameter("@Id", SqlDbType.Int,4)			};
-            parameters[0].Value = Id;
-
-            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
-            if (rows > 0)
+            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
             {
-                return true;
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction())
+                { 
+                    try
+                    {
+                        StringBuilder strSql = new StringBuilder();
+                        strSql.Append("delete from Goods ");
+                        strSql.Append(" where Id=@Id ");
+                        SqlParameter[] parameters = {
+					        new SqlParameter("@Id", SqlDbType.Int,4)			
+                        };
+                        parameters[0].Value = Id;
+                        DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+                        new GoodsAttributeValues().DeleteList(conn, trans, Id);
+
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+
+                        return false;
+                    }
+                }
             }
-            else
-            {
-                return false;
-            }
+
+            return true;
         }
 
         /// <summary>

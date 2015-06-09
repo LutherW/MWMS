@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="goods_list.aspx.cs" Inherits="DTcms.Web.admin.goods.goods_list" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="store_waiting.aspx.cs" Inherits="DTcms.Web.admin.business.store_waiting" %>
 
 <%@ Import Namespace="DTcms.Common" %>
 
@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>货物管理</title>
+    <title>待入库货物管理</title>
     <link href="../../scripts/artdialog/ui-dialog.css" rel="stylesheet" type="text/css" />
     <link href="../skin/default/style.css" rel="stylesheet" type="text/css" />
     <link href="../../css/pagination.css" rel="stylesheet" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript" charset="utf-8" src="../js/laymain.js"></script>
     <script type="text/javascript" charset="utf-8" src="../js/common.js"></script>
     <script type="text/javascript">
-        function showAttributeDialog(goodsId, goodsName) {
+        function showAttachDialog(goodsId, goodsName) {
             var objNum = arguments.length;
             var attachDialog = top.dialog({
                 id: 'attachDialogId',
@@ -40,7 +40,7 @@
             <a href="javascript:history.back(-1);" class="back"><i></i><span>返回上一页</span></a>
             <a href="../center.aspx" class="home"><i></i><span>首页</span></a>
             <i class="arrow"></i>
-            <span>货物列表</span>
+            <span>待入库货物列表</span>
         </div>
         <!--/导航栏-->
 
@@ -51,10 +51,10 @@
                     <a class="menu-btn"></a>
                     <div class="l-list">
                         <ul class="icon-list">
-                            <li><a class="add" href="goods_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>新增</span></a></li>
+                            <li><a class="add" href="store_waiting_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>新增</span></a></li>
                             <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
                             <li>
-                                <asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete','只允许删除已作废货物，是否继续？');" OnClick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>
+                                <asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete','只允许删除未入库货物，是否继续？');" OnClick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>
                         </ul>
                         <div class="menu-list">
                             <div class="rule-single-select">
@@ -87,12 +87,10 @@
                     <table width="100%" bgoods="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
                             <th width="8%">选择</th>
-                            <th align="left">名称</th>
-                            <th align="left" width="20%">客户</th>
-                            <th align="left" width="10%">存储方式</th>
-                            <th align="left" width="10%">装卸方式</th>
-                            <th width="8%">计量单位</th>
-                            <th width="8%">属性</th>
+                            <th align="left" width="10%">货物名称</th>
+                            <th align="left" width="10%">客户</th>
+                            <th align="left">运输车辆</th>
+                            <th width="8%">附件</th>
                             <th width="8%">操作</th>
                         </tr>
                 </HeaderTemplate>
@@ -102,16 +100,14 @@
                             <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Enabled='True' Style="vertical-align: middle;" />
                             <asp:HiddenField ID="hidId" Value='<%#Eval("Id")%>' runat="server" />
                         </td>
-                        <td><a href="goods_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>"><%#Eval("Name")%></a></td>
+                        <td><a href="store_waiting_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>"><%#Eval("GoodsName")%></a></td>
                         <td><%#Eval("CustomerName")%></td>
-                        <td><%#Eval("StoreModeName")%></td>
-                        <td><%#Eval("HandlingModeName")%></td>
-                        <td align="center"><%#Eval("UnitName")%></td>
+                        <td><%#Eval("Id")%></td>
                         <td align="center">
-                            <a href="javascript:void(0);" onclick="showAttributeDialog(<%#Eval("Id") %>, '<%#Eval("Name") %>');">属性</a>
+                            <a href="javascript:void(0);" onclick="showAttachDialog(<%#Eval("Id") %>, '<%#Eval("Name") %>');">附件</a>
                         </td>
                         <td align="center">
-                            <a href="goods_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
+                            <a href="store_waiting_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
                         </td>
                     </tr>
                 </ItemTemplate>

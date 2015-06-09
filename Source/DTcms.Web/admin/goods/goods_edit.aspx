@@ -35,6 +35,8 @@
             });
         });
 
+       
+
         function delAttributeNode(obj) {
             $(obj).parent().remove();
         }

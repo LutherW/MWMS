@@ -25,7 +25,7 @@ namespace DTcms.Web.admin.store
                     JscriptMsg("传输参数不正确！", "back");
                     return;
                 }
-                if (!new BLL.StoreMode().Exists(this.id))
+                if (!new BLL.StoreDomain().Exists(this.id))
                 {
                     JscriptMsg("仓库区域不存在或已被删除！", "back");
                     return;
@@ -44,8 +44,8 @@ namespace DTcms.Web.admin.store
         #region 赋值操作=================================
         private void ShowInfo(int _id)
         {
-            BLL.StoreMode bll = new BLL.StoreMode();
-            Model.StoreMode model = bll.GetModel(_id);
+            BLL.StoreDomain bll = new BLL.StoreDomain();
+            Model.StoreDomain model = bll.GetModel(_id);
             txtName.Text = model.Name;
             txtRemark.Text = model.Remark;
         }
@@ -55,8 +55,8 @@ namespace DTcms.Web.admin.store
         private bool DoAdd()
         {
             bool result = false;
-            Model.StoreMode model = new Model.StoreMode();
-            BLL.StoreMode bll = new BLL.StoreMode();
+            Model.StoreDomain model = new Model.StoreDomain();
+            BLL.StoreDomain bll = new BLL.StoreDomain();
 
             model.Name = txtName.Text;
             model.Remark = txtRemark.Text;
@@ -73,8 +73,8 @@ namespace DTcms.Web.admin.store
         private bool DoEdit(int _id)
         {
             bool result = false;
-            BLL.StoreMode bll = new BLL.StoreMode();
-            Model.StoreMode model = bll.GetModel(_id);
+            BLL.StoreDomain bll = new BLL.StoreDomain();
+            Model.StoreDomain model = bll.GetModel(_id);
 
             model.Name = txtName.Text;
             model.Remark = txtRemark.Text;
