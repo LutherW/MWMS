@@ -17,9 +17,9 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 是否存在该记录
 		/// </summary>
-		public bool Exists(int Id,int VehicleId)
+		public bool Exists(int StoreWaitingGoodsId,int VehicleId)
 		{
-			return dal.Exists(Id,VehicleId);
+			return dal.Exists(StoreWaitingGoodsId,VehicleId);
 		}
 
 		/// <summary>
@@ -42,34 +42,34 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>
-		public bool Delete(int Id,int VehicleId)
+		public bool Delete(int StoreWaitingGoodsId,int VehicleId)
 		{
 			
-			return dal.Delete(Id,VehicleId);
+			return dal.Delete(StoreWaitingGoodsId,VehicleId);
 		}
 		
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.StoreInGoodsVehicle GetModel(int Id,int VehicleId)
+		public DTcms.Model.StoreInGoodsVehicle GetModel(int StoreWaitingGoodsId,int VehicleId)
 		{
 			
-			return dal.GetModel(Id,VehicleId);
+			return dal.GetModel(StoreWaitingGoodsId,VehicleId);
 		}
 
 		/// <summary>
 		/// 得到一个对象实体，从缓存中
 		/// </summary>
-        //public DTcms.Model.StoreInGoodsVehicle GetModelByCache(int Id,int VehicleId)
+        //public DTcms.Model.StoreInGoodsVehicle GetModelByCache(int StoreWaitingGoodsId,int VehicleId)
         //{
 			
-        //    string CacheKey = "StoreInGoodsVehicleModel-" + Id+VehicleId;
+        //    string CacheKey = "StoreInGoodsVehicleModel-" + StoreWaitingGoodsId+VehicleId;
         //    object objModel = DTcms.Common.DataCache.GetCache(CacheKey);
         //    if (objModel == null)
         //    {
         //        try
         //        {
-        //            objModel = dal.GetModel(Id,VehicleId);
+        //            objModel = dal.GetModel(StoreWaitingGoodsId,VehicleId);
         //            if (objModel != null)
         //            {
         //                int ModelCache = DTcms.Common.ConfigHelper.GetConfigInt("ModelCache");
@@ -116,9 +116,9 @@ namespace DTcms.BLL{
 				for (int n = 0; n < rowsCount; n++)
 				{
 					model = new DTcms.Model.StoreInGoodsVehicle();					
-													if(dt.Rows[n]["Id"].ToString()!="")
+													if(dt.Rows[n]["StoreWaitingGoodsId"].ToString()!="")
 				{
-					model.Id=int.Parse(dt.Rows[n]["Id"].ToString());
+					model.StoreWaitingGoodsId=int.Parse(dt.Rows[n]["StoreWaitingGoodsId"].ToString());
 				}
 																																if(dt.Rows[n]["VehicleId"].ToString()!="")
 				{

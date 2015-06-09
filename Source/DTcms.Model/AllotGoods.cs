@@ -8,15 +8,6 @@ namespace DTcms.Model{
 	{
    		     
       	/// <summary>
-		/// AllotOrderId
-        /// </summary>		
-		private int _allotorderid;
-        public int AllotOrderId
-        {
-            get{ return _allotorderid; }
-            set{ _allotorderid = value; }
-        }        
-		/// <summary>
 		/// Id
         /// </summary>		
 		private int _id;
@@ -26,6 +17,15 @@ namespace DTcms.Model{
             set{ _id = value; }
         }        
 		/// <summary>
+		/// AllotOrderId
+        /// </summary>		
+		private int _allotorderid;
+        public int AllotOrderId
+        {
+            get{ return _allotorderid; }
+            set{ _allotorderid = value; }
+        }        
+		/// <summary>
 		/// StoreInOrderId
         /// </summary>		
 		private int _storeinorderid;
@@ -33,15 +33,6 @@ namespace DTcms.Model{
         {
             get{ return _storeinorderid; }
             set{ _storeinorderid = value; }
-        }        
-		/// <summary>
-		/// GoodsId
-        /// </summary>		
-		private int _goodsid;
-        public int GoodsId
-        {
-            get{ return _goodsid; }
-            set{ _goodsid = value; }
         }        
 		/// <summary>
 		/// StoreInGoodsStoreInOrderId

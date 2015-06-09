@@ -53,6 +53,15 @@ namespace DTcms.Model{
             set{ _admin = value; }
         }        
 		/// <summary>
+		/// TotalMoney
+        /// </summary>		
+		private decimal _totalmoney;
+        public decimal TotalMoney
+        {
+            get{ return _totalmoney; }
+            set{ _totalmoney = value; }
+        }        
+		/// <summary>
 		/// InvoiceMoney
         /// </summary>		
 		private decimal _invoicemoney;

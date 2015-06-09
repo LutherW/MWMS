@@ -25,9 +25,9 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public void  Add(DTcms.Model.CheckRecord model)
+		public int  Add(DTcms.Model.CheckRecord model)
 		{
-						dal.Add(model);
+						return dal.Add(model);
 						
 		}
 
@@ -42,34 +42,41 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>
-		public bool Delete(int Id,int VehicleId,int CustomerId,int HandlingModeId,int GoodsId)
+		public bool Delete(int Id)
 		{
 			
-			return dal.Delete(Id,VehicleId,CustomerId,HandlingModeId,GoodsId);
+			return dal.Delete(Id);
+		}
+				/// <summary>
+		/// 批量删除一批数据
+		/// </summary>
+		public bool DeleteList(string Idlist )
+		{
+			return dal.DeleteList(Idlist );
 		}
 		
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.CheckRecord GetModel(int Id,int VehicleId,int CustomerId,int HandlingModeId,int GoodsId)
+		public DTcms.Model.CheckRecord GetModel(int Id)
 		{
 			
-			return dal.GetModel(Id,VehicleId,CustomerId,HandlingModeId,GoodsId);
+			return dal.GetModel(Id);
 		}
 
 		/// <summary>
 		/// 得到一个对象实体，从缓存中
 		/// </summary>
-        //public DTcms.Model.CheckRecord GetModelByCache(int Id,int VehicleId,int CustomerId,int HandlingModeId,int GoodsId)
+        //public DTcms.Model.CheckRecord GetModelByCache(int Id)
         //{
 			
-        //    string CacheKey = "CheckRecordModel-" + Id+VehicleId+CustomerId+HandlingModeId+GoodsId;
+        //    string CacheKey = "CheckRecordModel-" + Id;
         //    object objModel = DTcms.Common.DataCache.GetCache(CacheKey);
         //    if (objModel == null)
         //    {
         //        try
         //        {
-        //            objModel = dal.GetModel(Id,VehicleId,CustomerId,HandlingModeId,GoodsId);
+        //            objModel = dal.GetModel(Id);
         //            if (objModel != null)
         //            {
         //                int ModelCache = DTcms.Common.ConfigHelper.GetConfigInt("ModelCache");

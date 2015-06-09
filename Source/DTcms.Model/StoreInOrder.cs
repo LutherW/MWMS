@@ -107,15 +107,6 @@ namespace DTcms.Model{
             set{ _suttleweight = value; }
         }        
 		/// <summary>
-		/// FreeDays
-        /// </summary>		
-		private int _freedays;
-        public int FreeDays
-        {
-            get{ return _freedays; }
-            set{ _freedays = value; }
-        }        
-		/// <summary>
 		/// Remark
         /// </summary>		
 		private string _remark;

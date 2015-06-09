@@ -4,8 +4,7 @@ using System.Data.SqlClient;
 using System.Collections.Generic; 
 using System.Data;
 using DTcms.DBUtility;
-namespace DTcms.DAL  
-	
+namespace DTcms.DAL
 {
 	 	//StoreInOrder
 		public partial class StoreInOrder
@@ -32,18 +31,17 @@ namespace DTcms.DAL
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public void Add(DTcms.Model.StoreInOrder model)
+		public int Add(DTcms.Model.StoreInOrder model)
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("insert into StoreInOrder(");			
-            strSql.Append("Id,CustomerId,Status,CreateTime,BeginChargingTime,ChargingTime,Admin,ChargingCount,InspectionNumber,AccountNumber,SuttleWeight,FreeDays,Remark");
+            strSql.Append("CustomerId,Status,CreateTime,BeginChargingTime,ChargingTime,Admin,ChargingCount,InspectionNumber,AccountNumber,SuttleWeight,Remark");
 			strSql.Append(") values (");
-            strSql.Append("@Id,@CustomerId,@Status,@CreateTime,@BeginChargingTime,@ChargingTime,@Admin,@ChargingCount,@InspectionNumber,@AccountNumber,@SuttleWeight,@FreeDays,@Remark");            
+            strSql.Append("@CustomerId,@Status,@CreateTime,@BeginChargingTime,@ChargingTime,@Admin,@ChargingCount,@InspectionNumber,@AccountNumber,@SuttleWeight,@Remark");            
             strSql.Append(") ");            
-            		
+            strSql.Append(";select @@IDENTITY");		
 			SqlParameter[] parameters = {
-			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@CustomerId", SqlDbType.Int,4) ,            
+			            new SqlParameter("@CustomerId", SqlDbType.Int,4) ,            
                         new SqlParameter("@Status", SqlDbType.Int,4) ,            
                         new SqlParameter("@CreateTime", SqlDbType.DateTime) ,            
                         new SqlParameter("@BeginChargingTime", SqlDbType.DateTime) ,            
@@ -53,25 +51,33 @@ namespace DTcms.DAL
                         new SqlParameter("@InspectionNumber", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@AccountNumber", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@SuttleWeight", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@FreeDays", SqlDbType.Int,4) ,            
                         new SqlParameter("@Remark", SqlDbType.VarChar,254)             
               
             };
 			            
-            parameters[0].Value = model.Id;                        
-            parameters[1].Value = model.CustomerId;                        
-            parameters[2].Value = model.Status;                        
-            parameters[3].Value = model.CreateTime;                        
-            parameters[4].Value = model.BeginChargingTime;                        
-            parameters[5].Value = model.ChargingTime;                        
-            parameters[6].Value = model.Admin;                        
-            parameters[7].Value = model.ChargingCount;                        
-            parameters[8].Value = model.InspectionNumber;                        
-            parameters[9].Value = model.AccountNumber;                        
-            parameters[10].Value = model.SuttleWeight;                        
-            parameters[11].Value = model.FreeDays;                        
-            parameters[12].Value = model.Remark;                        
-			            DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
+            parameters[0].Value = model.CustomerId;                        
+            parameters[1].Value = model.Status;                        
+            parameters[2].Value = model.CreateTime;                        
+            parameters[3].Value = model.BeginChargingTime;                        
+            parameters[4].Value = model.ChargingTime;                        
+            parameters[5].Value = model.Admin;                        
+            parameters[6].Value = model.ChargingCount;                        
+            parameters[7].Value = model.InspectionNumber;                        
+            parameters[8].Value = model.AccountNumber;                        
+            parameters[9].Value = model.SuttleWeight;                        
+            parameters[10].Value = model.Remark;                        
+			   
+			object obj = DbHelperSQL.GetSingle(strSql.ToString(),parameters);			
+			if (obj == null)
+			{
+				return 0;
+			}
+			else
+			{
+				                    
+            	return Convert.ToInt32(obj);
+                                                                  
+			}			   
             			
 		}
 		
@@ -83,8 +89,7 @@ namespace DTcms.DAL
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("update StoreInOrder set ");
-			                        
-            strSql.Append(" Id = @Id , ");                                    
+			                                                
             strSql.Append(" CustomerId = @CustomerId , ");                                    
             strSql.Append(" Status = @Status , ");                                    
             strSql.Append(" CreateTime = @CreateTime , ");                                    
@@ -95,9 +100,8 @@ namespace DTcms.DAL
             strSql.Append(" InspectionNumber = @InspectionNumber , ");                                    
             strSql.Append(" AccountNumber = @AccountNumber , ");                                    
             strSql.Append(" SuttleWeight = @SuttleWeight , ");                                    
-            strSql.Append(" FreeDays = @FreeDays , ");                                    
             strSql.Append(" Remark = @Remark  ");            			
-			strSql.Append(" where Id=@Id and CustomerId=@CustomerId  ");
+			strSql.Append(" where Id=@Id ");
 						
 SqlParameter[] parameters = {
 			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
@@ -111,7 +115,6 @@ SqlParameter[] parameters = {
                         new SqlParameter("@InspectionNumber", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@AccountNumber", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@SuttleWeight", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@FreeDays", SqlDbType.Int,4) ,            
                         new SqlParameter("@Remark", SqlDbType.VarChar,254)             
               
             };
@@ -127,8 +130,7 @@ SqlParameter[] parameters = {
             parameters[8].Value = model.InspectionNumber;                        
             parameters[9].Value = model.AccountNumber;                        
             parameters[10].Value = model.SuttleWeight;                        
-            parameters[11].Value = model.FreeDays;                        
-            parameters[12].Value = model.Remark;                        
+            parameters[11].Value = model.Remark;                        
             int rows=DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
 			if (rows > 0)
 			{
@@ -144,17 +146,16 @@ SqlParameter[] parameters = {
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>
-		public bool Delete(int Id,int CustomerId)
+		public bool Delete(int Id)
 		{
 			
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("delete from StoreInOrder ");
-			strSql.Append(" where Id=@Id and CustomerId=@CustomerId ");
+			strSql.Append(" where Id=@Id");
 						SqlParameter[] parameters = {
-					new SqlParameter("@Id", SqlDbType.Int,4),
-					new SqlParameter("@CustomerId", SqlDbType.Int,4)			};
+					new SqlParameter("@Id", SqlDbType.Int,4)
+			};
 			parameters[0].Value = Id;
-			parameters[1].Value = CustomerId;
 
 
 			int rows=DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
@@ -168,23 +169,40 @@ SqlParameter[] parameters = {
 			}
 		}
 		
+				/// <summary>
+		/// 批量删除一批数据
+		/// </summary>
+		public bool DeleteList(string Idlist )
+		{
+			StringBuilder strSql=new StringBuilder();
+			strSql.Append("delete from StoreInOrder ");
+			strSql.Append(" where ID in ("+Idlist + ")  ");
+			int rows=DbHelperSQL.ExecuteSql(strSql.ToString());
+			if (rows > 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 				
 		
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.StoreInOrder GetModel(int Id,int CustomerId)
+		public DTcms.Model.StoreInOrder GetModel(int Id)
 		{
 			
 			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select Id, CustomerId, Status, CreateTime, BeginChargingTime, ChargingTime, Admin, ChargingCount, InspectionNumber, AccountNumber, SuttleWeight, FreeDays, Remark  ");			
+			strSql.Append("select Id, CustomerId, Status, CreateTime, BeginChargingTime, ChargingTime, Admin, ChargingCount, InspectionNumber, AccountNumber, SuttleWeight, Remark  ");			
 			strSql.Append("  from StoreInOrder ");
-			strSql.Append(" where Id=@Id and CustomerId=@CustomerId ");
+			strSql.Append(" where Id=@Id");
 						SqlParameter[] parameters = {
-					new SqlParameter("@Id", SqlDbType.Int,4),
-					new SqlParameter("@CustomerId", SqlDbType.Int,4)			};
+					new SqlParameter("@Id", SqlDbType.Int,4)
+			};
 			parameters[0].Value = Id;
-			parameters[1].Value = CustomerId;
 
 			
 			DTcms.Model.StoreInOrder model=new DTcms.Model.StoreInOrder();
@@ -226,10 +244,6 @@ SqlParameter[] parameters = {
 																												if(ds.Tables[0].Rows[0]["SuttleWeight"].ToString()!="")
 				{
 					model.SuttleWeight=decimal.Parse(ds.Tables[0].Rows[0]["SuttleWeight"].ToString());
-				}
-																																if(ds.Tables[0].Rows[0]["FreeDays"].ToString()!="")
-				{
-					model.FreeDays=int.Parse(ds.Tables[0].Rows[0]["FreeDays"].ToString());
 				}
 																																				model.Remark= ds.Tables[0].Rows[0]["Remark"].ToString();
 																										

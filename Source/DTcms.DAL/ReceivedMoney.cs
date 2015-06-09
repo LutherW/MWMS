@@ -4,8 +4,7 @@ using System.Data.SqlClient;
 using System.Collections.Generic; 
 using System.Data;
 using DTcms.DBUtility;
-namespace DTcms.DAL  
-	
+namespace DTcms.DAL
 {
 	 	//ReceivedMoney
 		public partial class ReceivedMoney
@@ -35,22 +34,21 @@ namespace DTcms.DAL
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public void Add(DTcms.Model.ReceivedMoney model)
+		public int Add(DTcms.Model.ReceivedMoney model)
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("insert into ReceivedMoney(");			
-            strSql.Append("Id,StoreInOrderId,CustomerId,Name,BeginChargingTime,EndChargingTime2,ChargingCount,TotalPrice,FactTotalPrice,CreateTime,Admin,Remark,Status");
+            strSql.Append("StoreInOrderId,CustomerId,Name,BeginChargingTime,EndChargingTime,ChargingCount,TotalPrice,FactTotalPrice,CreateTime,Admin,Remark,Status");
 			strSql.Append(") values (");
-            strSql.Append("@Id,@StoreInOrderId,@CustomerId,@Name,@BeginChargingTime,@EndChargingTime2,@ChargingCount,@TotalPrice,@FactTotalPrice,@CreateTime,@Admin,@Remark,@Status");            
+            strSql.Append("@StoreInOrderId,@CustomerId,@Name,@BeginChargingTime,@EndChargingTime,@ChargingCount,@TotalPrice,@FactTotalPrice,@CreateTime,@Admin,@Remark,@Status");            
             strSql.Append(") ");            
-            		
+            strSql.Append(";select @@IDENTITY");		
 			SqlParameter[] parameters = {
-			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@StoreInOrderId", SqlDbType.Int,4) ,            
+			            new SqlParameter("@StoreInOrderId", SqlDbType.Int,4) ,            
                         new SqlParameter("@CustomerId", SqlDbType.Int,4) ,            
                         new SqlParameter("@Name", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@BeginChargingTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@EndChargingTime2", SqlDbType.DateTime) ,            
+                        new SqlParameter("@EndChargingTime", SqlDbType.DateTime) ,            
                         new SqlParameter("@ChargingCount", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@TotalPrice", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@FactTotalPrice", SqlDbType.Decimal,9) ,            
@@ -61,20 +59,30 @@ namespace DTcms.DAL
               
             };
 			            
-            parameters[0].Value = model.Id;                        
-            parameters[1].Value = model.StoreInOrderId;                        
-            parameters[2].Value = model.CustomerId;                        
-            parameters[3].Value = model.Name;                        
-            parameters[4].Value = model.BeginChargingTime;                        
-            parameters[5].Value = model.EndChargingTime2;                        
-            parameters[6].Value = model.ChargingCount;                        
-            parameters[7].Value = model.TotalPrice;                        
-            parameters[8].Value = model.FactTotalPrice;                        
-            parameters[9].Value = model.CreateTime;                        
-            parameters[10].Value = model.Admin;                        
-            parameters[11].Value = model.Remark;                        
-            parameters[12].Value = model.Status;                        
-			            DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
+            parameters[0].Value = model.StoreInOrderId;                        
+            parameters[1].Value = model.CustomerId;                        
+            parameters[2].Value = model.Name;                        
+            parameters[3].Value = model.BeginChargingTime;                        
+            parameters[4].Value = model.EndChargingTime;                        
+            parameters[5].Value = model.ChargingCount;                        
+            parameters[6].Value = model.TotalPrice;                        
+            parameters[7].Value = model.FactTotalPrice;                        
+            parameters[8].Value = model.CreateTime;                        
+            parameters[9].Value = model.Admin;                        
+            parameters[10].Value = model.Remark;                        
+            parameters[11].Value = model.Status;                        
+			   
+			object obj = DbHelperSQL.GetSingle(strSql.ToString(),parameters);			
+			if (obj == null)
+			{
+				return 0;
+			}
+			else
+			{
+				                    
+            	return Convert.ToInt32(obj);
+                                                                  
+			}			   
             			
 		}
 		
@@ -86,13 +94,12 @@ namespace DTcms.DAL
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("update ReceivedMoney set ");
-			                        
-            strSql.Append(" Id = @Id , ");                                    
+			                                                
             strSql.Append(" StoreInOrderId = @StoreInOrderId , ");                                    
             strSql.Append(" CustomerId = @CustomerId , ");                                    
             strSql.Append(" Name = @Name , ");                                    
             strSql.Append(" BeginChargingTime = @BeginChargingTime , ");                                    
-            strSql.Append(" EndChargingTime2 = @EndChargingTime2 , ");                                    
+            strSql.Append(" EndChargingTime = @EndChargingTime , ");                                    
             strSql.Append(" ChargingCount = @ChargingCount , ");                                    
             strSql.Append(" TotalPrice = @TotalPrice , ");                                    
             strSql.Append(" FactTotalPrice = @FactTotalPrice , ");                                    
@@ -100,7 +107,7 @@ namespace DTcms.DAL
             strSql.Append(" Admin = @Admin , ");                                    
             strSql.Append(" Remark = @Remark , ");                                    
             strSql.Append(" Status = @Status  ");            			
-			strSql.Append(" where Id=@Id and StoreInOrderId=@StoreInOrderId and CustomerId=@CustomerId  ");
+			strSql.Append(" where Id=@Id ");
 						
 SqlParameter[] parameters = {
 			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
@@ -108,7 +115,7 @@ SqlParameter[] parameters = {
                         new SqlParameter("@CustomerId", SqlDbType.Int,4) ,            
                         new SqlParameter("@Name", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@BeginChargingTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@EndChargingTime2", SqlDbType.DateTime) ,            
+                        new SqlParameter("@EndChargingTime", SqlDbType.DateTime) ,            
                         new SqlParameter("@ChargingCount", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@TotalPrice", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@FactTotalPrice", SqlDbType.Decimal,9) ,            
@@ -124,7 +131,7 @@ SqlParameter[] parameters = {
             parameters[2].Value = model.CustomerId;                        
             parameters[3].Value = model.Name;                        
             parameters[4].Value = model.BeginChargingTime;                        
-            parameters[5].Value = model.EndChargingTime2;                        
+            parameters[5].Value = model.EndChargingTime;                        
             parameters[6].Value = model.ChargingCount;                        
             parameters[7].Value = model.TotalPrice;                        
             parameters[8].Value = model.FactTotalPrice;                        
@@ -147,19 +154,16 @@ SqlParameter[] parameters = {
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>
-		public bool Delete(int Id,int StoreInOrderId,int CustomerId)
+		public bool Delete(int Id)
 		{
 			
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("delete from ReceivedMoney ");
-			strSql.Append(" where Id=@Id and StoreInOrderId=@StoreInOrderId and CustomerId=@CustomerId ");
+			strSql.Append(" where Id=@Id");
 						SqlParameter[] parameters = {
-					new SqlParameter("@Id", SqlDbType.Int,4),
-					new SqlParameter("@StoreInOrderId", SqlDbType.Int,4),
-					new SqlParameter("@CustomerId", SqlDbType.Int,4)			};
+					new SqlParameter("@Id", SqlDbType.Int,4)
+			};
 			parameters[0].Value = Id;
-			parameters[1].Value = StoreInOrderId;
-			parameters[2].Value = CustomerId;
 
 
 			int rows=DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
@@ -173,25 +177,40 @@ SqlParameter[] parameters = {
 			}
 		}
 		
+				/// <summary>
+		/// 批量删除一批数据
+		/// </summary>
+		public bool DeleteList(string Idlist )
+		{
+			StringBuilder strSql=new StringBuilder();
+			strSql.Append("delete from ReceivedMoney ");
+			strSql.Append(" where ID in ("+Idlist + ")  ");
+			int rows=DbHelperSQL.ExecuteSql(strSql.ToString());
+			if (rows > 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 				
 		
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.ReceivedMoney GetModel(int Id,int StoreInOrderId,int CustomerId)
+		public DTcms.Model.ReceivedMoney GetModel(int Id)
 		{
 			
 			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select Id, StoreInOrderId, CustomerId, Name, BeginChargingTime, EndChargingTime2, ChargingCount, TotalPrice, FactTotalPrice, CreateTime, Admin, Remark, Status  ");			
+			strSql.Append("select Id, StoreInOrderId, CustomerId, Name, BeginChargingTime, EndChargingTime, ChargingCount, TotalPrice, FactTotalPrice, CreateTime, Admin, Remark, Status  ");			
 			strSql.Append("  from ReceivedMoney ");
-			strSql.Append(" where Id=@Id and StoreInOrderId=@StoreInOrderId and CustomerId=@CustomerId ");
+			strSql.Append(" where Id=@Id");
 						SqlParameter[] parameters = {
-					new SqlParameter("@Id", SqlDbType.Int,4),
-					new SqlParameter("@StoreInOrderId", SqlDbType.Int,4),
-					new SqlParameter("@CustomerId", SqlDbType.Int,4)			};
+					new SqlParameter("@Id", SqlDbType.Int,4)
+			};
 			parameters[0].Value = Id;
-			parameters[1].Value = StoreInOrderId;
-			parameters[2].Value = CustomerId;
 
 			
 			DTcms.Model.ReceivedMoney model=new DTcms.Model.ReceivedMoney();
@@ -216,9 +235,9 @@ SqlParameter[] parameters = {
 				{
 					model.BeginChargingTime=DateTime.Parse(ds.Tables[0].Rows[0]["BeginChargingTime"].ToString());
 				}
-																																if(ds.Tables[0].Rows[0]["EndChargingTime2"].ToString()!="")
+																																if(ds.Tables[0].Rows[0]["EndChargingTime"].ToString()!="")
 				{
-					model.EndChargingTime2=DateTime.Parse(ds.Tables[0].Rows[0]["EndChargingTime2"].ToString());
+					model.EndChargingTime=DateTime.Parse(ds.Tables[0].Rows[0]["EndChargingTime"].ToString());
 				}
 																																if(ds.Tables[0].Rows[0]["ChargingCount"].ToString()!="")
 				{

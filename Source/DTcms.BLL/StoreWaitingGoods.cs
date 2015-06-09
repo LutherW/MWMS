@@ -5,36 +5,36 @@ using System.Data;
 using DTcms.Common;
 using DTcms.Model;
 namespace DTcms.BLL{
-	 	//Attach
-		public partial class Attach
+	 	//StoreWaitingGoods
+		public partial class StoreWaitingGoods
 	{
    		     
-		private readonly DTcms.DAL.Attach dal=new DTcms.DAL.Attach();
-		public Attach()
+		private readonly DTcms.DAL.StoreWaitingGoods dal=new DTcms.DAL.StoreWaitingGoods();
+		public StoreWaitingGoods()
 		{}
 		
 		#region  Method
 		/// <summary>
 		/// 是否存在该记录
 		/// </summary>
-		public bool Exists(int StoreWaitingGoodsId)
+		public bool Exists(int Id,int GoodsId)
 		{
-			return dal.Exists(StoreWaitingGoodsId);
+			return dal.Exists(Id,GoodsId);
 		}
 
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public void  Add(DTcms.Model.Attach model)
+		public int  Add(DTcms.Model.StoreWaitingGoods model)
 		{
-						dal.Add(model);
+						return dal.Add(model);
 						
 		}
 
 		/// <summary>
 		/// 更新一条数据
 		/// </summary>
-		public bool Update(DTcms.Model.Attach model)
+		public bool Update(DTcms.Model.StoreWaitingGoods model)
 		{
 			return dal.Update(model);
 		}
@@ -42,34 +42,41 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>
-		public bool Delete(int StoreWaitingGoodsId)
+		public bool Delete(int Id)
 		{
 			
-			return dal.Delete(StoreWaitingGoodsId);
+			return dal.Delete(Id);
+		}
+				/// <summary>
+		/// 批量删除一批数据
+		/// </summary>
+		public bool DeleteList(string Idlist )
+		{
+			return dal.DeleteList(Idlist );
 		}
 		
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.Attach GetModel(int StoreWaitingGoodsId)
+		public DTcms.Model.StoreWaitingGoods GetModel(int Id)
 		{
 			
-			return dal.GetModel(StoreWaitingGoodsId);
+			return dal.GetModel(Id);
 		}
 
 		/// <summary>
 		/// 得到一个对象实体，从缓存中
 		/// </summary>
-        //public DTcms.Model.Attach GetModelByCache(int StoreWaitingGoodsId)
+        //public DTcms.Model.StoreWaitingGoods GetModelByCache(int Id)
         //{
 			
-        //    string CacheKey = "AttachModel-" + StoreWaitingGoodsId;
+        //    string CacheKey = "StoreWaitingGoodsModel-" + Id;
         //    object objModel = DTcms.Common.DataCache.GetCache(CacheKey);
         //    if (objModel == null)
         //    {
         //        try
         //        {
-        //            objModel = dal.GetModel(StoreWaitingGoodsId);
+        //            objModel = dal.GetModel(Id);
         //            if (objModel != null)
         //            {
         //                int ModelCache = DTcms.Common.ConfigHelper.GetConfigInt("ModelCache");
@@ -78,7 +85,7 @@ namespace DTcms.BLL{
         //        }
         //        catch{}
         //    }
-        //    return (DTcms.Model.Attach)objModel;
+        //    return (DTcms.Model.StoreWaitingGoods)objModel;
         //}
 
 		/// <summary>
@@ -98,7 +105,7 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 获得数据列表
 		/// </summary>
-		public List<DTcms.Model.Attach> GetModelList(string strWhere)
+		public List<DTcms.Model.StoreWaitingGoods> GetModelList(string strWhere)
 		{
 			DataSet ds = dal.GetList(strWhere);
 			return DataTableToList(ds.Tables[0]);
@@ -106,27 +113,29 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 获得数据列表
 		/// </summary>
-		public List<DTcms.Model.Attach> DataTableToList(DataTable dt)
+		public List<DTcms.Model.StoreWaitingGoods> DataTableToList(DataTable dt)
 		{
-			List<DTcms.Model.Attach> modelList = new List<DTcms.Model.Attach>();
+			List<DTcms.Model.StoreWaitingGoods> modelList = new List<DTcms.Model.StoreWaitingGoods>();
 			int rowsCount = dt.Rows.Count;
 			if (rowsCount > 0)
 			{
-				DTcms.Model.Attach model;
+				DTcms.Model.StoreWaitingGoods model;
 				for (int n = 0; n < rowsCount; n++)
 				{
-					model = new DTcms.Model.Attach();					
-													if(dt.Rows[n]["StoreWaitingGoodsId"].ToString()!="")
+					model = new DTcms.Model.StoreWaitingGoods();					
+													if(dt.Rows[n]["Id"].ToString()!="")
 				{
-					model.StoreWaitingGoodsId=int.Parse(dt.Rows[n]["StoreWaitingGoodsId"].ToString());
+					model.Id=int.Parse(dt.Rows[n]["Id"].ToString());
 				}
-																																				model.FilePath= dt.Rows[n]["FilePath"].ToString();
-																												if(dt.Rows[n]["CreateTime"].ToString()!="")
+																																if(dt.Rows[n]["GoodsId"].ToString()!="")
 				{
-					model.CreateTime=DateTime.Parse(dt.Rows[n]["CreateTime"].ToString());
+					model.GoodsId=int.Parse(dt.Rows[n]["GoodsId"].ToString());
 				}
-																																				model.Admin= dt.Rows[n]["Admin"].ToString();
-																																model.Remark= dt.Rows[n]["Remark"].ToString();
+																																if(dt.Rows[n]["Status"].ToString()!="")
+				{
+					model.Status=int.Parse(dt.Rows[n]["Status"].ToString());
+				}
+																																				model.Remark= dt.Rows[n]["Remark"].ToString();
 																						
 				
 					modelList.Add(model);

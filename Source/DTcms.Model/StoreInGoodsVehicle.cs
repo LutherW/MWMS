@@ -8,13 +8,13 @@ namespace DTcms.Model{
 	{
    		     
       	/// <summary>
-		/// Id
+		/// StoreWaitingGoodsId
         /// </summary>		
-		private int _id;
-        public int Id
+		private int _storewaitinggoodsid;
+        public int StoreWaitingGoodsId
         {
-            get{ return _id; }
-            set{ _id = value; }
+            get{ return _storewaitinggoodsid; }
+            set{ _storewaitinggoodsid = value; }
         }        
 		/// <summary>
 		/// VehicleId

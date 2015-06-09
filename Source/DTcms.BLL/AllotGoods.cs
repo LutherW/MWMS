@@ -17,17 +17,17 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 是否存在该记录
 		/// </summary>
-		public bool Exists(int AllotOrderId,int Id,int StoreInOrderId,int GoodsId,int StoreInGoodsStoreInOrderId,int StoreInGoodsId)
+		public bool Exists(int Id,int AllotOrderId,int StoreInOrderId,int StoreInGoodsId)
 		{
-			return dal.Exists(AllotOrderId,Id,StoreInOrderId,GoodsId,StoreInGoodsStoreInOrderId,StoreInGoodsId);
+			return dal.Exists(Id,AllotOrderId,StoreInOrderId,StoreInGoodsId);
 		}
 
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public void  Add(DTcms.Model.AllotGoods model)
+		public int  Add(DTcms.Model.AllotGoods model)
 		{
-						dal.Add(model);
+						return dal.Add(model);
 						
 		}
 
@@ -42,34 +42,41 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>
-		public bool Delete(int AllotOrderId,int Id,int StoreInOrderId,int GoodsId,int StoreInGoodsStoreInOrderId,int StoreInGoodsId)
+		public bool Delete(int Id)
 		{
 			
-			return dal.Delete(AllotOrderId,Id,StoreInOrderId,GoodsId,StoreInGoodsStoreInOrderId,StoreInGoodsId);
+			return dal.Delete(Id);
+		}
+				/// <summary>
+		/// 批量删除一批数据
+		/// </summary>
+		public bool DeleteList(string Idlist )
+		{
+			return dal.DeleteList(Idlist );
 		}
 		
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.AllotGoods GetModel(int AllotOrderId,int Id,int StoreInOrderId,int GoodsId,int StoreInGoodsStoreInOrderId,int StoreInGoodsId)
+		public DTcms.Model.AllotGoods GetModel(int Id)
 		{
 			
-			return dal.GetModel(AllotOrderId,Id,StoreInOrderId,GoodsId,StoreInGoodsStoreInOrderId,StoreInGoodsId);
+			return dal.GetModel(Id);
 		}
 
 		/// <summary>
 		/// 得到一个对象实体，从缓存中
 		/// </summary>
-        //public DTcms.Model.AllotGoods GetModelByCache(int AllotOrderId,int Id,int StoreInOrderId,int GoodsId,int StoreInGoodsStoreInOrderId,int StoreInGoodsId)
+        //public DTcms.Model.AllotGoods GetModelByCache(int Id)
         //{
 			
-        //    string CacheKey = "AllotGoodsModel-" + AllotOrderId+Id+StoreInOrderId+GoodsId+StoreInGoodsStoreInOrderId+StoreInGoodsId;
+        //    string CacheKey = "AllotGoodsModel-" + Id;
         //    object objModel = DTcms.Common.DataCache.GetCache(CacheKey);
         //    if (objModel == null)
         //    {
         //        try
         //        {
-        //            objModel = dal.GetModel(AllotOrderId,Id,StoreInOrderId,GoodsId,StoreInGoodsStoreInOrderId,StoreInGoodsId);
+        //            objModel = dal.GetModel(Id);
         //            if (objModel != null)
         //            {
         //                int ModelCache = DTcms.Common.ConfigHelper.GetConfigInt("ModelCache");
@@ -116,21 +123,17 @@ namespace DTcms.BLL{
 				for (int n = 0; n < rowsCount; n++)
 				{
 					model = new DTcms.Model.AllotGoods();					
-													if(dt.Rows[n]["AllotOrderId"].ToString()!="")
-				{
-					model.AllotOrderId=int.Parse(dt.Rows[n]["AllotOrderId"].ToString());
-				}
-																																if(dt.Rows[n]["Id"].ToString()!="")
+													if(dt.Rows[n]["Id"].ToString()!="")
 				{
 					model.Id=int.Parse(dt.Rows[n]["Id"].ToString());
+				}
+																																if(dt.Rows[n]["AllotOrderId"].ToString()!="")
+				{
+					model.AllotOrderId=int.Parse(dt.Rows[n]["AllotOrderId"].ToString());
 				}
 																																if(dt.Rows[n]["StoreInOrderId"].ToString()!="")
 				{
 					model.StoreInOrderId=int.Parse(dt.Rows[n]["StoreInOrderId"].ToString());
-				}
-																																if(dt.Rows[n]["GoodsId"].ToString()!="")
-				{
-					model.GoodsId=int.Parse(dt.Rows[n]["GoodsId"].ToString());
 				}
 																																if(dt.Rows[n]["StoreInGoodsStoreInOrderId"].ToString()!="")
 				{

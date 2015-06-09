@@ -4,8 +4,7 @@ using System.Data.SqlClient;
 using System.Collections.Generic; 
 using System.Data;
 using DTcms.DBUtility;
-namespace DTcms.DAL  
-	
+namespace DTcms.DAL
 {
 	 	//CheckRecord
 		public partial class CheckRecord
@@ -41,18 +40,17 @@ namespace DTcms.DAL
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public void Add(DTcms.Model.CheckRecord model)
+		public int Add(DTcms.Model.CheckRecord model)
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("insert into CheckRecord(");			
-            strSql.Append("Id,VehicleId,CustomerId,HandlingModeId,GoodsId,Status,CreateTime,Admin,InspectionNumber,CaseNumber,CheckResult,RealName,LinkMan,Remark");
+            strSql.Append("VehicleId,CustomerId,HandlingModeId,GoodsId,Status,CreateTime,Admin,InspectionNumber,CaseNumber,CheckResult,RealName,LinkMan,Remark");
 			strSql.Append(") values (");
-            strSql.Append("@Id,@VehicleId,@CustomerId,@HandlingModeId,@GoodsId,@Status,@CreateTime,@Admin,@InspectionNumber,@CaseNumber,@CheckResult,@RealName,@LinkMan,@Remark");            
+            strSql.Append("@VehicleId,@CustomerId,@HandlingModeId,@GoodsId,@Status,@CreateTime,@Admin,@InspectionNumber,@CaseNumber,@CheckResult,@RealName,@LinkMan,@Remark");            
             strSql.Append(") ");            
-            		
+            strSql.Append(";select @@IDENTITY");		
 			SqlParameter[] parameters = {
-			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@VehicleId", SqlDbType.Int,4) ,            
+			            new SqlParameter("@VehicleId", SqlDbType.Int,4) ,            
                         new SqlParameter("@CustomerId", SqlDbType.Int,4) ,            
                         new SqlParameter("@HandlingModeId", SqlDbType.Int,4) ,            
                         new SqlParameter("@GoodsId", SqlDbType.Int,4) ,            
@@ -68,21 +66,31 @@ namespace DTcms.DAL
               
             };
 			            
-            parameters[0].Value = model.Id;                        
-            parameters[1].Value = model.VehicleId;                        
-            parameters[2].Value = model.CustomerId;                        
-            parameters[3].Value = model.HandlingModeId;                        
-            parameters[4].Value = model.GoodsId;                        
-            parameters[5].Value = model.Status;                        
-            parameters[6].Value = model.CreateTime;                        
-            parameters[7].Value = model.Admin;                        
-            parameters[8].Value = model.InspectionNumber;                        
-            parameters[9].Value = model.CaseNumber;                        
-            parameters[10].Value = model.CheckResult;                        
-            parameters[11].Value = model.RealName;                        
-            parameters[12].Value = model.LinkMan;                        
-            parameters[13].Value = model.Remark;                        
-			            DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
+            parameters[0].Value = model.VehicleId;                        
+            parameters[1].Value = model.CustomerId;                        
+            parameters[2].Value = model.HandlingModeId;                        
+            parameters[3].Value = model.GoodsId;                        
+            parameters[4].Value = model.Status;                        
+            parameters[5].Value = model.CreateTime;                        
+            parameters[6].Value = model.Admin;                        
+            parameters[7].Value = model.InspectionNumber;                        
+            parameters[8].Value = model.CaseNumber;                        
+            parameters[9].Value = model.CheckResult;                        
+            parameters[10].Value = model.RealName;                        
+            parameters[11].Value = model.LinkMan;                        
+            parameters[12].Value = model.Remark;                        
+			   
+			object obj = DbHelperSQL.GetSingle(strSql.ToString(),parameters);			
+			if (obj == null)
+			{
+				return 0;
+			}
+			else
+			{
+				                    
+            	return Convert.ToInt32(obj);
+                                                                  
+			}			   
             			
 		}
 		
@@ -94,8 +102,7 @@ namespace DTcms.DAL
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("update CheckRecord set ");
-			                        
-            strSql.Append(" Id = @Id , ");                                    
+			                                                
             strSql.Append(" VehicleId = @VehicleId , ");                                    
             strSql.Append(" CustomerId = @CustomerId , ");                                    
             strSql.Append(" HandlingModeId = @HandlingModeId , ");                                    
@@ -109,7 +116,7 @@ namespace DTcms.DAL
             strSql.Append(" RealName = @RealName , ");                                    
             strSql.Append(" LinkMan = @LinkMan , ");                                    
             strSql.Append(" Remark = @Remark  ");            			
-			strSql.Append(" where Id=@Id and VehicleId=@VehicleId and CustomerId=@CustomerId and HandlingModeId=@HandlingModeId and GoodsId=@GoodsId  ");
+			strSql.Append(" where Id=@Id ");
 						
 SqlParameter[] parameters = {
 			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
@@ -158,23 +165,16 @@ SqlParameter[] parameters = {
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>
-		public bool Delete(int Id,int VehicleId,int CustomerId,int HandlingModeId,int GoodsId)
+		public bool Delete(int Id)
 		{
 			
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("delete from CheckRecord ");
-			strSql.Append(" where Id=@Id and VehicleId=@VehicleId and CustomerId=@CustomerId and HandlingModeId=@HandlingModeId and GoodsId=@GoodsId ");
+			strSql.Append(" where Id=@Id");
 						SqlParameter[] parameters = {
-					new SqlParameter("@Id", SqlDbType.Int,4),
-					new SqlParameter("@VehicleId", SqlDbType.Int,4),
-					new SqlParameter("@CustomerId", SqlDbType.Int,4),
-					new SqlParameter("@HandlingModeId", SqlDbType.Int,4),
-					new SqlParameter("@GoodsId", SqlDbType.Int,4)			};
+					new SqlParameter("@Id", SqlDbType.Int,4)
+			};
 			parameters[0].Value = Id;
-			parameters[1].Value = VehicleId;
-			parameters[2].Value = CustomerId;
-			parameters[3].Value = HandlingModeId;
-			parameters[4].Value = GoodsId;
 
 
 			int rows=DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
@@ -188,29 +188,40 @@ SqlParameter[] parameters = {
 			}
 		}
 		
+				/// <summary>
+		/// 批量删除一批数据
+		/// </summary>
+		public bool DeleteList(string Idlist )
+		{
+			StringBuilder strSql=new StringBuilder();
+			strSql.Append("delete from CheckRecord ");
+			strSql.Append(" where ID in ("+Idlist + ")  ");
+			int rows=DbHelperSQL.ExecuteSql(strSql.ToString());
+			if (rows > 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 				
 		
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.CheckRecord GetModel(int Id,int VehicleId,int CustomerId,int HandlingModeId,int GoodsId)
+		public DTcms.Model.CheckRecord GetModel(int Id)
 		{
 			
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("select Id, VehicleId, CustomerId, HandlingModeId, GoodsId, Status, CreateTime, Admin, InspectionNumber, CaseNumber, CheckResult, RealName, LinkMan, Remark  ");			
 			strSql.Append("  from CheckRecord ");
-			strSql.Append(" where Id=@Id and VehicleId=@VehicleId and CustomerId=@CustomerId and HandlingModeId=@HandlingModeId and GoodsId=@GoodsId ");
+			strSql.Append(" where Id=@Id");
 						SqlParameter[] parameters = {
-					new SqlParameter("@Id", SqlDbType.Int,4),
-					new SqlParameter("@VehicleId", SqlDbType.Int,4),
-					new SqlParameter("@CustomerId", SqlDbType.Int,4),
-					new SqlParameter("@HandlingModeId", SqlDbType.Int,4),
-					new SqlParameter("@GoodsId", SqlDbType.Int,4)			};
+					new SqlParameter("@Id", SqlDbType.Int,4)
+			};
 			parameters[0].Value = Id;
-			parameters[1].Value = VehicleId;
-			parameters[2].Value = CustomerId;
-			parameters[3].Value = HandlingModeId;
-			parameters[4].Value = GoodsId;
 
 			
 			DTcms.Model.CheckRecord model=new DTcms.Model.CheckRecord();

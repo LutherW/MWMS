@@ -25,9 +25,9 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public void  Add(DTcms.Model.ReceivedMoney model)
+		public int  Add(DTcms.Model.ReceivedMoney model)
 		{
-						dal.Add(model);
+						return dal.Add(model);
 						
 		}
 
@@ -42,34 +42,41 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>
-		public bool Delete(int Id,int StoreInOrderId,int CustomerId)
+		public bool Delete(int Id)
 		{
 			
-			return dal.Delete(Id,StoreInOrderId,CustomerId);
+			return dal.Delete(Id);
+		}
+				/// <summary>
+		/// 批量删除一批数据
+		/// </summary>
+		public bool DeleteList(string Idlist )
+		{
+			return dal.DeleteList(Idlist );
 		}
 		
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.ReceivedMoney GetModel(int Id,int StoreInOrderId,int CustomerId)
+		public DTcms.Model.ReceivedMoney GetModel(int Id)
 		{
 			
-			return dal.GetModel(Id,StoreInOrderId,CustomerId);
+			return dal.GetModel(Id);
 		}
 
 		/// <summary>
 		/// 得到一个对象实体，从缓存中
 		/// </summary>
-        //public DTcms.Model.ReceivedMoney GetModelByCache(int Id,int StoreInOrderId,int CustomerId)
+        //public DTcms.Model.ReceivedMoney GetModelByCache(int Id)
         //{
 			
-        //    string CacheKey = "ReceivedMoneyModel-" + Id+StoreInOrderId+CustomerId;
+        //    string CacheKey = "ReceivedMoneyModel-" + Id;
         //    object objModel = DTcms.Common.DataCache.GetCache(CacheKey);
         //    if (objModel == null)
         //    {
         //        try
         //        {
-        //            objModel = dal.GetModel(Id,StoreInOrderId,CustomerId);
+        //            objModel = dal.GetModel(Id);
         //            if (objModel != null)
         //            {
         //                int ModelCache = DTcms.Common.ConfigHelper.GetConfigInt("ModelCache");
@@ -133,9 +140,9 @@ namespace DTcms.BLL{
 				{
 					model.BeginChargingTime=DateTime.Parse(dt.Rows[n]["BeginChargingTime"].ToString());
 				}
-																																if(dt.Rows[n]["EndChargingTime2"].ToString()!="")
+																																if(dt.Rows[n]["EndChargingTime"].ToString()!="")
 				{
-					model.EndChargingTime2=DateTime.Parse(dt.Rows[n]["EndChargingTime2"].ToString());
+					model.EndChargingTime=DateTime.Parse(dt.Rows[n]["EndChargingTime"].ToString());
 				}
 																																if(dt.Rows[n]["ChargingCount"].ToString()!="")
 				{

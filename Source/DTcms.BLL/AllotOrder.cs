@@ -17,17 +17,17 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 是否存在该记录
 		/// </summary>
-		public bool Exists(int Id,int PurposeStoreId,int SourceStoreId)
+		public bool Exists(int Id,int SourceStoreId,int PurposeStoreId)
 		{
-			return dal.Exists(Id,PurposeStoreId,SourceStoreId);
+			return dal.Exists(Id,SourceStoreId,PurposeStoreId);
 		}
 
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public void  Add(DTcms.Model.AllotOrder model)
+		public int  Add(DTcms.Model.AllotOrder model)
 		{
-						dal.Add(model);
+						return dal.Add(model);
 						
 		}
 
@@ -42,34 +42,41 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>
-		public bool Delete(int Id,int PurposeStoreId,int SourceStoreId)
+		public bool Delete(int Id)
 		{
 			
-			return dal.Delete(Id,PurposeStoreId,SourceStoreId);
+			return dal.Delete(Id);
+		}
+				/// <summary>
+		/// 批量删除一批数据
+		/// </summary>
+		public bool DeleteList(string Idlist )
+		{
+			return dal.DeleteList(Idlist );
 		}
 		
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.AllotOrder GetModel(int Id,int PurposeStoreId,int SourceStoreId)
+		public DTcms.Model.AllotOrder GetModel(int Id)
 		{
 			
-			return dal.GetModel(Id,PurposeStoreId,SourceStoreId);
+			return dal.GetModel(Id);
 		}
 
 		/// <summary>
 		/// 得到一个对象实体，从缓存中
 		/// </summary>
-        //public DTcms.Model.AllotOrder GetModelByCache(int Id,int PurposeStoreId,int SourceStoreId)
+        //public DTcms.Model.AllotOrder GetModelByCache(int Id)
         //{
 			
-        //    string CacheKey = "AllotOrderModel-" + Id+PurposeStoreId+SourceStoreId;
+        //    string CacheKey = "AllotOrderModel-" + Id;
         //    object objModel = DTcms.Common.DataCache.GetCache(CacheKey);
         //    if (objModel == null)
         //    {
         //        try
         //        {
-        //            objModel = dal.GetModel(Id,PurposeStoreId,SourceStoreId);
+        //            objModel = dal.GetModel(Id);
         //            if (objModel != null)
         //            {
         //                int ModelCache = DTcms.Common.ConfigHelper.GetConfigInt("ModelCache");
@@ -120,13 +127,13 @@ namespace DTcms.BLL{
 				{
 					model.Id=int.Parse(dt.Rows[n]["Id"].ToString());
 				}
-																																if(dt.Rows[n]["PurposeStoreId"].ToString()!="")
-				{
-					model.PurposeStoreId=int.Parse(dt.Rows[n]["PurposeStoreId"].ToString());
-				}
 																																if(dt.Rows[n]["SourceStoreId"].ToString()!="")
 				{
 					model.SourceStoreId=int.Parse(dt.Rows[n]["SourceStoreId"].ToString());
+				}
+																																if(dt.Rows[n]["PurposeStoreId"].ToString()!="")
+				{
+					model.PurposeStoreId=int.Parse(dt.Rows[n]["PurposeStoreId"].ToString());
 				}
 																																				model.Remark= dt.Rows[n]["Remark"].ToString();
 																												if(dt.Rows[n]["CreateTime"].ToString()!="")

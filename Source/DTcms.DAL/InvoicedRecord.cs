@@ -4,8 +4,7 @@ using System.Data.SqlClient;
 using System.Collections.Generic; 
 using System.Data;
 using DTcms.DBUtility;
-namespace DTcms.DAL  
-	
+namespace DTcms.DAL
 {
 	 	//InvoicedRecord
 		public partial class InvoicedRecord
@@ -38,18 +37,17 @@ namespace DTcms.DAL
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public void Add(DTcms.Model.InvoicedRecord model)
+		public int Add(DTcms.Model.InvoicedRecord model)
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("insert into InvoicedRecord(");			
-            strSql.Append("Id,ReceivedMoneyId,StoreInOrderId,CustomerId,Remark,CreateTime,Admin,Price");
+            strSql.Append("ReceivedMoneyId,StoreInOrderId,CustomerId,Remark,CreateTime,Admin,Price");
 			strSql.Append(") values (");
-            strSql.Append("@Id,@ReceivedMoneyId,@StoreInOrderId,@CustomerId,@Remark,@CreateTime,@Admin,@Price");            
+            strSql.Append("@ReceivedMoneyId,@StoreInOrderId,@CustomerId,@Remark,@CreateTime,@Admin,@Price");            
             strSql.Append(") ");            
-            		
+            strSql.Append(";select @@IDENTITY");		
 			SqlParameter[] parameters = {
-			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@ReceivedMoneyId", SqlDbType.Int,4) ,            
+			            new SqlParameter("@ReceivedMoneyId", SqlDbType.Int,4) ,            
                         new SqlParameter("@StoreInOrderId", SqlDbType.Int,4) ,            
                         new SqlParameter("@CustomerId", SqlDbType.Int,4) ,            
                         new SqlParameter("@Remark", SqlDbType.VarChar,254) ,            
@@ -59,15 +57,25 @@ namespace DTcms.DAL
               
             };
 			            
-            parameters[0].Value = model.Id;                        
-            parameters[1].Value = model.ReceivedMoneyId;                        
-            parameters[2].Value = model.StoreInOrderId;                        
-            parameters[3].Value = model.CustomerId;                        
-            parameters[4].Value = model.Remark;                        
-            parameters[5].Value = model.CreateTime;                        
-            parameters[6].Value = model.Admin;                        
-            parameters[7].Value = model.Price;                        
-			            DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
+            parameters[0].Value = model.ReceivedMoneyId;                        
+            parameters[1].Value = model.StoreInOrderId;                        
+            parameters[2].Value = model.CustomerId;                        
+            parameters[3].Value = model.Remark;                        
+            parameters[4].Value = model.CreateTime;                        
+            parameters[5].Value = model.Admin;                        
+            parameters[6].Value = model.Price;                        
+			   
+			object obj = DbHelperSQL.GetSingle(strSql.ToString(),parameters);			
+			if (obj == null)
+			{
+				return 0;
+			}
+			else
+			{
+				                    
+            	return Convert.ToInt32(obj);
+                                                                  
+			}			   
             			
 		}
 		
@@ -79,8 +87,7 @@ namespace DTcms.DAL
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("update InvoicedRecord set ");
-			                        
-            strSql.Append(" Id = @Id , ");                                    
+			                                                
             strSql.Append(" ReceivedMoneyId = @ReceivedMoneyId , ");                                    
             strSql.Append(" StoreInOrderId = @StoreInOrderId , ");                                    
             strSql.Append(" CustomerId = @CustomerId , ");                                    
@@ -88,7 +95,7 @@ namespace DTcms.DAL
             strSql.Append(" CreateTime = @CreateTime , ");                                    
             strSql.Append(" Admin = @Admin , ");                                    
             strSql.Append(" Price = @Price  ");            			
-			strSql.Append(" where Id=@Id and ReceivedMoneyId=@ReceivedMoneyId and StoreInOrderId=@StoreInOrderId and CustomerId=@CustomerId  ");
+			strSql.Append(" where Id=@Id ");
 						
 SqlParameter[] parameters = {
 			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
@@ -125,21 +132,16 @@ SqlParameter[] parameters = {
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>
-		public bool Delete(int Id,int ReceivedMoneyId,int StoreInOrderId,int CustomerId)
+		public bool Delete(int Id)
 		{
 			
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("delete from InvoicedRecord ");
-			strSql.Append(" where Id=@Id and ReceivedMoneyId=@ReceivedMoneyId and StoreInOrderId=@StoreInOrderId and CustomerId=@CustomerId ");
+			strSql.Append(" where Id=@Id");
 						SqlParameter[] parameters = {
-					new SqlParameter("@Id", SqlDbType.Int,4),
-					new SqlParameter("@ReceivedMoneyId", SqlDbType.Int,4),
-					new SqlParameter("@StoreInOrderId", SqlDbType.Int,4),
-					new SqlParameter("@CustomerId", SqlDbType.Int,4)			};
+					new SqlParameter("@Id", SqlDbType.Int,4)
+			};
 			parameters[0].Value = Id;
-			parameters[1].Value = ReceivedMoneyId;
-			parameters[2].Value = StoreInOrderId;
-			parameters[3].Value = CustomerId;
 
 
 			int rows=DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
@@ -153,27 +155,40 @@ SqlParameter[] parameters = {
 			}
 		}
 		
+				/// <summary>
+		/// 批量删除一批数据
+		/// </summary>
+		public bool DeleteList(string Idlist )
+		{
+			StringBuilder strSql=new StringBuilder();
+			strSql.Append("delete from InvoicedRecord ");
+			strSql.Append(" where ID in ("+Idlist + ")  ");
+			int rows=DbHelperSQL.ExecuteSql(strSql.ToString());
+			if (rows > 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 				
 		
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.InvoicedRecord GetModel(int Id,int ReceivedMoneyId,int StoreInOrderId,int CustomerId)
+		public DTcms.Model.InvoicedRecord GetModel(int Id)
 		{
 			
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("select Id, ReceivedMoneyId, StoreInOrderId, CustomerId, Remark, CreateTime, Admin, Price  ");			
 			strSql.Append("  from InvoicedRecord ");
-			strSql.Append(" where Id=@Id and ReceivedMoneyId=@ReceivedMoneyId and StoreInOrderId=@StoreInOrderId and CustomerId=@CustomerId ");
+			strSql.Append(" where Id=@Id");
 						SqlParameter[] parameters = {
-					new SqlParameter("@Id", SqlDbType.Int,4),
-					new SqlParameter("@ReceivedMoneyId", SqlDbType.Int,4),
-					new SqlParameter("@StoreInOrderId", SqlDbType.Int,4),
-					new SqlParameter("@CustomerId", SqlDbType.Int,4)			};
+					new SqlParameter("@Id", SqlDbType.Int,4)
+			};
 			parameters[0].Value = Id;
-			parameters[1].Value = ReceivedMoneyId;
-			parameters[2].Value = StoreInOrderId;
-			parameters[3].Value = CustomerId;
 
 			
 			DTcms.Model.InvoicedRecord model=new DTcms.Model.InvoicedRecord();

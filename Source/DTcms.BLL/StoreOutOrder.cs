@@ -17,17 +17,17 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 是否存在该记录
 		/// </summary>
-		public bool Exists(int Id,int CustomerId,int StoreInUnitPriceStoreInOrderId)
+		public bool Exists(int Id,int CustomerId)
 		{
-			return dal.Exists(Id,CustomerId,StoreInUnitPriceStoreInOrderId);
+			return dal.Exists(Id,CustomerId);
 		}
 
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public void  Add(DTcms.Model.StoreOutOrder model)
+		public int  Add(DTcms.Model.StoreOutOrder model)
 		{
-						dal.Add(model);
+						return dal.Add(model);
 						
 		}
 
@@ -42,34 +42,41 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>
-		public bool Delete(int Id,int CustomerId,int StoreInUnitPriceStoreInOrderId)
+		public bool Delete(int Id)
 		{
 			
-			return dal.Delete(Id,CustomerId,StoreInUnitPriceStoreInOrderId);
+			return dal.Delete(Id);
+		}
+				/// <summary>
+		/// 批量删除一批数据
+		/// </summary>
+		public bool DeleteList(string Idlist )
+		{
+			return dal.DeleteList(Idlist );
 		}
 		
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.StoreOutOrder GetModel(int Id,int CustomerId,int StoreInUnitPriceStoreInOrderId)
+		public DTcms.Model.StoreOutOrder GetModel(int Id)
 		{
 			
-			return dal.GetModel(Id,CustomerId,StoreInUnitPriceStoreInOrderId);
+			return dal.GetModel(Id);
 		}
 
 		/// <summary>
 		/// 得到一个对象实体，从缓存中
 		/// </summary>
-        //public DTcms.Model.StoreOutOrder GetModelByCache(int Id,int CustomerId,int StoreInUnitPriceStoreInOrderId)
+        //public DTcms.Model.StoreOutOrder GetModelByCache(int Id)
         //{
 			
-        //    string CacheKey = "StoreOutOrderModel-" + Id+CustomerId+StoreInUnitPriceStoreInOrderId;
+        //    string CacheKey = "StoreOutOrderModel-" + Id;
         //    object objModel = DTcms.Common.DataCache.GetCache(CacheKey);
         //    if (objModel == null)
         //    {
         //        try
         //        {
-        //            objModel = dal.GetModel(Id,CustomerId,StoreInUnitPriceStoreInOrderId);
+        //            objModel = dal.GetModel(Id);
         //            if (objModel != null)
         //            {
         //                int ModelCache = DTcms.Common.ConfigHelper.GetConfigInt("ModelCache");
@@ -133,7 +140,11 @@ namespace DTcms.BLL{
 					model.CreateTime=DateTime.Parse(dt.Rows[n]["CreateTime"].ToString());
 				}
 																																				model.Admin= dt.Rows[n]["Admin"].ToString();
-																												if(dt.Rows[n]["InvoiceMoney"].ToString()!="")
+																												if(dt.Rows[n]["TotalMoney"].ToString()!="")
+				{
+					model.TotalMoney=decimal.Parse(dt.Rows[n]["TotalMoney"].ToString());
+				}
+																																if(dt.Rows[n]["InvoiceMoney"].ToString()!="")
 				{
 					model.InvoiceMoney=decimal.Parse(dt.Rows[n]["InvoiceMoney"].ToString());
 				}

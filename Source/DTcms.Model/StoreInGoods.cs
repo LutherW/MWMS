@@ -35,13 +35,13 @@ namespace DTcms.Model{
             set{ _storeid = value; }
         }        
 		/// <summary>
-		/// StoreModeId
+		/// StoreWaitingGoodsId
         /// </summary>		
-		private int _storemodeid;
-        public int StoreModeId
+		private int _storewaitinggoodsid;
+        public int StoreWaitingGoodsId
         {
-            get{ return _storemodeid; }
-            set{ _storemodeid = value; }
+            get{ return _storewaitinggoodsid; }
+            set{ _storewaitinggoodsid = value; }
         }        
 		/// <summary>
 		/// CustomerId
@@ -51,15 +51,6 @@ namespace DTcms.Model{
         {
             get{ return _customerid; }
             set{ _customerid = value; }
-        }        
-		/// <summary>
-		/// GoodsId
-        /// </summary>		
-		private int _goodsid;
-        public int GoodsId
-        {
-            get{ return _goodsid; }
-            set{ _goodsid = value; }
         }        
 		/// <summary>
 		/// Status

@@ -4,37 +4,30 @@ using System.Data.SqlClient;
 using System.Collections.Generic; 
 using System.Data;
 using DTcms.DBUtility;
-namespace DTcms.DAL  
-	
+namespace DTcms.DAL
 {
 	 	//StoreOutGoods
 		public partial class StoreOutGoods
 	{
    		     
-		public bool Exists(int StoreOutOrderId,int Id,int GoodsId,int StoreInOrderId,int StoreInGoodsStoreInOrderId,int StoreInGoodsId)
+		public bool Exists(int Id,int StoreOutOrderId,int StoreInOrderId,int StoreInGoodsId)
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("select count(1) from StoreOutGoods");
 			strSql.Append(" where ");
-			                                       strSql.Append(" StoreOutOrderId = @StoreOutOrderId and  ");
-                                                                   strSql.Append(" Id = @Id and  ");
-                                                                   strSql.Append(" GoodsId = @GoodsId and  ");
+			                                       strSql.Append(" Id = @Id and  ");
+                                                                   strSql.Append(" StoreOutOrderId = @StoreOutOrderId and  ");
                                                                    strSql.Append(" StoreInOrderId = @StoreInOrderId and  ");
-                                                                   strSql.Append(" StoreInGoodsStoreInOrderId = @StoreInGoodsStoreInOrderId and  ");
                                                                    strSql.Append(" StoreInGoodsId = @StoreInGoodsId  ");
                             			SqlParameter[] parameters = {
-					new SqlParameter("@StoreOutOrderId", SqlDbType.Int,4),
 					new SqlParameter("@Id", SqlDbType.Int,4),
-					new SqlParameter("@GoodsId", SqlDbType.Int,4),
+					new SqlParameter("@StoreOutOrderId", SqlDbType.Int,4),
 					new SqlParameter("@StoreInOrderId", SqlDbType.Int,4),
-					new SqlParameter("@StoreInGoodsStoreInOrderId", SqlDbType.Int,4),
 					new SqlParameter("@StoreInGoodsId", SqlDbType.Int,4)			};
-			parameters[0].Value = StoreOutOrderId;
-			parameters[1].Value = Id;
-			parameters[2].Value = GoodsId;
-			parameters[3].Value = StoreInOrderId;
-			parameters[4].Value = StoreInGoodsStoreInOrderId;
-			parameters[5].Value = StoreInGoodsId;
+			parameters[0].Value = Id;
+			parameters[1].Value = StoreOutOrderId;
+			parameters[2].Value = StoreInOrderId;
+			parameters[3].Value = StoreInGoodsId;
 
 			return DbHelperSQL.Exists(strSql.ToString(),parameters);
 		}
@@ -44,19 +37,17 @@ namespace DTcms.DAL
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public void Add(DTcms.Model.StoreOutGoods model)
+		public int Add(DTcms.Model.StoreOutGoods model)
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("insert into StoreOutGoods(");			
-            strSql.Append("StoreOutOrderId,Id,GoodsId,StoreInOrderId,StoreInGoodsStoreInOrderId,StoreInGoodsId,Remark,StoringOutTime,FactStoringOutTime,Status,Count");
+            strSql.Append("StoreOutOrderId,StoreInOrderId,StoreInGoodsStoreInOrderId,StoreInGoodsId,Remark,StoringOutTime,FactStoringOutTime,Status,Count");
 			strSql.Append(") values (");
-            strSql.Append("@StoreOutOrderId,@Id,@GoodsId,@StoreInOrderId,@StoreInGoodsStoreInOrderId,@StoreInGoodsId,@Remark,@StoringOutTime,@FactStoringOutTime,@Status,@Count");            
+            strSql.Append("@StoreOutOrderId,@StoreInOrderId,@StoreInGoodsStoreInOrderId,@StoreInGoodsId,@Remark,@StoringOutTime,@FactStoringOutTime,@Status,@Count");            
             strSql.Append(") ");            
-            		
+            strSql.Append(";select @@IDENTITY");		
 			SqlParameter[] parameters = {
 			            new SqlParameter("@StoreOutOrderId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@GoodsId", SqlDbType.Int,4) ,            
                         new SqlParameter("@StoreInOrderId", SqlDbType.Int,4) ,            
                         new SqlParameter("@StoreInGoodsStoreInOrderId", SqlDbType.Int,4) ,            
                         new SqlParameter("@StoreInGoodsId", SqlDbType.Int,4) ,            
@@ -69,17 +60,26 @@ namespace DTcms.DAL
             };
 			            
             parameters[0].Value = model.StoreOutOrderId;                        
-            parameters[1].Value = model.Id;                        
-            parameters[2].Value = model.GoodsId;                        
-            parameters[3].Value = model.StoreInOrderId;                        
-            parameters[4].Value = model.StoreInGoodsStoreInOrderId;                        
-            parameters[5].Value = model.StoreInGoodsId;                        
-            parameters[6].Value = model.Remark;                        
-            parameters[7].Value = model.StoringOutTime;                        
-            parameters[8].Value = model.FactStoringOutTime;                        
-            parameters[9].Value = model.Status;                        
-            parameters[10].Value = model.Count;                        
-			            DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
+            parameters[1].Value = model.StoreInOrderId;                        
+            parameters[2].Value = model.StoreInGoodsStoreInOrderId;                        
+            parameters[3].Value = model.StoreInGoodsId;                        
+            parameters[4].Value = model.Remark;                        
+            parameters[5].Value = model.StoringOutTime;                        
+            parameters[6].Value = model.FactStoringOutTime;                        
+            parameters[7].Value = model.Status;                        
+            parameters[8].Value = model.Count;                        
+			   
+			object obj = DbHelperSQL.GetSingle(strSql.ToString(),parameters);			
+			if (obj == null)
+			{
+				return 0;
+			}
+			else
+			{
+				                    
+            	return Convert.ToInt32(obj);
+                                                                  
+			}			   
             			
 		}
 		
@@ -91,10 +91,8 @@ namespace DTcms.DAL
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("update StoreOutGoods set ");
-			                        
+			                                                
             strSql.Append(" StoreOutOrderId = @StoreOutOrderId , ");                                    
-            strSql.Append(" Id = @Id , ");                                    
-            strSql.Append(" GoodsId = @GoodsId , ");                                    
             strSql.Append(" StoreInOrderId = @StoreInOrderId , ");                                    
             strSql.Append(" StoreInGoodsStoreInOrderId = @StoreInGoodsStoreInOrderId , ");                                    
             strSql.Append(" StoreInGoodsId = @StoreInGoodsId , ");                                    
@@ -103,12 +101,11 @@ namespace DTcms.DAL
             strSql.Append(" FactStoringOutTime = @FactStoringOutTime , ");                                    
             strSql.Append(" Status = @Status , ");                                    
             strSql.Append(" Count = @Count  ");            			
-			strSql.Append(" where StoreOutOrderId=@StoreOutOrderId and Id=@Id and GoodsId=@GoodsId and StoreInOrderId=@StoreInOrderId and StoreInGoodsStoreInOrderId=@StoreInGoodsStoreInOrderId and StoreInGoodsId=@StoreInGoodsId  ");
+			strSql.Append(" where Id=@Id ");
 						
 SqlParameter[] parameters = {
-			            new SqlParameter("@StoreOutOrderId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@GoodsId", SqlDbType.Int,4) ,            
+			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
+                        new SqlParameter("@StoreOutOrderId", SqlDbType.Int,4) ,            
                         new SqlParameter("@StoreInOrderId", SqlDbType.Int,4) ,            
                         new SqlParameter("@StoreInGoodsStoreInOrderId", SqlDbType.Int,4) ,            
                         new SqlParameter("@StoreInGoodsId", SqlDbType.Int,4) ,            
@@ -120,17 +117,16 @@ SqlParameter[] parameters = {
               
             };
 						            
-            parameters[0].Value = model.StoreOutOrderId;                        
-            parameters[1].Value = model.Id;                        
-            parameters[2].Value = model.GoodsId;                        
-            parameters[3].Value = model.StoreInOrderId;                        
-            parameters[4].Value = model.StoreInGoodsStoreInOrderId;                        
-            parameters[5].Value = model.StoreInGoodsId;                        
-            parameters[6].Value = model.Remark;                        
-            parameters[7].Value = model.StoringOutTime;                        
-            parameters[8].Value = model.FactStoringOutTime;                        
-            parameters[9].Value = model.Status;                        
-            parameters[10].Value = model.Count;                        
+            parameters[0].Value = model.Id;                        
+            parameters[1].Value = model.StoreOutOrderId;                        
+            parameters[2].Value = model.StoreInOrderId;                        
+            parameters[3].Value = model.StoreInGoodsStoreInOrderId;                        
+            parameters[4].Value = model.StoreInGoodsId;                        
+            parameters[5].Value = model.Remark;                        
+            parameters[6].Value = model.StoringOutTime;                        
+            parameters[7].Value = model.FactStoringOutTime;                        
+            parameters[8].Value = model.Status;                        
+            parameters[9].Value = model.Count;                        
             int rows=DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
 			if (rows > 0)
 			{
@@ -146,25 +142,16 @@ SqlParameter[] parameters = {
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>
-		public bool Delete(int StoreOutOrderId,int Id,int GoodsId,int StoreInOrderId,int StoreInGoodsStoreInOrderId,int StoreInGoodsId)
+		public bool Delete(int Id)
 		{
 			
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("delete from StoreOutGoods ");
-			strSql.Append(" where StoreOutOrderId=@StoreOutOrderId and Id=@Id and GoodsId=@GoodsId and StoreInOrderId=@StoreInOrderId and StoreInGoodsStoreInOrderId=@StoreInGoodsStoreInOrderId and StoreInGoodsId=@StoreInGoodsId ");
+			strSql.Append(" where Id=@Id");
 						SqlParameter[] parameters = {
-					new SqlParameter("@StoreOutOrderId", SqlDbType.Int,4),
-					new SqlParameter("@Id", SqlDbType.Int,4),
-					new SqlParameter("@GoodsId", SqlDbType.Int,4),
-					new SqlParameter("@StoreInOrderId", SqlDbType.Int,4),
-					new SqlParameter("@StoreInGoodsStoreInOrderId", SqlDbType.Int,4),
-					new SqlParameter("@StoreInGoodsId", SqlDbType.Int,4)			};
-			parameters[0].Value = StoreOutOrderId;
-			parameters[1].Value = Id;
-			parameters[2].Value = GoodsId;
-			parameters[3].Value = StoreInOrderId;
-			parameters[4].Value = StoreInGoodsStoreInOrderId;
-			parameters[5].Value = StoreInGoodsId;
+					new SqlParameter("@Id", SqlDbType.Int,4)
+			};
+			parameters[0].Value = Id;
 
 
 			int rows=DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
@@ -178,31 +165,40 @@ SqlParameter[] parameters = {
 			}
 		}
 		
+				/// <summary>
+		/// 批量删除一批数据
+		/// </summary>
+		public bool DeleteList(string Idlist )
+		{
+			StringBuilder strSql=new StringBuilder();
+			strSql.Append("delete from StoreOutGoods ");
+			strSql.Append(" where ID in ("+Idlist + ")  ");
+			int rows=DbHelperSQL.ExecuteSql(strSql.ToString());
+			if (rows > 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 				
 		
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.StoreOutGoods GetModel(int StoreOutOrderId,int Id,int GoodsId,int StoreInOrderId,int StoreInGoodsStoreInOrderId,int StoreInGoodsId)
+		public DTcms.Model.StoreOutGoods GetModel(int Id)
 		{
 			
 			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select StoreOutOrderId, Id, GoodsId, StoreInOrderId, StoreInGoodsStoreInOrderId, StoreInGoodsId, Remark, StoringOutTime, FactStoringOutTime, Status, Count  ");			
+			strSql.Append("select Id, StoreOutOrderId, StoreInOrderId, StoreInGoodsStoreInOrderId, StoreInGoodsId, Remark, StoringOutTime, FactStoringOutTime, Status, Count  ");			
 			strSql.Append("  from StoreOutGoods ");
-			strSql.Append(" where StoreOutOrderId=@StoreOutOrderId and Id=@Id and GoodsId=@GoodsId and StoreInOrderId=@StoreInOrderId and StoreInGoodsStoreInOrderId=@StoreInGoodsStoreInOrderId and StoreInGoodsId=@StoreInGoodsId ");
+			strSql.Append(" where Id=@Id");
 						SqlParameter[] parameters = {
-					new SqlParameter("@StoreOutOrderId", SqlDbType.Int,4),
-					new SqlParameter("@Id", SqlDbType.Int,4),
-					new SqlParameter("@GoodsId", SqlDbType.Int,4),
-					new SqlParameter("@StoreInOrderId", SqlDbType.Int,4),
-					new SqlParameter("@StoreInGoodsStoreInOrderId", SqlDbType.Int,4),
-					new SqlParameter("@StoreInGoodsId", SqlDbType.Int,4)			};
-			parameters[0].Value = StoreOutOrderId;
-			parameters[1].Value = Id;
-			parameters[2].Value = GoodsId;
-			parameters[3].Value = StoreInOrderId;
-			parameters[4].Value = StoreInGoodsStoreInOrderId;
-			parameters[5].Value = StoreInGoodsId;
+					new SqlParameter("@Id", SqlDbType.Int,4)
+			};
+			parameters[0].Value = Id;
 
 			
 			DTcms.Model.StoreOutGoods model=new DTcms.Model.StoreOutGoods();
@@ -210,17 +206,13 @@ SqlParameter[] parameters = {
 			
 			if(ds.Tables[0].Rows.Count>0)
 			{
-												if(ds.Tables[0].Rows[0]["StoreOutOrderId"].ToString()!="")
-				{
-					model.StoreOutOrderId=int.Parse(ds.Tables[0].Rows[0]["StoreOutOrderId"].ToString());
-				}
-																																if(ds.Tables[0].Rows[0]["Id"].ToString()!="")
+												if(ds.Tables[0].Rows[0]["Id"].ToString()!="")
 				{
 					model.Id=int.Parse(ds.Tables[0].Rows[0]["Id"].ToString());
 				}
-																																if(ds.Tables[0].Rows[0]["GoodsId"].ToString()!="")
+																																if(ds.Tables[0].Rows[0]["StoreOutOrderId"].ToString()!="")
 				{
-					model.GoodsId=int.Parse(ds.Tables[0].Rows[0]["GoodsId"].ToString());
+					model.StoreOutOrderId=int.Parse(ds.Tables[0].Rows[0]["StoreOutOrderId"].ToString());
 				}
 																																if(ds.Tables[0].Rows[0]["StoreInOrderId"].ToString()!="")
 				{

@@ -25,9 +25,9 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public void  Add(DTcms.Model.StoreInOrder model)
+		public int  Add(DTcms.Model.StoreInOrder model)
 		{
-						dal.Add(model);
+						return dal.Add(model);
 						
 		}
 
@@ -42,34 +42,41 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>
-		public bool Delete(int Id,int CustomerId)
+		public bool Delete(int Id)
 		{
 			
-			return dal.Delete(Id,CustomerId);
+			return dal.Delete(Id);
+		}
+				/// <summary>
+		/// 批量删除一批数据
+		/// </summary>
+		public bool DeleteList(string Idlist )
+		{
+			return dal.DeleteList(Idlist );
 		}
 		
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.StoreInOrder GetModel(int Id,int CustomerId)
+		public DTcms.Model.StoreInOrder GetModel(int Id)
 		{
 			
-			return dal.GetModel(Id,CustomerId);
+			return dal.GetModel(Id);
 		}
 
 		/// <summary>
 		/// 得到一个对象实体，从缓存中
 		/// </summary>
-        //public DTcms.Model.StoreInOrder GetModelByCache(int Id,int CustomerId)
+        //public DTcms.Model.StoreInOrder GetModelByCache(int Id)
         //{
 			
-        //    string CacheKey = "StoreInOrderModel-" + Id+CustomerId;
+        //    string CacheKey = "StoreInOrderModel-" + Id;
         //    object objModel = DTcms.Common.DataCache.GetCache(CacheKey);
         //    if (objModel == null)
         //    {
         //        try
         //        {
-        //            objModel = dal.GetModel(Id,CustomerId);
+        //            objModel = dal.GetModel(Id);
         //            if (objModel != null)
         //            {
         //                int ModelCache = DTcms.Common.ConfigHelper.GetConfigInt("ModelCache");
@@ -150,10 +157,6 @@ namespace DTcms.BLL{
 																												if(dt.Rows[n]["SuttleWeight"].ToString()!="")
 				{
 					model.SuttleWeight=decimal.Parse(dt.Rows[n]["SuttleWeight"].ToString());
-				}
-																																if(dt.Rows[n]["FreeDays"].ToString()!="")
-				{
-					model.FreeDays=int.Parse(dt.Rows[n]["FreeDays"].ToString());
 				}
 																																				model.Remark= dt.Rows[n]["Remark"].ToString();
 																						

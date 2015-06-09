@@ -17,9 +17,9 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 是否存在该记录
 		/// </summary>
-		public bool Exists(int Id,int VehicleId)
+		public bool Exists(int StoreOutGoodsId,int VehicleId)
 		{
-			return dal.Exists(Id,VehicleId);
+			return dal.Exists(StoreOutGoodsId,VehicleId);
 		}
 
 		/// <summary>
@@ -42,34 +42,34 @@ namespace DTcms.BLL{
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>
-		public bool Delete(int Id,int VehicleId)
+		public bool Delete(int StoreOutGoodsId,int VehicleId)
 		{
 			
-			return dal.Delete(Id,VehicleId);
+			return dal.Delete(StoreOutGoodsId,VehicleId);
 		}
 		
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.StoreOutGoodsVehicle GetModel(int Id,int VehicleId)
+		public DTcms.Model.StoreOutGoodsVehicle GetModel(int StoreOutGoodsId,int VehicleId)
 		{
 			
-			return dal.GetModel(Id,VehicleId);
+			return dal.GetModel(StoreOutGoodsId,VehicleId);
 		}
 
 		/// <summary>
 		/// 得到一个对象实体，从缓存中
 		/// </summary>
-        //public DTcms.Model.StoreOutGoodsVehicle GetModelByCache(int Id,int VehicleId)
+        //public DTcms.Model.StoreOutGoodsVehicle GetModelByCache(int StoreOutGoodsId,int VehicleId)
         //{
 			
-        //    string CacheKey = "StoreOutGoodsVehicleModel-" + Id+VehicleId;
+        //    string CacheKey = "StoreOutGoodsVehicleModel-" + StoreOutGoodsId+VehicleId;
         //    object objModel = DTcms.Common.DataCache.GetCache(CacheKey);
         //    if (objModel == null)
         //    {
         //        try
         //        {
-        //            objModel = dal.GetModel(Id,VehicleId);
+        //            objModel = dal.GetModel(StoreOutGoodsId,VehicleId);
         //            if (objModel != null)
         //            {
         //                int ModelCache = DTcms.Common.ConfigHelper.GetConfigInt("ModelCache");
@@ -116,9 +116,13 @@ namespace DTcms.BLL{
 				for (int n = 0; n < rowsCount; n++)
 				{
 					model = new DTcms.Model.StoreOutGoodsVehicle();					
-													if(dt.Rows[n]["Id"].ToString()!="")
+													if(dt.Rows[n]["StoreOutGoodsStoreOutOrderId"].ToString()!="")
 				{
-					model.Id=int.Parse(dt.Rows[n]["Id"].ToString());
+					model.StoreOutGoodsStoreOutOrderId=int.Parse(dt.Rows[n]["StoreOutGoodsStoreOutOrderId"].ToString());
+				}
+																																if(dt.Rows[n]["StoreOutGoodsId"].ToString()!="")
+				{
+					model.StoreOutGoodsId=int.Parse(dt.Rows[n]["StoreOutGoodsId"].ToString());
 				}
 																																if(dt.Rows[n]["VehicleId"].ToString()!="")
 				{

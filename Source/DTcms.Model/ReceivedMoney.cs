@@ -53,13 +53,13 @@ namespace DTcms.Model{
             set{ _beginchargingtime = value; }
         }        
 		/// <summary>
-		/// EndChargingTime2
+		/// EndChargingTime
         /// </summary>		
-		private DateTime _endchargingtime2;
-        public DateTime EndChargingTime2
+		private DateTime _endchargingtime;
+        public DateTime EndChargingTime
         {
-            get{ return _endchargingtime2; }
-            set{ _endchargingtime2 = value; }
+            get{ return _endchargingtime; }
+            set{ _endchargingtime = value; }
         }        
 		/// <summary>
 		/// ChargingCount

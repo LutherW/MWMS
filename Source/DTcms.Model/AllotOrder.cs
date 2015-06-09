@@ -17,15 +17,6 @@ namespace DTcms.Model{
             set{ _id = value; }
         }        
 		/// <summary>
-		/// PurposeStoreId
-        /// </summary>		
-		private int _purposestoreid;
-        public int PurposeStoreId
-        {
-            get{ return _purposestoreid; }
-            set{ _purposestoreid = value; }
-        }        
-		/// <summary>
 		/// SourceStoreId
         /// </summary>		
 		private int _sourcestoreid;
@@ -33,6 +24,15 @@ namespace DTcms.Model{
         {
             get{ return _sourcestoreid; }
             set{ _sourcestoreid = value; }
+        }        
+		/// <summary>
+		/// PurposeStoreId
+        /// </summary>		
+		private int _purposestoreid;
+        public int PurposeStoreId
+        {
+            get{ return _purposestoreid; }
+            set{ _purposestoreid = value; }
         }        
 		/// <summary>
 		/// Remark

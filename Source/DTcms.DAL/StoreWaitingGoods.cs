@@ -6,25 +6,22 @@ using System.Data;
 using DTcms.DBUtility;
 namespace DTcms.DAL
 {
-	 	//AllotOrder
-		public partial class AllotOrder
+	 	//StoreWaitingGoods
+		public partial class StoreWaitingGoods
 	{
    		     
-		public bool Exists(int Id,int SourceStoreId,int PurposeStoreId)
+		public bool Exists(int Id,int GoodsId)
 		{
 			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select count(1) from AllotOrder");
+			strSql.Append("select count(1) from StoreWaitingGoods");
 			strSql.Append(" where ");
 			                                       strSql.Append(" Id = @Id and  ");
-                                                                   strSql.Append(" SourceStoreId = @SourceStoreId and  ");
-                                                                   strSql.Append(" PurposeStoreId = @PurposeStoreId  ");
+                                                                   strSql.Append(" GoodsId = @GoodsId  ");
                             			SqlParameter[] parameters = {
 					new SqlParameter("@Id", SqlDbType.Int,4),
-					new SqlParameter("@SourceStoreId", SqlDbType.Int,4),
-					new SqlParameter("@PurposeStoreId", SqlDbType.Int,4)			};
+					new SqlParameter("@GoodsId", SqlDbType.Int,4)			};
 			parameters[0].Value = Id;
-			parameters[1].Value = SourceStoreId;
-			parameters[2].Value = PurposeStoreId;
+			parameters[1].Value = GoodsId;
 
 			return DbHelperSQL.Exists(strSql.ToString(),parameters);
 		}
@@ -34,29 +31,25 @@ namespace DTcms.DAL
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public int Add(DTcms.Model.AllotOrder model)
+		public int Add(DTcms.Model.StoreWaitingGoods model)
 		{
 			StringBuilder strSql=new StringBuilder();
-			strSql.Append("insert into AllotOrder(");			
-            strSql.Append("SourceStoreId,PurposeStoreId,Remark,CreateTime,Admin");
+			strSql.Append("insert into StoreWaitingGoods(");			
+            strSql.Append("GoodsId,Status,Remark");
 			strSql.Append(") values (");
-            strSql.Append("@SourceStoreId,@PurposeStoreId,@Remark,@CreateTime,@Admin");            
+            strSql.Append("@GoodsId,@Status,@Remark");            
             strSql.Append(") ");            
             strSql.Append(";select @@IDENTITY");		
 			SqlParameter[] parameters = {
-			            new SqlParameter("@SourceStoreId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@PurposeStoreId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@Remark", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@CreateTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@Admin", SqlDbType.VarChar,254)             
+			            new SqlParameter("@GoodsId", SqlDbType.Int,4) ,            
+                        new SqlParameter("@Status", SqlDbType.Int,4) ,            
+                        new SqlParameter("@Remark", SqlDbType.VarChar,254)             
               
             };
 			            
-            parameters[0].Value = model.SourceStoreId;                        
-            parameters[1].Value = model.PurposeStoreId;                        
+            parameters[0].Value = model.GoodsId;                        
+            parameters[1].Value = model.Status;                        
             parameters[2].Value = model.Remark;                        
-            parameters[3].Value = model.CreateTime;                        
-            parameters[4].Value = model.Admin;                        
 			   
 			object obj = DbHelperSQL.GetSingle(strSql.ToString(),parameters);			
 			if (obj == null)
@@ -76,34 +69,28 @@ namespace DTcms.DAL
 		/// <summary>
 		/// 更新一条数据
 		/// </summary>
-		public bool Update(DTcms.Model.AllotOrder model)
+		public bool Update(DTcms.Model.StoreWaitingGoods model)
 		{
 			StringBuilder strSql=new StringBuilder();
-			strSql.Append("update AllotOrder set ");
+			strSql.Append("update StoreWaitingGoods set ");
 			                                                
-            strSql.Append(" SourceStoreId = @SourceStoreId , ");                                    
-            strSql.Append(" PurposeStoreId = @PurposeStoreId , ");                                    
-            strSql.Append(" Remark = @Remark , ");                                    
-            strSql.Append(" CreateTime = @CreateTime , ");                                    
-            strSql.Append(" Admin = @Admin  ");            			
+            strSql.Append(" GoodsId = @GoodsId , ");                                    
+            strSql.Append(" Status = @Status , ");                                    
+            strSql.Append(" Remark = @Remark  ");            			
 			strSql.Append(" where Id=@Id ");
 						
 SqlParameter[] parameters = {
 			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@SourceStoreId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@PurposeStoreId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@Remark", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@CreateTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@Admin", SqlDbType.VarChar,254)             
+                        new SqlParameter("@GoodsId", SqlDbType.Int,4) ,            
+                        new SqlParameter("@Status", SqlDbType.Int,4) ,            
+                        new SqlParameter("@Remark", SqlDbType.VarChar,254)             
               
             };
 						            
             parameters[0].Value = model.Id;                        
-            parameters[1].Value = model.SourceStoreId;                        
-            parameters[2].Value = model.PurposeStoreId;                        
+            parameters[1].Value = model.GoodsId;                        
+            parameters[2].Value = model.Status;                        
             parameters[3].Value = model.Remark;                        
-            parameters[4].Value = model.CreateTime;                        
-            parameters[5].Value = model.Admin;                        
             int rows=DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
 			if (rows > 0)
 			{
@@ -123,7 +110,7 @@ SqlParameter[] parameters = {
 		{
 			
 			StringBuilder strSql=new StringBuilder();
-			strSql.Append("delete from AllotOrder ");
+			strSql.Append("delete from StoreWaitingGoods ");
 			strSql.Append(" where Id=@Id");
 						SqlParameter[] parameters = {
 					new SqlParameter("@Id", SqlDbType.Int,4)
@@ -148,7 +135,7 @@ SqlParameter[] parameters = {
 		public bool DeleteList(string Idlist )
 		{
 			StringBuilder strSql=new StringBuilder();
-			strSql.Append("delete from AllotOrder ");
+			strSql.Append("delete from StoreWaitingGoods ");
 			strSql.Append(" where ID in ("+Idlist + ")  ");
 			int rows=DbHelperSQL.ExecuteSql(strSql.ToString());
 			if (rows > 0)
@@ -165,12 +152,12 @@ SqlParameter[] parameters = {
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
-		public DTcms.Model.AllotOrder GetModel(int Id)
+		public DTcms.Model.StoreWaitingGoods GetModel(int Id)
 		{
 			
 			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select Id, SourceStoreId, PurposeStoreId, Remark, CreateTime, Admin  ");			
-			strSql.Append("  from AllotOrder ");
+			strSql.Append("select Id, GoodsId, Status, Remark  ");			
+			strSql.Append("  from StoreWaitingGoods ");
 			strSql.Append(" where Id=@Id");
 						SqlParameter[] parameters = {
 					new SqlParameter("@Id", SqlDbType.Int,4)
@@ -178,7 +165,7 @@ SqlParameter[] parameters = {
 			parameters[0].Value = Id;
 
 			
-			DTcms.Model.AllotOrder model=new DTcms.Model.AllotOrder();
+			DTcms.Model.StoreWaitingGoods model=new DTcms.Model.StoreWaitingGoods();
 			DataSet ds=DbHelperSQL.Query(strSql.ToString(),parameters);
 			
 			if(ds.Tables[0].Rows.Count>0)
@@ -187,20 +174,15 @@ SqlParameter[] parameters = {
 				{
 					model.Id=int.Parse(ds.Tables[0].Rows[0]["Id"].ToString());
 				}
-																																if(ds.Tables[0].Rows[0]["SourceStoreId"].ToString()!="")
+																																if(ds.Tables[0].Rows[0]["GoodsId"].ToString()!="")
 				{
-					model.SourceStoreId=int.Parse(ds.Tables[0].Rows[0]["SourceStoreId"].ToString());
+					model.GoodsId=int.Parse(ds.Tables[0].Rows[0]["GoodsId"].ToString());
 				}
-																																if(ds.Tables[0].Rows[0]["PurposeStoreId"].ToString()!="")
+																																if(ds.Tables[0].Rows[0]["Status"].ToString()!="")
 				{
-					model.PurposeStoreId=int.Parse(ds.Tables[0].Rows[0]["PurposeStoreId"].ToString());
+					model.Status=int.Parse(ds.Tables[0].Rows[0]["Status"].ToString());
 				}
 																																				model.Remark= ds.Tables[0].Rows[0]["Remark"].ToString();
-																												if(ds.Tables[0].Rows[0]["CreateTime"].ToString()!="")
-				{
-					model.CreateTime=DateTime.Parse(ds.Tables[0].Rows[0]["CreateTime"].ToString());
-				}
-																																				model.Admin= ds.Tables[0].Rows[0]["Admin"].ToString();
 																										
 				return model;
 			}
@@ -218,7 +200,7 @@ SqlParameter[] parameters = {
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("select * ");
-			strSql.Append(" FROM AllotOrder ");
+			strSql.Append(" FROM StoreWaitingGoods ");
 			if(strWhere.Trim()!="")
 			{
 				strSql.Append(" where "+strWhere);
@@ -238,7 +220,7 @@ SqlParameter[] parameters = {
 				strSql.Append(" top "+Top.ToString());
 			}
 			strSql.Append(" * ");
-			strSql.Append(" FROM AllotOrder ");
+			strSql.Append(" FROM StoreWaitingGoods ");
 			if(strWhere.Trim()!="")
 			{
 				strSql.Append(" where "+strWhere);
