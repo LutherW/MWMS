@@ -195,6 +195,7 @@ textarea.input{ width:300px; height:65px; }
 	.toolbar .r-list{ display:block; position:absolute; top:0; right:0; }
 	.toolbar .r-list .keyword{ display:block; float:left; margin:0; padding:0 5px; width:110px; height:30px; line-height:28px; font-size:12px; border:1px solid #eee; color:#444; }
 	.toolbar .r-list .btn-search{ display:block; float:left; margin:0 0 0 -1px; padding:0; width:30px; height:30px; line-height:30px; border:1px solid #eee; background:url(skin_icons.png) -160px -20px no-repeat #fafafa; cursor:pointer; text-indent:-9999px; }
+    .toolbar .r-list .lable{ display:block; float:left; margin-left:10px;margin-right:10px;; height:30px;line-height:30px;}
 	.toolbar .r-list .img-view{ display:block; float:left; margin-left:10px; width:30px; height:30px; border:1px solid #eee; background:url(skin_icons.png) -187px -20px no-repeat #fafafa; text-indent:-9999px; }
 	.toolbar .r-list .txt-view{ display:block; float:left; width:30px; height:30px; border:1px solid #eee; border-left:none; background:url(skin_icons.png) -216px -20px no-repeat #fafafa; text-indent:-9999px; }
 /*迷你样式*/

@@ -60,8 +60,8 @@ namespace DTcms.DAL
                 conn.Open();
                 using (SqlTransaction trans = conn.BeginTransaction())
                 {
-                    //try
-                    //{
+                    try
+                    {
                         StringBuilder strSql = new StringBuilder();
                         strSql.Append("insert into Goods(");
                         strSql.Append("UnitId,CustomerId,StoreModeId,HandlingModeId,Name");
@@ -118,12 +118,12 @@ namespace DTcms.DAL
 
 
                         trans.Commit();
-                    //}
-                    //catch
-                    //{
-                    //    trans.Rollback();
-                    //    return false;
-                    //}
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
                 }
             }
 

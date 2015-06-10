@@ -132,23 +132,23 @@
             var parentObj = $(api.data).parent();
             parentObj.find("input[name='hid_attach_filename']").val(fileName);
             parentObj.find("input[name='hid_attach_filepath']").val(filePath);
-            parentObj.find("input[name='hid_attach_fileSize']").val(fileSize);
+            //parentObj.find("input[name='hid_attach_fileSize']").val(fileSize);
             parentObj.find(".title").text(fileName);
-            parentObj.find(".info .ext").text(fileExt);
-            parentObj.find(".info .size").text(fileSizeStr);
+            //parentObj.find(".info .ext").text(fileExt);
+            //parentObj.find(".info .size").text(fileSizeStr);
             api.close().remove();
         } else {
             var liHtml = '<li>'
-            + '<input name="hid_attach_id" type="hidden" value="0" />'
+            //+ '<input name="hid_attach_id" type="hidden" value="0" />'
             + '<input name="hid_attach_filename" type="hidden" value="' + fileName + '" />'
             + '<input name="hid_attach_filepath" type="hidden" value="' + filePath + '" />'
-            + '<input name="hid_attach_filesize" type="hidden" value="' + fileSize + '" />'
+            //+ '<input name="hid_attach_filesize" type="hidden" value="' + fileSize + '" />'
             + '<i class="icon"></i>'
             + '<a href="javascript:;" onclick="delAttachNode(this);" class="del" title="删除附件"></a>'
             + '<a href="javascript:;" onclick="showAttachDialog(this);" class="edit" title="更新附件"></a>'
             + '<div class="title">' + fileName + '</div>'
-            + '<div class="info">类型：<span class="ext">' + fileExt + '</span> 大小：<span class="size">' + fileSizeStr + '</span> 下载：<span class="down">0</span>次</div>'
-            + '<div class="btns">下载积分：<input type="text" name="txt_attach_point" onkeydown="return checkNumber(event);" value="0" /></div>'
+            //+ '<div class="info">类型：<span class="ext">' + fileExt + '</span> 大小：<span class="size">' + fileSizeStr + '</span> 下载：<span class="down">0</span>次</div>'
+            + '<div class="btns">备注：<input type="text" name="txt_attach_remark" value="" style="width: 70%;"/></div>'
             + '</li>';
             api.close(liHtml).remove();
         }

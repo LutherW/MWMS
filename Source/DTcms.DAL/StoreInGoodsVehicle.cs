@@ -121,8 +121,11 @@ SqlParameter[] parameters = {
 				return false;
 			}
 		}
-		
-				
+
+        public void DeleteList(SqlConnection conn, SqlTransaction trans, int storeWaitingGoodsId)
+        {
+            int rows = DbHelperSQL.ExecuteSql(conn, trans, "delete from StoreInGoodsVehicle where StoreWaitingGoodsId=" + storeWaitingGoodsId.ToString());
+        }	
 		
 		/// <summary>
 		/// 得到一个对象实体
@@ -175,11 +178,11 @@ SqlParameter[] parameters = {
 		public DataSet GetList(string strWhere)
 		{
 			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select * ");
-			strSql.Append(" FROM StoreInGoodsVehicle ");
+            strSql.Append("select A.Count, A.Remark AS Remark, B.Name AS VehicleName, B.Id AS VehicleId ");
+			strSql.Append(" FROM StoreInGoodsVehicle A, Vehicle B where A.VehicleId = B.Id ");
 			if(strWhere.Trim()!="")
 			{
-				strSql.Append(" where "+strWhere);
+				strSql.Append(strWhere);
 			}
 			return DbHelperSQL.Query(strSql.ToString());
 		}

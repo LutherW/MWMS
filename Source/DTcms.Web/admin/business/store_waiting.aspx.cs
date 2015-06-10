@@ -16,23 +16,23 @@ namespace DTcms.Web.admin.business
         protected int pageSize;
 
         protected int customer_id;
-        protected int store_mode_id;
-        protected int handling_mode_id;
-        protected string keywords = string.Empty;
+        protected int goods_id;
+        protected string beginTime = string.Empty;
+        protected string endTime = string.Empty;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             this.customer_id = DTRequest.GetQueryInt("customer_id");
-            this.store_mode_id = DTRequest.GetQueryInt("store_mode_id");
-            this.handling_mode_id = DTRequest.GetQueryInt("handling_mode_id");
-            this.keywords = DTRequest.GetQueryString("keywords");
+            this.goods_id = DTRequest.GetQueryInt("goods_id");
+            this.beginTime = DTRequest.GetQueryString("beginTime");
+            this.endTime = DTRequest.GetQueryString("endTime");
 
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
             {
-                ChkAdminLevel("goods_manage", DTEnums.ActionEnum.View.ToString()); //检查权限
+                ChkAdminLevel("store_waiting", DTEnums.ActionEnum.View.ToString()); //检查权限
                 TreeBind("");
-                RptBind(CombSqlTxt(this.customer_id, this.store_mode_id, this.handling_mode_id, this.keywords), "g.Id desc");
+                RptBind(" and A.Status = 0 " + CombSqlTxt(this.customer_id, this.goods_id, this.beginTime, this.endTime), "A.StoringTime ASC");
             }
         }
 
@@ -48,25 +48,16 @@ namespace DTcms.Web.admin.business
                 this.ddlCustomer.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
             }
 
-            BLL.StoreMode storeModeBLL = new BLL.StoreMode();
-            DataTable storeModeDT = storeModeBLL.GetList(0, strWhere, "Id desc").Tables[0];
+            BLL.Goods goodsBLL = new BLL.Goods();
+            DataTable goodsDT = goodsBLL.GetList(0, strWhere, "Id desc").Tables[0];
 
-            this.ddlStoreMode.Items.Clear();
-            this.ddlStoreMode.Items.Add(new ListItem("存储方式", ""));
-            foreach (DataRow dr in storeModeDT.Rows)
+            this.ddlGoods.Items.Clear();
+            this.ddlGoods.Items.Add(new ListItem("待入库", ""));
+            foreach (DataRow dr in goodsDT.Rows)
             {
-                this.ddlStoreMode.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
+                this.ddlGoods.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
             }
 
-            BLL.HandlingMode handlingModeBLL = new BLL.HandlingMode();
-            DataTable handlingModeDT = handlingModeBLL.GetList(0, strWhere, "Id desc").Tables[0];
-
-            this.ddlHandlingMode.Items.Clear();
-            this.ddlHandlingMode.Items.Add(new ListItem("装卸方式", ""));
-            foreach (DataRow dr in handlingModeDT.Rows)
-            {
-                this.ddlHandlingMode.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
-            }
         }
 
         #region 数据绑定=================================
@@ -77,48 +68,45 @@ namespace DTcms.Web.admin.business
             {
                 this.ddlCustomer.SelectedValue = this.customer_id.ToString();
             }
-            if (this.store_mode_id > 0)
+            if (this.goods_id > 0)
             {
-                this.ddlStoreMode.SelectedValue = this.store_mode_id.ToString();
+                this.ddlGoods.SelectedValue = this.goods_id.ToString();
             }
-            if (this.handling_mode_id > 0)
-            {
-                this.ddlHandlingMode.SelectedValue = this.handling_mode_id.ToString();
-            }
-            txtKeywords.Text = this.keywords;
-            BLL.Goods bll = new BLL.Goods();
+            txtBeginTime.Text = this.beginTime;
+            txtEndTime.Text = this.endTime;
+            BLL.StoreWaitingGoods bll = new BLL.StoreWaitingGoods();
             this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _goodsby, out this.totalCount);
             this.rptList.DataBind();
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("goods_list.aspx", "customer_id={0}&store_mode_id={1}&handling_mode_id={2}&keywords={3}&page={4}",
-                this.customer_id.ToString(), this.store_mode_id.ToString(), this.handling_mode_id.ToString(), this.keywords, "__id__");
+            string pageUrl = Utils.CombUrlTxt("store_waiting.aspx", "customer_id={0}&goods_id={1}&beginTime={2}&endTime={3}&page={4}",
+                this.customer_id.ToString(), this.goods_id.ToString(), this.beginTime.ToString(), this.endTime, "__id__");
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
         }
         #endregion
 
         #region 组合SQL查询语句==========================
-        protected string CombSqlTxt(int _customer_id, int _store_mode_id, int _handling_mode_id, string _keywords)
+        protected string CombSqlTxt(int _customer_id, int _goods_id, string _beginTime, string _endTime)
         {
             StringBuilder strTemp = new StringBuilder();
             if (_customer_id > 0)
             {
-                strTemp.Append(" and g.CustomerId=" + _customer_id);
+                strTemp.Append(" and B.CustomerId=" + _customer_id);
             }
-            if (_store_mode_id > 0)
+            if (_goods_id > 0)
             {
-                strTemp.Append(" and g.StoreModeId=" + _store_mode_id);
+                strTemp.Append(" and A.GoodsId=" + _goods_id);
             }
-            if (_handling_mode_id > 0)
+            if (!string.IsNullOrEmpty(beginTime))
             {
-                strTemp.Append(" and g.HandlingModeId=" + _handling_mode_id);
+                strTemp.Append(" and A.StoringTime>='" + _beginTime + "'");
             }
-            _keywords = _keywords.Replace("'", "");
-            if (!string.IsNullOrEmpty(_keywords))
+            if (!string.IsNullOrEmpty(endTime))
             {
-                strTemp.Append(" and (g.Name like '%" + _keywords + "%' )");
+                strTemp.Append(" and A.StoringTime <='"+_endTime+"'");
             }
+
             return strTemp.ToString();
         }
         #endregion
@@ -127,7 +115,7 @@ namespace DTcms.Web.admin.business
         private int GetPageSize(int _default_size)
         {
             int _pagesize;
-            if (int.TryParse(Utils.GetCookie("goods_list_page_size", "DTcmsPage"), out _pagesize))
+            if (int.TryParse(Utils.GetCookie("store_waiting_page_size", "DTcmsPage"), out _pagesize))
             {
                 if (_pagesize > 0)
                 {
@@ -142,29 +130,22 @@ namespace DTcms.Web.admin.business
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("goods_list.aspx", "customer_id={0}&store_mode_id={1}&handling_mode_id={2}&keywords={3}",
-                this.customer_id.ToString(), this.store_mode_id.ToString(), this.handling_mode_id.ToString(), txtKeywords.Text));
+            Response.Redirect(Utils.CombUrlTxt("store_waiting.aspx", "customer_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
+                this.customer_id.ToString(), this.goods_id.ToString(), txtBeginTime.Text, txtEndTime.Text));
         }
 
-        //货物状态
+        //待入库状态
         protected void ddlCustomer_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("goods_list.aspx", "customer_id={0}&store_mode_id={1}&handling_mode_id={2}&keywords={3}",
-                ddlCustomer.SelectedValue, this.store_mode_id.ToString(), this.handling_mode_id.ToString(), this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("store_waiting.aspx", "customer_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
+                ddlCustomer.SelectedValue, this.goods_id.ToString(), this.beginTime, this.endTime));
         }
 
         //支付状态
-        protected void ddlStoreMode_SelectedIndexChanged(object sender, EventArgs e)
+        protected void ddlGoods_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("goods_list.aspx", "customer_id={0}&store_mode_id={1}&handling_mode_id={2}&keywords={3}",
-                this.customer_id.ToString(), ddlStoreMode.SelectedValue, this.handling_mode_id.ToString(), this.keywords));
-        }
-
-        //发货状态
-        protected void ddlHandlingMode_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Response.Redirect(Utils.CombUrlTxt("goods_list.aspx", "customer_id={0}&store_mode_id={1}&handling_mode_id={2}&keywords={3}",
-                this.customer_id.ToString(), this.store_mode_id.ToString(), ddlHandlingMode.SelectedValue, this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("store_waiting.aspx", "customer_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
+                this.customer_id.ToString(), ddlGoods.SelectedValue, this.beginTime, this.endTime));
         }
 
         //设置分页数量
@@ -175,17 +156,17 @@ namespace DTcms.Web.admin.business
             {
                 if (_pagesize > 0)
                 {
-                    Utils.WriteCookie("goods_list_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
+                    Utils.WriteCookie("store_waiting_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("user_list.aspx", "customer_id={0}&store_mode_id={1}&handling_mode_id={2}&keywords={3}",
-                this.customer_id.ToString(), this.store_mode_id.ToString(), this.handling_mode_id.ToString(), this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("user_list.aspx", "customer_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
+                this.customer_id.ToString(), this.goods_id.ToString(), this.beginTime.ToString(), this.endTime));
         }
 
         //批量删除
         protected void btnDelete_Click(object sender, EventArgs e)
         {
-            ChkAdminLevel("goods_", DTEnums.ActionEnum.Delete.ToString()); //检查权限
+            ChkAdminLevel("store_waiting", DTEnums.ActionEnum.Delete.ToString()); //检查权限
             int sucCount = 0;
             int errorCount = 0;
             BLL.Goods bll = new BLL.Goods();
@@ -205,9 +186,9 @@ namespace DTcms.Web.admin.business
                     }
                 }
             }
-            AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除货物成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
-            JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("goods_list.aspx", "customer_id={0}&store_mode_id={1}&handling_mode_id={2}&keywords={3}",
-                this.customer_id.ToString(), this.store_mode_id.ToString(), this.handling_mode_id.ToString(), this.keywords));
+            AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除待入库成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
+            JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("store_waiting.aspx", "customer_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
+                this.customer_id.ToString(), this.goods_id.ToString(), this.beginTime.ToString(), this.endTime));
         }
 
     }

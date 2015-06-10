@@ -14,6 +14,7 @@
     <link href="../../css/pagination.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" charset="utf-8" src="../../scripts/jquery/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../scripts/artdialog/dialog-plus-min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../scripts/datepicker/WdatePicker.js"></script>
     <script type="text/javascript" charset="utf-8" src="../js/laymain.js"></script>
     <script type="text/javascript" charset="utf-8" src="../js/common.js"></script>
     <script type="text/javascript">
@@ -62,17 +63,16 @@
                                 </asp:DropDownList>
                             </div>
                             <div class="rule-single-select">
-                                <asp:DropDownList ID="ddlStoreMode" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlStoreMode_SelectedIndexChanged">
-                                </asp:DropDownList>
-                            </div>
-                            <div class="rule-single-select">
-                                <asp:DropDownList ID="ddlHandlingMode" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlHandlingMode_SelectedIndexChanged">
+                                <asp:DropDownList ID="ddlGoods" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlGoods_SelectedIndexChanged">
                                 </asp:DropDownList>
                             </div>
                         </div>
                     </div>
                     <div class="r-list">
-                        <asp:TextBox ID="txtKeywords" runat="server" CssClass="keyword" />
+                        <span class="lable">计划入库时间</span>
+                        <asp:TextBox ID="txtBeginTime" runat="server" CssClass="keyword" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'txtEndTime\',{d:-1})}'})"/>
+                        <span class="lable">-</span>
+                        <asp:TextBox ID="txtEndTime" runat="server" Text="bbb" CssClass="keyword" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'txtBeginTime\',{d:0})}'})"/>
                         <asp:LinkButton ID="lbtnSearch" runat="server" CssClass="btn-search" OnClick="btnSearch_Click">查询</asp:LinkButton>
                     </div>
                 </div>
@@ -89,8 +89,9 @@
                             <th width="8%">选择</th>
                             <th align="left" width="10%">货物名称</th>
                             <th align="left" width="10%">客户</th>
-                            <th align="left">运输车辆</th>
-                            <th width="8%">附件</th>
+                            <th align="left" width="15%">计划入库时间</th>
+                            <th width="8%">其他</th>
+                            <th align="left" width="10%">操作员</th>
                             <th width="8%">操作</th>
                         </tr>
                 </HeaderTemplate>
@@ -102,10 +103,12 @@
                         </td>
                         <td><a href="store_waiting_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>"><%#Eval("GoodsName")%></a></td>
                         <td><%#Eval("CustomerName")%></td>
-                        <td><%#Eval("Id")%></td>
+                        <td><%#Eval("StoringTime")%></td>
                         <td align="center">
-                            <a href="javascript:void(0);" onclick="showAttachDialog(<%#Eval("Id") %>, '<%#Eval("Name") %>');">附件</a>
+                            <a href="javascript:void(0);" onclick="showAttachDialog(<%#Eval("Id") %>, '<%#Eval("GoodsName") %>');">附件</a>&nbsp;|&nbsp;
+                            <a href="javascript:void(0);" onclick="showAttachDialog(<%#Eval("Id") %>, '<%#Eval("GoodsName") %>');">车辆</a>
                         </td>
+                        <td><%#Eval("Admin")%></td>
                         <td align="center">
                             <a href="store_waiting_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
                         </td>

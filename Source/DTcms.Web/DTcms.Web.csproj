@@ -74,6 +74,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="admin\business\store_waiting_edit.aspx" />
     <Content Include="admin\business\store_waiting.aspx" />
     <Content Include="admin\center.aspx" />
     <Content Include="admin\customer\customer_list.aspx" />
@@ -90,6 +91,7 @@
     <Content Include="admin\dialog\dialog_spec.aspx" />
     <Content Include="admin\dialog\goods_attribute_list.aspx" />
     <Content Include="admin\dialog\dialog_spec_item.aspx" />
+    <Content Include="admin\dialog\dialog_vehicle_list.aspx" />
     <Content Include="admin\goods\goods_list.aspx" />
     <Content Include="admin\goods\goods_edit.aspx" />
     <Content Include="admin\goods\vehicle_list.aspx" />
@@ -727,6 +729,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="admin\business\store_waiting_edit.aspx.cs">
+      <DependentUpon>store_waiting_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\business\store_waiting_edit.aspx.designer.cs">
+      <DependentUpon>store_waiting_edit.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\business\store_waiting.aspx.cs">
       <DependentUpon>store_waiting.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -817,6 +826,13 @@
     </Compile>
     <Compile Include="admin\dialog\dialog_spec_item.aspx.designer.cs">
       <DependentUpon>dialog_spec_item.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\dialog\dialog_vehicle_list.aspx.cs">
+      <DependentUpon>dialog_vehicle_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\dialog\dialog_vehicle_list.aspx.designer.cs">
+      <DependentUpon>dialog_vehicle_list.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\goods\goods_list.aspx.cs">
       <DependentUpon>goods_list.aspx</DependentUpon>

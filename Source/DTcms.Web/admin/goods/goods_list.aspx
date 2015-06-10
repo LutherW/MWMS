@@ -18,7 +18,6 @@
     <script type="text/javascript" charset="utf-8" src="../js/common.js"></script>
     <script type="text/javascript">
         function showAttributeDialog(goodsId, goodsName) {
-            var objNum = arguments.length;
             var attachDialog = top.dialog({
                 id: 'attachDialogId',
                 title: goodsName + "属性",
