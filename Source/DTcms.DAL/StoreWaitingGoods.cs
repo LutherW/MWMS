@@ -27,7 +27,19 @@ namespace DTcms.DAL
             return DbHelperSQL.Exists(strSql.ToString(), parameters);
         }
 
+        public bool Exists(int Id)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select count(1) from StoreWaitingGoods");
+            strSql.Append(" where ");
+            strSql.Append(" Id = @Id ");
 
+            SqlParameter[] parameters = {
+					new SqlParameter("@Id", SqlDbType.Int,4)};
+            parameters[0].Value = Id;
+
+            return DbHelperSQL.Exists(strSql.ToString(), parameters);
+        }
 
         /// <summary>
         /// 增加一条数据
@@ -103,14 +115,14 @@ namespace DTcms.DAL
                             foreach (Model.Attach attach in model.Attachs)
                             {
                                 strSql3 = new StringBuilder();
-                                strSql.Append("insert into Attach(");
-                                strSql.Append("StoreWaitingGoodsId,FilePath,CreateTime,Admin,Remark");
-                                strSql.Append(") values (");
-                                strSql.Append("@StoreWaitingGoodsId,@FilePath,@CreateTime,@Admin,@Remark");
-                                strSql.Append(") ");
+                                strSql3.Append("insert into Attach(");
+                                strSql3.Append("StoreWaitingGoodsId,FilePath,CreateTime,Admin,Remark");
+                                strSql3.Append(") values (");
+                                strSql3.Append("@StoreWaitingGoodsId,@FilePath,@CreateTime,@Admin,@Remark");
+                                strSql3.Append(") ");
 
                                 SqlParameter[] attachParameters = {
-			                                new SqlParameter("@StoreWaitingGoodsId", SqlDbType.Int,4) ,            
+                                            new SqlParameter("@StoreWaitingGoodsId", SqlDbType.Int,4) ,            
                                             new SqlParameter("@FilePath", SqlDbType.VarChar,254) ,            
                                             new SqlParameter("@CreateTime", SqlDbType.DateTime) ,            
                                             new SqlParameter("@Admin", SqlDbType.VarChar,254) ,            
@@ -126,6 +138,7 @@ namespace DTcms.DAL
                                 DbHelperSQL.ExecuteSql(conn, trans, strSql3.ToString(), attachParameters); //带事务
                             }
                         }
+                        
                         #endregion
 
 
@@ -225,11 +238,11 @@ namespace DTcms.DAL
                             foreach (Model.Attach attach in model.Attachs)
                             {
                                 strSql3 = new StringBuilder();
-                                strSql.Append("insert into Attach(");
-                                strSql.Append("StoreWaitingGoodsId,FilePath,CreateTime,Admin,Remark");
-                                strSql.Append(") values (");
-                                strSql.Append("@StoreWaitingGoodsId,@FilePath,@CreateTime,@Admin,@Remark");
-                                strSql.Append(") ");
+                                strSql3.Append("insert into Attach(");
+                                strSql3.Append("StoreWaitingGoodsId,FilePath,CreateTime,Admin,Remark");
+                                strSql3.Append(") values (");
+                                strSql3.Append("@StoreWaitingGoodsId,@FilePath,@CreateTime,@Admin,@Remark");
+                                strSql3.Append(") ");
 
                                 SqlParameter[] attachParameters = {
 			                                new SqlParameter("@StoreWaitingGoodsId", SqlDbType.Int,4) ,            

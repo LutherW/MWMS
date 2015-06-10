@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="store_waiting.aspx.cs" Inherits="DTcms.Web.admin.business.store_waiting" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="store_in_order.aspx.cs" Inherits="DTcms.Web.admin.business.store_in_order" %>
 
 <%@ Import Namespace="DTcms.Common" %>
 

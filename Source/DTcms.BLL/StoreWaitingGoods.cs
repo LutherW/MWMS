@@ -23,6 +23,11 @@ namespace DTcms.BLL
             return dal.Exists(Id, GoodsId);
         }
 
+        public bool Exists(int Id)
+        {
+            return dal.Exists(Id);
+        }
+
         /// <summary>
         /// 增加一条数据
         /// </summary>

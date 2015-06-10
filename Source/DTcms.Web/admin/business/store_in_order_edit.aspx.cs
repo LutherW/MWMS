@@ -9,7 +9,7 @@ using DTcms.Model;
 
 namespace DTcms.Web.admin.business
 {
-    public partial class store_waiting_edit : Web.UI.ManagePage
+    public partial class store_in_order_edit : Web.UI.ManagePage
     {
         string defaultpassword = "0|0|0|0"; //默认显示密码
         protected string action = DTEnums.ActionEnum.Add.ToString(); //操作类型

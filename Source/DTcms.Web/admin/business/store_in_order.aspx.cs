@@ -9,7 +9,7 @@ using DTcms.Common;
 
 namespace DTcms.Web.admin.business
 {
-    public partial class store_waiting : Web.UI.ManagePage
+    public partial class store_in_order : Web.UI.ManagePage
     {
         protected int totalCount;
         protected int page;
@@ -52,7 +52,7 @@ namespace DTcms.Web.admin.business
             DataTable goodsDT = goodsBLL.GetList(0, strWhere, "Id desc").Tables[0];
 
             this.ddlGoods.Items.Clear();
-            this.ddlGoods.Items.Add(new ListItem("货物", ""));
+            this.ddlGoods.Items.Add(new ListItem("待入库", ""));
             foreach (DataRow dr in goodsDT.Rows)
             {
                 this.ddlGoods.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));

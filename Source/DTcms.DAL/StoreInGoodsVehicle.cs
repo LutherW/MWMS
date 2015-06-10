@@ -178,7 +178,7 @@ SqlParameter[] parameters = {
 		public DataSet GetList(string strWhere)
 		{
 			StringBuilder strSql=new StringBuilder();
-            strSql.Append("select A.Count, A.Remark AS Remark, B.Name AS VehicleName, B.Id AS VehicleId ");
+            strSql.Append("select A.Count, A.Remark AS Remark, B.PlateNumber AS VehicleName, B.Id AS VehicleId ");
 			strSql.Append(" FROM StoreInGoodsVehicle A, Vehicle B where A.VehicleId = B.Id ");
 			if(strWhere.Trim()!="")
 			{
