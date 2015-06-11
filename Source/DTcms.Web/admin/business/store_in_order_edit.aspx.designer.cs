@@ -22,22 +22,58 @@ namespace DTcms.Web.admin.business {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// ddlGoods 控件。
+        /// ddlCustomer 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlGoods;
+        protected global::System.Web.UI.WebControls.DropDownList ddlCustomer;
         
         /// <summary>
-        /// txtStoringTime 控件。
+        /// txtAccountNumber 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtStoringTime;
+        protected global::System.Web.UI.WebControls.TextBox txtAccountNumber;
+        
+        /// <summary>
+        /// txtInspectionNumber 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtInspectionNumber;
+        
+        /// <summary>
+        /// txtBeginChargingTime 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBeginChargingTime;
+        
+        /// <summary>
+        /// txtChargingCount 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtChargingCount;
+        
+        /// <summary>
+        /// txtSuttleWeight 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSuttleWeight;
         
         /// <summary>
         /// txtAdmin 控件。
@@ -58,31 +94,49 @@ namespace DTcms.Web.admin.business {
         protected global::System.Web.UI.WebControls.TextBox txtRemark;
         
         /// <summary>
-        /// rptGoodsVehicleList 控件。
+        /// rptUnitPriceList 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptGoodsVehicleList;
+        protected global::System.Web.UI.WebControls.Repeater rptUnitPriceList;
         
         /// <summary>
-        /// div_attach_container 控件。
+        /// div_cost_container 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl div_attach_container;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl div_cost_container;
         
         /// <summary>
-        /// rptAttachList 控件。
+        /// rptCostList 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptAttachList;
+        protected global::System.Web.UI.WebControls.Repeater rptCostList;
+        
+        /// <summary>
+        /// div_goods_container 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl div_goods_container;
+        
+        /// <summary>
+        /// rptGoodsList 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptGoodsList;
         
         /// <summary>
         /// btnSubmit 控件。

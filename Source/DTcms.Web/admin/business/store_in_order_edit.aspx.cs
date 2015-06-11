@@ -27,7 +27,7 @@ namespace DTcms.Web.admin.business
                     JscriptMsg("传输参数不正确！", "back");
                     return;
                 }
-                if (!new BLL.StoreWaitingGoods().Exists(this.id))
+                if (!new BLL.StoreInOrder().Exists(this.id))
                 {
                     JscriptMsg("信息不存在或已被删除！", "back");
                     return;
@@ -35,9 +35,9 @@ namespace DTcms.Web.admin.business
             }
             if (!Page.IsPostBack)
             {
-                ChkAdminLevel("store_waiting", DTEnums.ActionEnum.View.ToString()); //检查权限
+                ChkAdminLevel("store_in", DTEnums.ActionEnum.View.ToString()); //检查权限
                 
-                TreeBind(""); //绑定类别
+                TreeBind("Status = 0 "); //绑定类别
                 if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
                 {
                     ShowInfo(this.id);
@@ -53,14 +53,14 @@ namespace DTcms.Web.admin.business
         #region 绑定类别=================================
         private void TreeBind(string strWhere)
         {
-            BLL.Goods goodsBLL = new BLL.Goods();
-            DataTable customerDT = goodsBLL.GetList(0, strWhere, "Id desc").Tables[0];
+            BLL.Customer customerBLL = new BLL.Customer();
+            DataTable customerDT = customerBLL.GetList(0, strWhere, "Id desc").Tables[0];
 
-            this.ddlGoods.Items.Clear();
-            this.ddlGoods.Items.Add(new ListItem("货物", ""));
+            this.ddlCustomer.Items.Clear();
+            this.ddlCustomer.Items.Add(new ListItem("客户", ""));
             foreach (DataRow dr in customerDT.Rows)
             {
-                this.ddlGoods.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
+                this.ddlCustomer.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
             }
         }
         #endregion
@@ -68,23 +68,27 @@ namespace DTcms.Web.admin.business
         #region 赋值操作=================================
         private void ShowInfo(int _id)
         {
-            BLL.StoreWaitingGoods bll = new BLL.StoreWaitingGoods();
-            Model.StoreWaitingGoods model = bll.GetModel(_id);
+            BLL.StoreInOrder bll = new BLL.StoreInOrder();
+            Model.StoreInOrder model = bll.GetModel(_id);
 
-            ddlGoods.SelectedValue = model.GoodsId.ToString();
-            txtStoringTime.Text = model.StoringTime.ToString("yyyy-MM-dd");
+            ddlCustomer.SelectedValue = model.CustomerId.ToString();
+            txtAccountNumber.Text = model.AccountNumber;
+            txtInspectionNumber.Text = model.InspectionNumber;
+            txtBeginChargingTime.Text = model.BeginChargingTime.ToString("yyyy-MM-dd");
+            txtChargingCount.Text = model.ChargingCount.ToString();
+            txtSuttleWeight.Text = model.SuttleWeight.ToString("0.00");
             txtAdmin.Text = model.Admin;
             txtRemark.Text = model.Remark;
 
-            BLL.StoreInGoodsVehicle goodsVehicleBLL = new BLL.StoreInGoodsVehicle();
-            DataTable goodsVehicleDT = goodsVehicleBLL.GetList(" and A.StoreWaitingGoodsId = " + _id + "").Tables[0];
-            this.rptGoodsVehicleList.DataSource = goodsVehicleDT;
-            this.rptGoodsVehicleList.DataBind();
+            BLL.StoreInUnitPrice unitpriceBLL = new BLL.StoreInUnitPrice();
+            DataTable unitpriceDT = unitpriceBLL.GetList(" and StoreInOrderId = " + _id + "").Tables[0];
+            this.rptUnitPriceList.DataSource = unitpriceDT;
+            this.rptUnitPriceList.DataBind();
 
-            BLL.Attach attachBLL = new BLL.Attach();
-            DataTable attachDT = attachBLL.GetList(" StoreWaitingGoodsId = " + _id + "").Tables[0];
-            this.rptAttachList.DataSource = attachDT;
-            this.rptAttachList.DataBind();
+            //BLL.Attach attachBLL = new BLL.Attach();
+            //DataTable attachDT = attachBLL.GetList(" StoreInOrderId = " + _id + "").Tables[0];
+            //this.rptAttachList.DataSource = attachDT;
+            //this.rptAttachList.DataBind();
         }
         #endregion
 
@@ -92,51 +96,56 @@ namespace DTcms.Web.admin.business
         private bool DoAdd()
         {
             bool result = false;
-            Model.StoreWaitingGoods model = new Model.StoreWaitingGoods();
-            BLL.StoreWaitingGoods bll = new BLL.StoreWaitingGoods();
+            Model.StoreInOrder model = new Model.StoreInOrder();
+            BLL.StoreInOrder bll = new BLL.StoreInOrder();
 
-            model.GoodsId = int.Parse(ddlGoods.SelectedValue);
-            model.StoringTime = DateTime.Parse(txtStoringTime.Text);
+            model.CustomerId = int.Parse(ddlCustomer.SelectedValue);
+            model.BeginChargingTime = DateTime.Parse(txtBeginChargingTime.Text);
+            model.ChargingTime = new DateTime(model.BeginChargingTime.Year, model.BeginChargingTime.Month, model.BeginChargingTime.Day + 1);
+            model.AccountNumber = txtAccountNumber.Text;
+            model.InspectionNumber = txtInspectionNumber.Text;
+            model.ChargingCount = decimal.Parse(txtChargingCount.Text);
+            model.SuttleWeight = decimal.Parse(txtSuttleWeight.Text);
             model.Admin = txtAdmin.Text;
             model.Remark = txtRemark.Text;
             model.Status = 0;
             model.CreateTime = DateTime.Now;
 
-            string[] vehicleIds = Request.Form.GetValues("VehicleId");
-            string[] vehicleCount = Request.Form.GetValues("Count");
-            string[] vehicleRemark = Request.Form.GetValues("GoodsVehicleRemark");
-            if (vehicleIds != null && vehicleCount != null && vehicleRemark != null
-                && vehicleIds.Length > 0 && vehicleCount.Length > 0 && vehicleRemark.Length > 0)
-            {
-                for (int i = 0; i < vehicleIds.Length; i++)
-                {
-                    decimal count;
-                    int vehicleId;
-                    if (int.TryParse(vehicleIds[i], out vehicleId) && decimal.TryParse(vehicleCount[i], out count))
-                    {
-                        model.AddGoodsVehicle(new StoreInGoodsVehicle(vehicleId, vehicleRemark[i], count));
-                    }
-                }
-            }
+            //string[] vehicleIds = Request.Form.GetValues("VehicleId");
+            //string[] vehicleCount = Request.Form.GetValues("Count");
+            //string[] vehicleRemark = Request.Form.GetValues("GoodsVehicleRemark");
+            //if (vehicleIds != null && vehicleCount != null && vehicleRemark != null
+            //    && vehicleIds.Length > 0 && vehicleCount.Length > 0 && vehicleRemark.Length > 0)
+            //{
+            //    for (int i = 0; i < vehicleIds.Length; i++)
+            //    {
+            //        decimal count;
+            //        int vehicleId;
+            //        if (int.TryParse(vehicleIds[i], out vehicleId) && decimal.TryParse(vehicleCount[i], out count))
+            //        {
+            //            model.AddGoodsVehicle(new StoreInGoodsVehicle(vehicleId, vehicleRemark[i], count));
+            //        }
+            //    }
+            //}
 
 
-            string[] fileNames = Request.Form.GetValues("hid_attach_filename");
-            string[] filePaths = Request.Form.GetValues("hid_attach_filepath");
-            string[] attachRemark = Request.Form.GetValues("txt_attach_remark");
-            if (fileNames != null && filePaths != null && attachRemark != null
-                && fileNames.Length > 0 && filePaths.Length > 0 && attachRemark.Length > 0)
-            {
-                for (int i = 0; i < fileNames.Length; i++)
-                {
-                    model.AddAttach(new Attach(filePaths[i], fileNames[i], attachRemark[i]));
-                }
-            }
+            //string[] fileNames = Request.Form.GetValues("hid_attach_filename");
+            //string[] filePaths = Request.Form.GetValues("hid_attach_filepath");
+            //string[] attachRemark = Request.Form.GetValues("txt_attach_remark");
+            //if (fileNames != null && filePaths != null && attachRemark != null
+            //    && fileNames.Length > 0 && filePaths.Length > 0 && attachRemark.Length > 0)
+            //{
+            //    for (int i = 0; i < fileNames.Length; i++)
+            //    {
+            //        model.AddAttach(new Attach(filePaths[i], fileNames[i], attachRemark[i]));
+            //    }
+            //}
 
-            if (bll.Add(model))
-            {
-                AddAdminLog(DTEnums.ActionEnum.Add.ToString(), "添加待入库货物:" + model.GoodsId); //记录日志
-                result = true;
-            }
+            //if (bll.Add(model))
+            //{
+            //    AddAdminLog(DTEnums.ActionEnum.Add.ToString(), "添加入库单:" + model.GoodsId); //记录日志
+            //    result = true;
+            //}
             return result;
         }
         #endregion
@@ -145,48 +154,55 @@ namespace DTcms.Web.admin.business
         private bool DoEdit(int _id)
         {
             bool result = false;
-            BLL.StoreWaitingGoods bll = new BLL.StoreWaitingGoods();
-            Model.StoreWaitingGoods model = bll.GetModel(_id);
+            BLL.StoreInOrder bll = new BLL.StoreInOrder();
+            Model.StoreInOrder model = bll.GetModel(_id);
 
-            model.GoodsId = int.Parse(ddlGoods.SelectedValue);
-            model.StoringTime = DateTime.Parse(txtStoringTime.Text);
+            model.CustomerId = int.Parse(ddlCustomer.SelectedValue);
+            model.BeginChargingTime = DateTime.Parse(txtBeginChargingTime.Text);
+            model.ChargingTime = new DateTime(model.BeginChargingTime.Year, model.BeginChargingTime.Month, model.BeginChargingTime.Day + 1);
+            model.AccountNumber = txtAccountNumber.Text;
+            model.InspectionNumber = txtInspectionNumber.Text;
+            model.ChargingCount = decimal.Parse(txtChargingCount.Text);
+            model.SuttleWeight = decimal.Parse(txtSuttleWeight.Text);
             model.Admin = txtAdmin.Text;
             model.Remark = txtRemark.Text;
+            //model.Status = 0;
+            //model.CreateTime = DateTime.Now;
 
-            string[] vehicleIds = Request.Form.GetValues("VehicleId");
-            string[] vehicleCount = Request.Form.GetValues("Count");
-            string[] vehicleRemark = Request.Form.GetValues("GoodsVehicleRemark");
-            if (vehicleIds != null && vehicleCount != null && vehicleRemark != null
-                && vehicleIds.Length > 0 && vehicleCount.Length > 0 && vehicleRemark.Length > 0)
-            {
-                for (int i = 0; i < vehicleIds.Length; i++)
-                {
-                    decimal count;
-                    int vehicleId;
-                    if (int.TryParse(vehicleIds[i], out vehicleId) && decimal.TryParse(vehicleCount[i], out count))
-                    {
-                        model.AddGoodsVehicle(new StoreInGoodsVehicle(vehicleId, vehicleRemark[i], count));
-                    }
-                }
-            }
+            //string[] vehicleIds = Request.Form.GetValues("VehicleId");
+            //string[] vehicleCount = Request.Form.GetValues("Count");
+            //string[] vehicleRemark = Request.Form.GetValues("GoodsVehicleRemark");
+            //if (vehicleIds != null && vehicleCount != null && vehicleRemark != null
+            //    && vehicleIds.Length > 0 && vehicleCount.Length > 0 && vehicleRemark.Length > 0)
+            //{
+            //    for (int i = 0; i < vehicleIds.Length; i++)
+            //    {
+            //        decimal count;
+            //        int vehicleId;
+            //        if (int.TryParse(vehicleIds[i], out vehicleId) && decimal.TryParse(vehicleCount[i], out count))
+            //        {
+            //            model.AddGoodsVehicle(new StoreInGoodsVehicle(vehicleId, vehicleRemark[i], count));
+            //        }
+            //    }
+            //}
 
-            string[] fileNames = Request.Form.GetValues("hid_attach_filename");
-            string[] filePaths = Request.Form.GetValues("hid_attach_filepath");
-            string[] attachRemark = Request.Form.GetValues("txt_attach_remark");
-            if (fileNames != null && filePaths != null && attachRemark != null
-                && fileNames.Length > 0 && filePaths.Length > 0 && attachRemark.Length > 0)
-            {
-                for (int i = 0; i < fileNames.Length; i++)
-                {
-                    model.AddAttach(new Attach(filePaths[i], fileNames[i], attachRemark[i]));
-                }
-            }
+            //string[] fileNames = Request.Form.GetValues("hid_attach_filename");
+            //string[] filePaths = Request.Form.GetValues("hid_attach_filepath");
+            //string[] attachRemark = Request.Form.GetValues("txt_attach_remark");
+            //if (fileNames != null && filePaths != null && attachRemark != null
+            //    && fileNames.Length > 0 && filePaths.Length > 0 && attachRemark.Length > 0)
+            //{
+            //    for (int i = 0; i < fileNames.Length; i++)
+            //    {
+            //        model.AddAttach(new Attach(filePaths[i], fileNames[i], attachRemark[i]));
+            //    }
+            //}
 
-            if (bll.Update(model))
-            {
-                AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "修改待入库货物信息:" + model.GoodsId); //记录日志
-                result = true;
-            }
+            //if (bll.Update(model))
+            //{
+            //    AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "修改入库单信息:" + model.GoodsId); //记录日志
+            //    result = true;
+            //}
             return result;
         }
         #endregion
@@ -196,23 +212,23 @@ namespace DTcms.Web.admin.business
         {
             if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
             {
-                ChkAdminLevel("store_waiting", DTEnums.ActionEnum.Edit.ToString()); //检查权限
+                ChkAdminLevel("store_in", DTEnums.ActionEnum.Edit.ToString()); //检查权限
                 if (!DoEdit(this.id))
                 {
                     JscriptMsg("保存过程中发生错误！", "");
                     return;
                 }
-                JscriptMsg("修改待入库货物成功！", "store_waiting.aspx");
+                JscriptMsg("修改入库单成功！", "store_in.aspx");
             }
             else //添加
             {
-                ChkAdminLevel("store_waiting", DTEnums.ActionEnum.Add.ToString()); //检查权限
+                ChkAdminLevel("store_in", DTEnums.ActionEnum.Add.ToString()); //检查权限
                 if (!DoAdd())
                 {
                     JscriptMsg("保存过程中发生错误！", "");
                     return;
                 }
-                JscriptMsg("添加待入库货物成功！", "store_waiting.aspx");
+                JscriptMsg("添加入库单成功！", "store_in.aspx");
             }
         }
 

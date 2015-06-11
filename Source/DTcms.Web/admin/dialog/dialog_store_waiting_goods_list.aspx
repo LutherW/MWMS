@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="store_waiting.aspx.cs" Inherits="DTcms.Web.admin.business.store_waiting" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="dialog_store_waiting_goods_list.aspx.cs" Inherits="DTcms.Web.admin.dialog.dialog_store_waiting_goods_list" %>
 
 <%@ Import Namespace="DTcms.Common" %>
 
@@ -8,56 +8,74 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>待入库货物管理</title>
+    <title>待入库货物列表</title>
     <link href="../../scripts/artdialog/ui-dialog.css" rel="stylesheet" type="text/css" />
     <link href="../skin/default/style.css" rel="stylesheet" type="text/css" />
     <link href="../../css/pagination.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" charset="utf-8" src="../../scripts/jquery/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../scripts/artdialog/dialog-plus-min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../../scripts/datepicker/WdatePicker.js"></script>
     <script type="text/javascript" charset="utf-8" src="../js/laymain.js"></script>
     <script type="text/javascript" charset="utf-8" src="../js/common.js"></script>
     <script type="text/javascript">
-        function showAttachDialog(id, name) {
-            var objNum = arguments.length;
-            var attachDialog = top.dialog({
-                id: 'attachDialogId',
-                title: name + "的附件",
-                url: '/admin/dialog/dialog_goods_attach_list.aspx?goodsId=' + id,
-                width: 500,
-                height: 180,
-                onclose: function () {
+        var api = top.dialog.get(window);//获取父窗体对象
+        var vehicles = [];
+        $(function () {
+            api.button([{
+                value: '确定',
+                callback: function () {
+                    createGoodsVehicleHtml();
+                },
+                autofocus: true
+            }, {
+                value: '取消',
+                callback: function () { }
+            }]);
 
-                }
-            }).showModal();
+        });
+
+        function createGoodsVehicleHtml() {
+            var html = "";
+            var storeOptions = "<%=storeOptions%>";
+            $.each($("#table_list tr input:checked"), function (i, n) {
+                var id = $(this).val();
+                var customerId = $(this).attr("data-customer-id")
+                var goodsName = $(this).attr("data-goods-name") + '(' + $(this).attr("data-customer-name") + ')';
+                html += "<li>";
+                html += '<a href="javascript:;" onclick="delNode(this);" class="del" title="删除"></a>';
+                html += '<div class="btns">';
+                html += '<input type="hidden" name="StoreWaitingGoodsId" value="' + id + '" />';
+                html += '<input type="hidden" name="CustomerId" value="' + customerId + '" />';
+                html += '货物：' + goodsName + '';
+                html += '</div>';
+                html += '<div class="btns">';
+                html += '仓库：<select name="StoreId">' + storeOptions + '</select>';
+                html += '</div>';
+                html += '<div class="btns">';
+                html += '数量：<input type="text" name="Count" value="0.00" style="width: 70%;" />';
+                html += '</div>';
+                html += '<div class="btns">';
+                html += '备注：<input type="text" name="GoodsVehicleRemark" value="" style="width: 70%;" />';
+                html += '</div>';
+                html += '</li>';
+            });
+
+            api.data.append(html);
         }
 
-        function showVehicleDialog(id, name) {
-            var objNum = arguments.length;
-            var attachDialog = top.dialog({
-                id: 'vehicleDialogId',
-                title: name + "的运输车辆",
-                url: '/admin/dialog/dialog_goods_vehicle_list.aspx?goodsId=' + id,
-                width: 700,
-                onclose: function () {
-
-                }
-            }).showModal();
+        function checkMyAll(chkobj) {
+            if ($(chkobj).text() == "全选") {
+                $(chkobj).children("span").text("取消");
+                $(".checkall:checkbox").prop("checked", true);
+            } else {
+                $(chkobj).children("span").text("全选");
+                $(".checkall:checkbox").prop("checked", false);
+            }
         }
     </script>
 </head>
 
 <body class="mainbody">
     <form id="form1" runat="server">
-        <!--导航栏-->
-        <div class="location">
-            <a href="javascript:history.back(-1);" class="back"><i></i><span>返回上一页</span></a>
-            <a href="../center.aspx" class="home"><i></i><span>首页</span></a>
-            <i class="arrow"></i>
-            <span>待入库货物列表</span>
-        </div>
-        <!--/导航栏-->
-
         <!--工具栏-->
         <div id="floatHead" class="toolbar-wrap">
             <div class="toolbar">
@@ -65,10 +83,7 @@
                     <a class="menu-btn"></a>
                     <div class="l-list">
                         <ul class="icon-list">
-                            <li><a class="add" href="store_waiting_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>新增</span></a></li>
-                            <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
-                            <li>
-                                <asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete','只允许删除未入库货物，是否继续？');" OnClick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>
+                            <li><a class="all" href="javascript:;" onclick="checkMyAll(this);"><i></i><span>全选</span></a></li>
                         </ul>
                         <div class="menu-list">
                             <div class="rule-single-select">
@@ -97,38 +112,33 @@
         <div class="table-container">
             <asp:Repeater ID="rptList" runat="server">
                 <HeaderTemplate>
-                    <table width="100%" bgoods="0" cellspacing="0" cellpadding="0" class="ltable">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="table_list">
                         <tr>
                             <th width="8%">选择</th>
                             <th align="left" width="10%">货物名称</th>
                             <th align="left" width="10%">客户</th>
                             <th align="left" width="15%">计划入库时间</th>
                             <th align="left" width="10%">操作员</th>
-                            <th width="8%">其他</th>
-                            <th width="8%">操作</th>
+                            <th>备注</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
                         <td align="center">
-                            <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Enabled='True' Style="vertical-align: middle;" />
-                            <asp:HiddenField ID="hidId" Value='<%#Eval("Id")%>' runat="server" />
+                            <input type="checkbox" name="StoreWaitingGoodsId" value="<%#Eval("Id")%>" 
+                                data-goods-name="<%#Eval("GoodsName")%>" 
+                                data-customer-name="<%#Eval("CustomerName")%>" 
+                                data-customer-id="<%#Eval("CustomerId")%>" 
+                                class="checkall" />
                         </td>
-                        <td><a href="store_waiting_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>"><%#Eval("GoodsName")%></a></td>
+                        <td><%#Eval("GoodsName")%></td>
                         <td><%#Eval("CustomerName")%></td>
-                        <td><%#Eval("StoringTime")%></td>
+                        <td><%#Convert.ToDateTime(Eval("StoringTime")).ToString("yyyy-MM-dd")%></td>
                         <td><%#Eval("Admin")%></td>
-                        <td align="center">
-                            <a href="javascript:void(0);" onclick="showAttachDialog(<%#Eval("Id") %>, '<%#Eval("GoodsName") %>');">附件</a>&nbsp;|&nbsp;
-                            <a href="javascript:void(0);" onclick="showVehicleDialog(<%#Eval("Id") %>, '<%#Eval("GoodsName") %>');">车辆</a>
-                        </td>
-                        <td align="center">
-                            <a href="store_waiting_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
-                        </td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"7\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"5\">暂无记录</td></tr>" : ""%>
 </table>
                 </FooterTemplate>
             </asp:Repeater>

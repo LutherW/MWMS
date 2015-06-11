@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>待入库货物管理</title>
+    <title>入库单管理</title>
     <link href="../../scripts/artdialog/ui-dialog.css" rel="stylesheet" type="text/css" />
     <link href="../skin/default/style.css" rel="stylesheet" type="text/css" />
     <link href="../../css/pagination.css" rel="stylesheet" type="text/css" />
@@ -54,7 +54,7 @@
             <a href="javascript:history.back(-1);" class="back"><i></i><span>返回上一页</span></a>
             <a href="../center.aspx" class="home"><i></i><span>首页</span></a>
             <i class="arrow"></i>
-            <span>待入库货物列表</span>
+            <span>入库单列表</span>
         </div>
         <!--/导航栏-->
 

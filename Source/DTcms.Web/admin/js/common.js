@@ -36,6 +36,7 @@ function checkNumber(e) {
         return false;
     }
 }
+
 //只允许输入小数
 function checkForFloat(obj, e) {
     var isOK = false;

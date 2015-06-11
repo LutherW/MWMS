@@ -25,8 +25,19 @@ namespace DTcms.DAL
 
 			return DbHelperSQL.Exists(strSql.ToString(),parameters);
 		}
-		
-				
+
+        public bool Exists(int Id)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select count(1) from StoreInOrder");
+            strSql.Append(" where ");
+            strSql.Append(" Id = @Id ");
+            SqlParameter[] parameters = {
+					new SqlParameter("@Id", SqlDbType.Int,4) };
+            parameters[0].Value = Id;
+
+            return DbHelperSQL.Exists(strSql.ToString(), parameters);
+        }		
 		
 		/// <summary>
 		/// 增加一条数据

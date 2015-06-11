@@ -103,7 +103,7 @@
                 <dt>货物</dt>
                 <dd>
                     <div class="rule-single-select">
-                        <asp:DropDownList ID="ddlGoods" runat="server" datatype="*" errormsg="请选择客户" sucmsg=" "></asp:DropDownList>
+                        <asp:DropDownList ID="ddlGoods" runat="server" datatype="*" errormsg="请选择货物" sucmsg=" "></asp:DropDownList>
                     </div>
                 </dd>
             </dl>
