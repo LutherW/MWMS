@@ -1,94 +1,106 @@
-﻿using System; 
+﻿using System;
 using System.Text;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using System.Data;
-namespace DTcms.Model{
-	 	//StoreInGoods
-		public class StoreInGoods
-	{
-   		     
-      	/// <summary>
-		/// StoreInOrderId
+namespace DTcms.Model
+{
+    //StoreInGoods
+    public class StoreInGoods
+    {
+        public StoreInGoods() { }
+        public StoreInGoods(int storeid, int storewaitinggoodsid, int customerid, decimal count, string remark)
+        {
+            _storeid = storeid;
+            _storewaitinggoodsid = storewaitinggoodsid;
+            _customerid = customerid;
+            _count = count;
+            _status = 0;
+            _remark = remark;
+            _storedintime = DateTime.Now;
+        }
+
+        /// <summary>
+        /// StoreInOrderId
         /// </summary>		
-		private int _storeinorderid;
+        private int _storeinorderid;
         public int StoreInOrderId
         {
-            get{ return _storeinorderid; }
-            set{ _storeinorderid = value; }
-        }        
-		/// <summary>
-		/// Id
+            get { return _storeinorderid; }
+            set { _storeinorderid = value; }
+        }
+        /// <summary>
+        /// Id
         /// </summary>		
-		private int _id;
+        private int _id;
         public int Id
         {
-            get{ return _id; }
-            set{ _id = value; }
-        }        
-		/// <summary>
-		/// StoreId
+            get { return _id; }
+            set { _id = value; }
+        }
+        /// <summary>
+        /// StoreId
         /// </summary>		
-		private int _storeid;
+        private int _storeid;
         public int StoreId
         {
-            get{ return _storeid; }
-            set{ _storeid = value; }
-        }        
-		/// <summary>
-		/// StoreWaitingGoodsId
+            get { return _storeid; }
+            set { _storeid = value; }
+        }
+        /// <summary>
+        /// StoreWaitingGoodsId
         /// </summary>		
-		private int _storewaitinggoodsid;
+        private int _storewaitinggoodsid;
         public int StoreWaitingGoodsId
         {
-            get{ return _storewaitinggoodsid; }
-            set{ _storewaitinggoodsid = value; }
-        }        
-		/// <summary>
-		/// CustomerId
+            get { return _storewaitinggoodsid; }
+            set { _storewaitinggoodsid = value; }
+        }
+        /// <summary>
+        /// CustomerId
         /// </summary>		
-		private int _customerid;
+        private int _customerid;
         public int CustomerId
         {
-            get{ return _customerid; }
-            set{ _customerid = value; }
-        }        
-		/// <summary>
-		/// Status
+            get { return _customerid; }
+            set { _customerid = value; }
+        }
+        /// <summary>
+        /// Status
         /// </summary>		
-		private int _status;
+        private int _status;
         public int Status
         {
-            get{ return _status; }
-            set{ _status = value; }
-        }        
-		/// <summary>
-		/// Count
+            get { return _status; }
+            set { _status = value; }
+        }
+        /// <summary>
+        /// Count
         /// </summary>		
-		private decimal _count;
+        private decimal _count;
         public decimal Count
         {
-            get{ return _count; }
-            set{ _count = value; }
-        }        
-		/// <summary>
-		/// StoredInTime
+            get { return _count; }
+            set { _count = value; }
+        }
+        /// <summary>
+        /// StoredInTime
         /// </summary>		
-		private DateTime _storedintime;
+        private DateTime _storedintime;
         public DateTime StoredInTime
         {
-            get{ return _storedintime; }
-            set{ _storedintime = value; }
-        }        
-		/// <summary>
-		/// Remark
+            get { return _storedintime; }
+            set { _storedintime = value; }
+        }
+        /// <summary>
+        /// Remark
         /// </summary>		
-		private string _remark;
+        private string _remark;
         public string Remark
         {
-            get{ return _remark; }
-            set{ _remark = value; }
-        }        
-		   
-	}
+            get { return _remark; }
+            set { _remark = value; }
+        }
+
+    }
 }
 

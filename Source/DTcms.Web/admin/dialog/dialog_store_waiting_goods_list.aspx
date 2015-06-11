@@ -54,7 +54,7 @@
                 html += '数量：<input type="text" name="Count" value="0.00" style="width: 70%;" />';
                 html += '</div>';
                 html += '<div class="btns">';
-                html += '备注：<input type="text" name="GoodsVehicleRemark" value="" style="width: 70%;" />';
+                html += '备注：<input type="text" name="StoreInGoodsRemark" value="" style="width: 70%;" />';
                 html += '</div>';
                 html += '</li>';
             });

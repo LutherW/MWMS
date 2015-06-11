@@ -54,6 +54,33 @@ namespace DTcms.DAL
 			            DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
             			
 		}
+
+        public void Add(SqlConnection conn, SqlTransaction trans, DTcms.Model.StoreInUnitPrice model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("insert into StoreInUnitPrice(");
+            strSql.Append("StoreInOrderId,BeginTime,Price,EndTime,Remark");
+            strSql.Append(") values (");
+            strSql.Append("@StoreInOrderId,@BeginTime,@Price,@EndTime,@Remark");
+            strSql.Append(") ");
+
+            SqlParameter[] parameters = {
+			            new SqlParameter("@StoreInOrderId", SqlDbType.Int,4) ,            
+                        new SqlParameter("@BeginTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@Price", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@EndTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@Remark", SqlDbType.VarChar,254)             
+              
+            };
+
+            parameters[0].Value = model.StoreInOrderId;
+            parameters[1].Value = model.BeginTime;
+            parameters[2].Value = model.Price;
+            parameters[3].Value = model.EndTime;
+            parameters[4].Value = model.Remark;
+            DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+        }
 		
 		
 		/// <summary>

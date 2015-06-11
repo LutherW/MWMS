@@ -236,21 +236,18 @@
                                     <li>
                                         <a href="javascript:;" onclick="delNode(this);" class="del" title="删除"></a>
                                         <div class="btns">
-                                            名称：<input type="text" name="CostName" value="<%#Eval("Name")%>" style="width: 70%;" />
+                                            <input type="hidden" name="StoreWaitingGoodsId" value="<%#Eval("StoreWaitingGoodsId") %>" />
+                                            <input type="hidden" name="CustomerId" value="<%#Eval("CustomerId") %>" />
+                                            货物：<%#Eval("GoodsName").ToString() + "(" + Eval("CustomerName").ToString() + ")"%>
                                         </div>
                                         <div class="btns">
-                                            数量：<input type="text" name="CostCount" onkeydown="return checkForFloat(this,event);" value="<%#Eval("Count") %>" style="width: 70%;" />
+                                            仓库：<select name="StoreId"><%#GetStoreOptions(Eval("StoreId").ToString()) %></select>
                                         </div>
                                         <div class="btns">
-                                            类型：<select name="CostType"><option value="+" <%#Convert.ToDecimal(Eval("TotalPrice")) >= 0? "selected='selected'" : "" %>>收入</option>
-                                                <option value="-" <%#Convert.ToDecimal(Eval("TotalPrice")) < 0? "selected='selected'" : "" %>>支出</option>
-                                            </select>
+                                            数量：<input type="text" name="Count" value="<%#Eval("Count") %>" style="width: 70%;" />
                                         </div>
                                         <div class="btns">
-                                            总价：<input type="text" name="CostTotalPrice" onkeydown="return checkForFloat(this,event);" value="<%#Math.Abs(Convert.ToDecimal(Eval("TotalPrice"))) %>" style="width: 70%;" />
-                                        </div>
-                                        <div class="btns">
-                                            客户：<input type="text" name="CostCustomer" value="<%#Eval("Customer") %>" style="width: 70%;" />
+                                            备注：<input type="text" name="StoreInGoodsRemark" value="<%#Eval("Remark") %>" style="width: 70%;" />
                                         </div>
                                     </li>
                                 </ItemTemplate>

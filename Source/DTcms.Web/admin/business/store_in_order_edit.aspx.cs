@@ -14,6 +14,7 @@ namespace DTcms.Web.admin.business
         string defaultpassword = "0|0|0|0"; //默认显示密码
         protected string action = DTEnums.ActionEnum.Add.ToString(); //操作类型
         private int id = 0;
+        private DataTable storeDT = null;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -62,6 +63,10 @@ namespace DTcms.Web.admin.business
             {
                 this.ddlCustomer.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
             }
+
+            BLL.Store storeBLL = new BLL.Store();
+            storeDT = storeBLL.GetAllList().Tables[0];
+
         }
         #endregion
 
@@ -85,10 +90,37 @@ namespace DTcms.Web.admin.business
             this.rptUnitPriceList.DataSource = unitpriceDT;
             this.rptUnitPriceList.DataBind();
 
-            //BLL.Attach attachBLL = new BLL.Attach();
-            //DataTable attachDT = attachBLL.GetList(" StoreInOrderId = " + _id + "").Tables[0];
-            //this.rptAttachList.DataSource = attachDT;
-            //this.rptAttachList.DataBind();
+            BLL.StoreInCost costBLL = new BLL.StoreInCost();
+            DataTable costDT = costBLL.GetList(" StoreInOrderId = " + _id + "").Tables[0];
+            this.rptCostList.DataSource = costDT;
+            this.rptCostList.DataBind();
+
+            BLL.StoreInGoods goodsBLL = new BLL.StoreInGoods();
+            DataTable goodsDT = goodsBLL.GetList(" and A.StoreInOrderId = " + _id + " ").Tables[0];
+            this.rptGoodsList.DataSource = goodsDT;
+            this.rptGoodsList.DataBind();
+        }
+
+        protected string GetStoreOptions(string storeId) 
+        {
+            string storeOptions = "";
+            storeOptions += "<option value='0'>选择仓库</option>";
+            if (storeDT != null)
+            {
+                foreach (DataRow dr in storeDT.Rows)
+                {
+                    if (dr["Id"].ToString().Equals(storeId))
+                    {
+                        storeOptions += "<option value='" + dr["Id"] + "' selected='selected'>" + dr["Name"] + "</option>";
+                    }
+                    else 
+                    {
+                        storeOptions += "<option value='" + dr["Id"] + "'>" + dr["Name"] + "</option>";
+                    }
+                }
+            }
+
+            return storeOptions;
         }
         #endregion
 
@@ -111,41 +143,78 @@ namespace DTcms.Web.admin.business
             model.Status = 0;
             model.CreateTime = DateTime.Now;
 
-            //string[] vehicleIds = Request.Form.GetValues("VehicleId");
-            //string[] vehicleCount = Request.Form.GetValues("Count");
-            //string[] vehicleRemark = Request.Form.GetValues("GoodsVehicleRemark");
-            //if (vehicleIds != null && vehicleCount != null && vehicleRemark != null
-            //    && vehicleIds.Length > 0 && vehicleCount.Length > 0 && vehicleRemark.Length > 0)
-            //{
-            //    for (int i = 0; i < vehicleIds.Length; i++)
-            //    {
-            //        decimal count;
-            //        int vehicleId;
-            //        if (int.TryParse(vehicleIds[i], out vehicleId) && decimal.TryParse(vehicleCount[i], out count))
-            //        {
-            //            model.AddGoodsVehicle(new StoreInGoodsVehicle(vehicleId, vehicleRemark[i], count));
-            //        }
-            //    }
-            //}
+            #region 单价
+            string[] unitpriceBeginTime = Request.Form.GetValues("UnitpriceBeginTime");
+            string[] unitpriceEndTime = Request.Form.GetValues("UnitpriceEndTime");
+            string[] unitprice = Request.Form.GetValues("Unitprice");
+            string[] unitpriceRemark = Request.Form.GetValues("UnitpriceRemark");
+            if (unitpriceBeginTime != null && unitpriceEndTime != null && unitprice != null && unitpriceRemark != null
+                && unitpriceBeginTime.Length > 0 && unitpriceEndTime.Length > 0 && unitprice.Length > 0 && unitpriceRemark.Length > 0)
+            {
+                for (int i = 0; i < unitpriceBeginTime.Length; i++)
+                {
+                    decimal price;
+                    DateTime begintime, endtime;
+                    if (DateTime.TryParse(unitpriceBeginTime[i], out begintime) && DateTime.TryParse(unitpriceEndTime[i], out endtime)
+                        && decimal.TryParse(unitprice[i], out price))
+                    {
+                        model.AddUnitPrice(new StoreInUnitPrice(begintime, endtime, price, unitpriceRemark[i]));
+                    }
+                }
+            }
+            #endregion
 
+            #region 费用
+            string[] costName = Request.Form.GetValues("CostName");
+            string[] costCount = Request.Form.GetValues("CostCount");
+            string[] costType = Request.Form.GetValues("CostType");
+            string[] costTotalPrice = Request.Form.GetValues("CostTotalPrice");
+            string[] costCustomer = Request.Form.GetValues("CostCustomer");
+            if (costName != null && costCount != null && costType != null && costTotalPrice != null && costCustomer != null
+                && costName.Length > 0 && costCount.Length > 0 && costType.Length > 0 && costTotalPrice.Length > 0 && costCustomer.Length > 0)
+            {
+                for (int i = 0; i < costName.Length; i++)
+                {
+                    decimal count, totalPrice;
+                    if (decimal.TryParse(costCount[i], out count) && decimal.TryParse(costTotalPrice[i], out totalPrice))
+                    {
+                        if (costType[i].ToString().Equals("-"))
+                        {
+                            totalPrice *= -1;
+                        }
+                        model.AddStoreInCost(new StoreInCost(costName[i], count, totalPrice, costCustomer[i], ""));
+                    }
+                }
+            }
+            #endregion
 
-            //string[] fileNames = Request.Form.GetValues("hid_attach_filename");
-            //string[] filePaths = Request.Form.GetValues("hid_attach_filepath");
-            //string[] attachRemark = Request.Form.GetValues("txt_attach_remark");
-            //if (fileNames != null && filePaths != null && attachRemark != null
-            //    && fileNames.Length > 0 && filePaths.Length > 0 && attachRemark.Length > 0)
-            //{
-            //    for (int i = 0; i < fileNames.Length; i++)
-            //    {
-            //        model.AddAttach(new Attach(filePaths[i], fileNames[i], attachRemark[i]));
-            //    }
-            //}
+            #region 入库货物
+            string[] storeWaitingGoodsIds = Request.Form.GetValues("StoreWaitingGoodsId");
+            string[] customerIds = Request.Form.GetValues("CustomerId");
+            string[] storeIds = Request.Form.GetValues("StoreId");
+            string[] storeInCounts = Request.Form.GetValues("Count");
+            string[] storeInGoodsRemark = Request.Form.GetValues("StoreInGoodsRemark");
+            if (storeWaitingGoodsIds != null && customerIds != null && storeIds != null && storeInCounts != null && storeInGoodsRemark != null
+                && storeWaitingGoodsIds.Length > 0 && customerIds.Length > 0 && storeIds.Length > 0 && storeInCounts.Length > 0 && storeInGoodsRemark.Length > 0)
+            {
+                for (int i = 0; i < storeWaitingGoodsIds.Length; i++)
+                {
+                    int storeWaitingGoodsId, customerId, storeId;
+                    decimal storeInCount;
+                    if (int.TryParse(storeWaitingGoodsIds[i], out storeWaitingGoodsId) && int.TryParse(customerIds[i], out customerId)
+                        && int.TryParse(storeIds[i], out storeId) && decimal.TryParse(storeInCounts[i], out storeInCount))
+                    {
+                        model.AddStoreInGoods(new StoreInGoods(storeId, storeWaitingGoodsId, customerId, storeInCount, storeInGoodsRemark[i]));
+                    }
+                }
+            }
+            #endregion
 
-            //if (bll.Add(model))
-            //{
-            //    AddAdminLog(DTEnums.ActionEnum.Add.ToString(), "添加入库单:" + model.GoodsId); //记录日志
-            //    result = true;
-            //}
+            if (bll.Add(model))
+            {
+                AddAdminLog(DTEnums.ActionEnum.Add.ToString(), "添加入库单:" + model.AccountNumber); //记录日志
+                result = true;
+            }
             return result;
         }
         #endregion

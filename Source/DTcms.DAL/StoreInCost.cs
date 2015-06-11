@@ -70,6 +70,49 @@ namespace DTcms.DAL
 			            DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
             			
 		}
+
+        public void Add(SqlConnection conn, SqlTransaction trans, DTcms.Model.StoreInCost model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("insert into StoreInCost(");
+            strSql.Append("StoreInOrderId,Name,Count,UnitPrice,TotalPrice,Status,PaidTime,Admin,Customer,HasBeenInvoiced,InvoicedTime,InvoicedOperator,Remark");
+            strSql.Append(") values (");
+            strSql.Append("@StoreInOrderId,@Name,@Count,@UnitPrice,@TotalPrice,@Status,@PaidTime,@Admin,@Customer,@HasBeenInvoiced,@InvoicedTime,@InvoicedOperator,@Remark");
+            strSql.Append(") ");
+
+            SqlParameter[] parameters = {
+			            new SqlParameter("@StoreInOrderId", SqlDbType.Int,4) ,            
+                        new SqlParameter("@Name", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@Count", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@UnitPrice", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@TotalPrice", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@Status", SqlDbType.Int,4) ,            
+                        new SqlParameter("@PaidTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@Admin", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@Customer", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@HasBeenInvoiced", SqlDbType.Bit,1) ,            
+                        new SqlParameter("@InvoicedTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@InvoicedOperator", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@Remark", SqlDbType.VarChar,254)             
+              
+            };
+
+            parameters[0].Value = model.StoreInOrderId;
+            parameters[1].Value = model.Name;
+            parameters[2].Value = model.Count;
+            parameters[3].Value = model.UnitPrice;
+            parameters[4].Value = model.TotalPrice;
+            parameters[5].Value = model.Status;
+            parameters[6].Value = model.PaidTime;
+            parameters[7].Value = model.Admin;
+            parameters[8].Value = model.Customer;
+            parameters[9].Value = model.HasBeenInvoiced;
+            parameters[10].Value = model.InvoicedTime;
+            parameters[11].Value = model.InvoicedOperator;
+            parameters[12].Value = model.Remark;
+            DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+        }
 		
 		
 		/// <summary>
