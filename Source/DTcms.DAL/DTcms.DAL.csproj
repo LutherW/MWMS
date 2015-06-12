@@ -90,14 +90,12 @@
     <Compile Include="StoreInCost.cs" />
     <Compile Include="StoreInGoods.cs" />
     <Compile Include="StoreInGoodsVehicle.cs" />
-    <Compile Include="StoreInGoodsWithVehicles.cs" />
     <Compile Include="StoreInOrder.cs" />
     <Compile Include="StoreInUnitPrice.cs" />
     <Compile Include="StoreMode.cs" />
     <Compile Include="StoreOutCost.cs" />
     <Compile Include="StoreOutGoods.cs" />
     <Compile Include="StoreOutGoodsVehicle.cs" />
-    <Compile Include="StoreOutGoodsWithVehicles.cs" />
     <Compile Include="StoreOutOrder.cs" />
     <Compile Include="StoreOutUnitPrice.cs" />
     <Compile Include="StoreWaitingGoods.cs" />

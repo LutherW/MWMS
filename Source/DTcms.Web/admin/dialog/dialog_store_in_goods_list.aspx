@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="dialog_store_waiting_goods_list.aspx.cs" Inherits="DTcms.Web.admin.dialog.dialog_store_waiting_goods_list" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="dialog_store_in_goods_list.aspx.cs" Inherits="DTcms.Web.admin.dialog.dialog_store_in_goods_list" %>
 
 <%@ Import Namespace="DTcms.Common" %>
 
@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>待入库货物列表</title>
+    <title>入库货物列表</title>
     <link href="../../scripts/artdialog/ui-dialog.css" rel="stylesheet" type="text/css" />
     <link href="../skin/default/style.css" rel="stylesheet" type="text/css" />
     <link href="../../css/pagination.css" rel="stylesheet" type="text/css" />
@@ -20,16 +20,16 @@
         var api = top.dialog.get(window);//获取父窗体对象
         var vehicles = [];
         $(function () {
-            api.button([{
-                value: '确定',
-                callback: function () {
-                    createGoodsVehicleHtml();
-                },
-                autofocus: true
-            }, {
-                value: '取消',
-                callback: function () { }
-            }]);
+            //api.button([{
+            //    value: '确定',
+            //    callback: function () {
+            //        createGoodsVehicleHtml();
+            //    },
+            //    autofocus: true
+            //}, {
+            //    value: '取消',
+            //    callback: function () { }
+            //}]);
 
         });
 
@@ -73,20 +73,47 @@
                 $(".checkall:checkbox").prop("checked", false);
             }
         }
+
+        function showAttachDialog(id, name) {
+            var objNum = arguments.length;
+            var attachDialog = top.dialog({
+                id: 'attachDialogId',
+                title: name + "的附件",
+                url: '/admin/dialog/dialog_goods_attach_list.aspx?goodsId=' + id,
+                width: 500,
+                height: 180,
+                onclose: function () {
+
+                }
+            }).showModal();
+        }
+
+        function showVehicleDialog(id, name) {
+            var objNum = arguments.length;
+            var attachDialog = top.dialog({
+                id: 'vehicleDialogId',
+                title: name + "的运输车辆",
+                url: '/admin/dialog/dialog_goods_vehicle_list.aspx?goodsId=' + id,
+                width: 700,
+                onclose: function () {
+
+                }
+            }).showModal();
+        }
     </script>
 </head>
 
 <body class="mainbody">
     <form id="form1" runat="server">
         <!--工具栏-->
-        <div id="floatHead" class="toolbar-wrap">
+        <div id="floatHead" class="toolbar-wrap"  style="display:none;">
             <div class="toolbar">
                 <div class="box-wrap">
                     <a class="menu-btn"></a>
                     <div class="l-list">
-                        <ul class="icon-list">
+                        <%--<ul class="icon-list">
                             <li><a class="all" href="javascript:;" onclick="checkMyAll(this);"><i></i><span>全选</span></a></li>
-                        </ul>
+                        </ul>--%>
                         <div class="menu-list">
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlCustomer" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCustomer_SelectedIndexChanged">
@@ -99,7 +126,7 @@
                         </div>
                     </div>
                     <div class="r-list">
-                        <span class="lable">计划入库时间</span>
+                        <span class="lable">入库时间</span>
                         <asp:TextBox ID="txtBeginTime" runat="server" CssClass="keyword" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'txtEndTime\',{d:-1})}'})"/>
                         <span class="lable">-</span>
                         <asp:TextBox ID="txtEndTime" runat="server" Text="bbb" CssClass="keyword" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'txtBeginTime\',{d:0})}'})"/>
@@ -116,28 +143,24 @@
                 <HeaderTemplate>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="table_list">
                         <tr>
-                            <th width="8%">选择</th>
-                            <th align="left" width="10%">货物名称</th>
-                            <th align="left" width="10%">客户</th>
+                            <%--<th width="8%">选择</th>--%>
+                            <th align="left" width="20%">货物名称</th>
+                            <th align="left" width="20%">客户</th>
                             <th align="left" width="15%">计划入库时间</th>
-                            <th align="left" width="10%">操作员</th>
-                            <th>备注</th>
+                            <th align="left" width="10%">数量</th>
+                            <th>明细</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
-                        <td align="center">
-                            <input type="checkbox" name="StoreWaitingGoodsId" value="<%#Eval("Id")%>" 
-                                data-goods-name="<%#Eval("GoodsName")%>" 
-                                data-customer-name="<%#Eval("CustomerName")%>" 
-                                data-customer-id="<%#Eval("CustomerId")%>" 
-                                data-goods-id="<%#Eval("GoodsId")%>" 
-                                class="checkall" />
-                        </td>
                         <td><%#Eval("GoodsName")%></td>
                         <td><%#Eval("CustomerName")%></td>
-                        <td><%#Convert.ToDateTime(Eval("StoringTime")).ToString("yyyy-MM-dd")%></td>
-                        <td><%#Eval("Admin")%></td>
+                        <td><%#Convert.ToDateTime(Eval("StoredInTime")).ToString("yyyy-MM-dd")%></td>
+                        <td><%#Eval("Count")%></td>
+                        <td align="center">
+                            <a href="javascript:void(0);" onclick="showAttachDialog(<%#Eval("StoreWaitingGoodsId") %>, '<%#Eval("GoodsName") %>');">附件</a>&nbsp;|&nbsp;
+                            <a href="javascript:void(0);" onclick="showVehicleDialog(<%#Eval("StoreWaitingGoodsId") %>, '<%#Eval("GoodsName") %>');">车辆</a>
+                        </td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>

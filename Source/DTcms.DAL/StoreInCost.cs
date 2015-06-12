@@ -204,8 +204,28 @@ SqlParameter[] parameters = {
 				return false;
 			}
 		}
-		
-				
+
+        public bool Delete(SqlConnection conn, SqlTransaction trans, int StoreInOrderId)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from StoreInCost ");
+            strSql.Append(" where StoreInOrderId=@StoreInOrderId ");
+            SqlParameter[] parameters = {
+					new SqlParameter("@StoreInOrderId", SqlDbType.Int,4)			};
+            parameters[0].Value = StoreInOrderId;
+
+
+            int rows = DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+            if (rows > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }		
 		
 		/// <summary>
 		/// 得到一个对象实体

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="store_in_order_edit.aspx.cs" Inherits="DTcms.Web.admin.business.store_in_order_edit" ValidateRequest="false" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="storein_storage_order_edit.aspx.cs" Inherits="DTcms.Web.admin.business.storein_storage_order_edit" ValidateRequest="false" %>
 
 <%@ Import Namespace="DTcms.Common" %>
 

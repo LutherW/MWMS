@@ -8,11 +8,12 @@ namespace DTcms.Model
     public class StoreInGoods
     {
         public StoreInGoods() { }
-        public StoreInGoods(int storeid, int storewaitinggoodsid, int customerid, decimal count, string remark)
+        public StoreInGoods(int storeid, int storewaitinggoodsid, int customerid, int goodsid, decimal count, string remark)
         {
             _storeid = storeid;
             _storewaitinggoodsid = storewaitinggoodsid;
             _customerid = customerid;
+            _goodsId = goodsid;
             _count = count;
             _status = 0;
             _remark = remark;
@@ -64,6 +65,16 @@ namespace DTcms.Model
             get { return _customerid; }
             set { _customerid = value; }
         }
+        /// <summary>
+        /// GoodsId
+        /// </summary>		
+        private int _goodsId;
+        public int GoodsId
+        {
+            get { return _goodsId; }
+            set { _goodsId = value; }
+        }
+
         /// <summary>
         /// Status
         /// </summary>		

@@ -7,10 +7,10 @@
 // </自动生成>
 //------------------------------------------------------------------------------
 
-namespace DTcms.Web.admin.business {
+namespace DTcms.Web.admin.dialog {
     
     
-    public partial class store_in_order {
+    public partial class dialog_store_in_goods_list {
         
         /// <summary>
         /// form1 控件。
@@ -22,24 +22,6 @@ namespace DTcms.Web.admin.business {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// btnDelete 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnDelete;
-        
-        /// <summary>
-        /// btnAudit 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnAudit;
-        
-        /// <summary>
         /// ddlCustomer 控件。
         /// </summary>
         /// <remarks>
@@ -47,6 +29,15 @@ namespace DTcms.Web.admin.business {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlCustomer;
+        
+        /// <summary>
+        /// ddlGoods 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlGoods;
         
         /// <summary>
         /// txtBeginTime 控件。
@@ -65,15 +56,6 @@ namespace DTcms.Web.admin.business {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtEndTime;
-        
-        /// <summary>
-        /// txtKeyWord 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtKeyWord;
         
         /// <summary>
         /// lbtnSearch 控件。

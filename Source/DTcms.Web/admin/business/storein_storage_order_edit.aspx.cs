@@ -9,7 +9,7 @@ using DTcms.Model;
 
 namespace DTcms.Web.admin.business
 {
-    public partial class store_in_order_edit : Web.UI.ManagePage
+    public partial class storein_storage_order_edit : Web.UI.ManagePage
     {
         string defaultpassword = "0|0|0|0"; //默认显示密码
         protected string action = DTEnums.ActionEnum.Add.ToString(); //操作类型
@@ -36,7 +36,7 @@ namespace DTcms.Web.admin.business
             }
             if (!Page.IsPostBack)
             {
-                ChkAdminLevel("store_in_order", DTEnums.ActionEnum.View.ToString()); //检查权限
+                ChkAdminLevel("storein_storage_order", DTEnums.ActionEnum.View.ToString()); //检查权限
                 
                 TreeBind("Status = 0 "); //绑定类别
                 if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
@@ -140,7 +140,7 @@ namespace DTcms.Web.admin.business
             model.SuttleWeight = decimal.Parse(txtSuttleWeight.Text);
             model.Admin = txtAdmin.Text;
             model.Remark = txtRemark.Text;
-            model.Status = 0;
+            model.Status = 1;
             model.CreateTime = DateTime.Now;
 
             #region 单价
@@ -245,8 +245,8 @@ namespace DTcms.Web.admin.business
             model.SuttleWeight = decimal.Parse(txtSuttleWeight.Text);
             model.Admin = txtAdmin.Text;
             model.Remark = txtRemark.Text;
-            model.Status = 0;
-            model.CreateTime = DateTime.Now;
+            //model.Status = 1;
+            //model.CreateTime = DateTime.Now;
 
             #region 单价
             string[] unitpriceBeginTime = Request.Form.GetValues("UnitpriceBeginTime");
@@ -341,23 +341,23 @@ namespace DTcms.Web.admin.business
         {
             if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
             {
-                ChkAdminLevel("store_in_order", DTEnums.ActionEnum.Edit.ToString()); //检查权限
+                ChkAdminLevel("storein_storage_order", DTEnums.ActionEnum.Edit.ToString()); //检查权限
                 if (!DoEdit(this.id))
                 {
                     JscriptMsg("保存过程中发生错误！", "");
                     return;
                 }
-                JscriptMsg("修改入库单成功！", "store_in_order.aspx");
+                JscriptMsg("修改入库单成功！", "storein_storage_order.aspx");
             }
             else //添加
             {
-                ChkAdminLevel("store_in_order", DTEnums.ActionEnum.Add.ToString()); //检查权限
+                ChkAdminLevel("storein_storage_order", DTEnums.ActionEnum.Add.ToString()); //检查权限
                 if (!DoAdd())
                 {
                     JscriptMsg("保存过程中发生错误！", "");
                     return;
                 }
-                JscriptMsg("添加入库单成功！", "store_in_order.aspx");
+                JscriptMsg("添加入库单成功！", "storein_storage_order.aspx");
             }
         }
 

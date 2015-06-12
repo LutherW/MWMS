@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Data;
 using DTcms.DBUtility;
+using DTcms.Common;
 namespace DTcms.DAL
 {
     //StoreInGoods
@@ -85,9 +86,9 @@ namespace DTcms.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into StoreInGoods(");
-            strSql.Append("StoreInOrderId,StoreId,StoreWaitingGoodsId,CustomerId,Status,Count,StoredInTime,Remark");
+            strSql.Append("StoreInOrderId,StoreId,StoreWaitingGoodsId,CustomerId,Status,Count,StoredInTime,Remark,GoodsId");
             strSql.Append(") values (");
-            strSql.Append("@StoreInOrderId,@StoreId,@StoreWaitingGoodsId,@CustomerId,@Status,@Count,@StoredInTime,@Remark");
+            strSql.Append("@StoreInOrderId,@StoreId,@StoreWaitingGoodsId,@CustomerId,@Status,@Count,@StoredInTime,@Remark,@GoodsId");
             strSql.Append(") ");
             strSql.Append(";select @@IDENTITY");
             SqlParameter[] parameters = {
@@ -98,8 +99,8 @@ namespace DTcms.DAL
                         new SqlParameter("@Status", SqlDbType.Int,4) ,            
                         new SqlParameter("@Count", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@StoredInTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@Remark", SqlDbType.VarChar,254)             
-              
+                        new SqlParameter("@Remark", SqlDbType.VarChar,254)  ,           
+                        new SqlParameter("@GoodsId", SqlDbType.Int,4) ,  
             };
 
             parameters[0].Value = model.StoreInOrderId;
@@ -110,6 +111,7 @@ namespace DTcms.DAL
             parameters[5].Value = model.Count;
             parameters[6].Value = model.StoredInTime;
             parameters[7].Value = model.Remark;
+            parameters[8].Value = model.GoodsId;
 
             DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
 
@@ -183,6 +185,29 @@ namespace DTcms.DAL
 
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
+            if (rows > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool Delete(SqlConnection conn, SqlTransaction trans, int storeInOrderId)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from StoreInGoods ");
+            strSql.Append(" where StoreInOrderId=@StoreInOrderId");
+            SqlParameter[] parameters = {
+					new SqlParameter("@StoreInOrderId", SqlDbType.Int,4)
+			};
+            parameters[0].Value = storeInOrderId;
+
+
+            int rows = DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
             if (rows > 0)
             {
                 return true;
@@ -283,9 +308,9 @@ namespace DTcms.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select A.StoreWaitingGoodsId, A.CustomerId, A.StoreId, A.Count, A.Remark as Remark, C.Name as GoodsName, D.Name as CustomerName ");
+            strSql.Append("select A.StoreWaitingGoodsId, A.CustomerId, A.StoreId, A.Count, A.Remark as Remark, C.Name as GoodsName, C.Id as GoodsId, D.Name as CustomerName ");
             strSql.Append(" FROM StoreInGoods A, StoreWaitingGoods B, Goods C, Customer D");
-            strSql.Append(" where A.StoreWaitingGoodsId = B.Id and B.GoodsId = C.Id, A.CustomerId = D.Id");
+            strSql.Append(" where A.StoreWaitingGoodsId = B.Id and B.GoodsId = C.Id and A.CustomerId = D.Id");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(strWhere);
@@ -315,6 +340,18 @@ namespace DTcms.DAL
         }
 
 
+        public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select A.Status, A.Id AS Id, A.Count, A.StoredInTime, A.Remark, A.StoreWaitingGoodsId, B.Name AS GoodsName, C.Name AS CustomerName, D.Name AS StoreName FROM StoreInGoods A, Goods B, Customer C, Store D ");
+            strSql.Append("where A.GoodsId = B.Id and b.CustomerId = c.Id and A.StoreId = D.Id ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(strWhere);
+            }
+            recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
+            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
+        }
     }
 }
 

@@ -277,6 +277,25 @@ namespace DTcms.DAL
             return true;
         }
 
+        public bool UpdateStatus(SqlConnection conn, SqlTransaction trans, int id, int status)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update StoreWaitingGoods set ");
+
+            strSql.Append(" Status = @Status ");
+            strSql.Append(" where Id=@Id ");
+
+            SqlParameter[] parameters = {
+			                        new SqlParameter("@Id", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@Status", SqlDbType.Int,4)            
+              
+                        };
+
+            parameters[0].Value = id;
+            parameters[1].Value = status;
+
+            return DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters) > 0;
+        }
 
         /// <summary>
         /// 删除一条数据

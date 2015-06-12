@@ -10,7 +10,7 @@
 namespace DTcms.Web.admin.business {
     
     
-    public partial class store_in_order {
+    public partial class storein_storage_order {
         
         /// <summary>
         /// form1 控件。
@@ -31,13 +31,13 @@ namespace DTcms.Web.admin.business {
         protected global::System.Web.UI.WebControls.LinkButton btnDelete;
         
         /// <summary>
-        /// btnAudit 控件。
+        /// btnOK 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnAudit;
+        protected global::System.Web.UI.WebControls.LinkButton btnOK;
         
         /// <summary>
         /// ddlCustomer 控件。

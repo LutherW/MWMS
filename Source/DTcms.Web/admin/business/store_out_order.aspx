@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="store_in_order.aspx.cs" Inherits="DTcms.Web.admin.business.store_in_order" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="store_out_order.aspx.cs" Inherits="DTcms.Web.admin.business.store_out_order" %>
 
 <%@ Import Namespace="DTcms.Common" %>
 
@@ -78,7 +78,7 @@
                     <a class="menu-btn"></a>
                     <div class="l-list">
                         <ul class="icon-list">
-                            <li><a class="add" href="store_in_order_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>新增</span></a></li>
+                            <li><a class="add" href="store_out_order_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>新增</span></a></li>
                             <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
                             <li>
                                 <asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete','只允许删除未入库货物，是否继续？');" OnClick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>
@@ -131,7 +131,7 @@
                             <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Enabled='<%#Eval("Status").ToString().Equals("2") ? false : true %>' Style="vertical-align: middle;" />
                             <asp:HiddenField ID="hidId" Value='<%#Eval("Id")%>' runat="server" />
                         </td>
-                        <td><a href="store_in_order_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>"><%#Eval("AccountNumber")%></a></td>
+                        <td><a href="store_out_order_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>"><%#Eval("AccountNumber")%></a></td>
                         <td><%#Eval("InspectionNumber")%></td>
                         <td><%#Eval("CustomerName")%></td>
                         <td><%#Convert.ToDateTime(Eval("BeginChargingTime")).ToString("yyyy-MM-dd")%></td>
@@ -146,7 +146,7 @@
                             <a href="javascript:void(0);" onclick="showCostDialog(<%#Eval("Id") %>);">费用项</a>
                         </td>
                         <td align="center">
-                            <a href="store_in_order_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
+                            <a href="store_out_order_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
                         </td>
                     </tr>
                 </ItemTemplate>

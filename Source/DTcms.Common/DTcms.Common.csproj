@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="CacheHelper.cs" />
     <Compile Include="DESEncrypt.cs" />
+    <Compile Include="DTDateTime.cs" />
     <Compile Include="DTEnums.cs" />
     <Compile Include="DTKeys.cs" />
     <Compile Include="DTMail.cs" />

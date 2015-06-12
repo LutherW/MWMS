@@ -45,6 +45,16 @@ namespace DTcms.BLL
             return dal.Update(model);
         }
 
+        public int UpdateField(int id, string strValue)
+        {
+            return dal.UpdateField(id, strValue);
+        }
+
+        public int UpdateField(string strWhere, string strValue)
+        {
+            return dal.UpdateField(strWhere, strValue);
+        }
+
         /// <summary>
         /// 删除一条数据
         /// </summary>
@@ -180,6 +190,15 @@ namespace DTcms.BLL
         {
             return GetList("");
         }
+
+        /// <summary>
+        /// 获得查询分页数据
+        /// </summary>
+        public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            return dal.GetList(pageSize, pageIndex, strWhere, filedOrder, out recordCount);
+        }
+
         #endregion
 
     }

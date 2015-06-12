@@ -10,7 +10,7 @@
 namespace DTcms.Web.admin.business {
     
     
-    public partial class store_in_order {
+    public partial class store_out_order {
         
         /// <summary>
         /// form1 控件。

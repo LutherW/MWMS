@@ -9,7 +9,7 @@ using DTcms.Common;
 
 namespace DTcms.Web.admin.business
 {
-    public partial class store_in_order : Web.UI.ManagePage
+    public partial class storein_storage_order : Web.UI.ManagePage
     {
         protected int totalCount;
         protected int page;
@@ -30,7 +30,7 @@ namespace DTcms.Web.admin.business
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
             {
-                ChkAdminLevel("store_in_order", DTEnums.ActionEnum.View.ToString()); //检查权限
+                ChkAdminLevel("storein_storage_order", DTEnums.ActionEnum.View.ToString()); //检查权限
                 TreeBind("");
                 RptBind(CombSqlTxt(this.customer_id, this.keyword, this.beginTime, this.endTime), "A.CreateTime DESC");
             }
@@ -66,7 +66,7 @@ namespace DTcms.Web.admin.business
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}&page={4}",
+            string pageUrl = Utils.CombUrlTxt("storein_storage_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}&page={4}",
                 this.customer_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime, "__id__");
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
         }
@@ -101,7 +101,7 @@ namespace DTcms.Web.admin.business
         private int GetPageSize(int _default_size)
         {
             int _pagesize;
-            if (int.TryParse(Utils.GetCookie("store_in_order_page_size", "DTcmsPage"), out _pagesize))
+            if (int.TryParse(Utils.GetCookie("storein_storage_order_page_size", "DTcmsPage"), out _pagesize))
             {
                 if (_pagesize > 0)
                 {
@@ -116,14 +116,14 @@ namespace DTcms.Web.admin.business
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
+            Response.Redirect(Utils.CombUrlTxt("storein_storage_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
                 this.customer_id.ToString(), txtKeyWord.Text, txtBeginTime.Text, txtEndTime.Text));
         }
 
         //待入库状态
         protected void ddlCustomer_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
+            Response.Redirect(Utils.CombUrlTxt("storein_storage_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
                 ddlCustomer.SelectedValue, this.keyword, this.beginTime, this.endTime));
         }
 
@@ -135,7 +135,7 @@ namespace DTcms.Web.admin.business
             {
                 if (_pagesize > 0)
                 {
-                    Utils.WriteCookie("store_in_order_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
+                    Utils.WriteCookie("storein_storage_order_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
             Response.Redirect(Utils.CombUrlTxt("user_list.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
@@ -145,7 +145,7 @@ namespace DTcms.Web.admin.business
         //批量删除
         protected void btnDelete_Click(object sender, EventArgs e)
         {
-            ChkAdminLevel("store_in_order", DTEnums.ActionEnum.Delete.ToString()); //检查权限
+            ChkAdminLevel("storein_storage_order", DTEnums.ActionEnum.Delete.ToString()); //检查权限
             int sucCount = 0;
             int errorCount = 0;
             BLL.StoreInOrder bll = new BLL.StoreInOrder();
@@ -166,13 +166,14 @@ namespace DTcms.Web.admin.business
                 }
             }
             AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除待入库成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
-            JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
+            JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("storein_storage_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
                 this.customer_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime));
         }
 
-        protected void btnAudit_Click(object sender, EventArgs e)
+        //审核通过
+        protected void btnOK_Click(object sender, EventArgs e)
         {
-            ChkAdminLevel("store_in_order", DTEnums.ActionEnum.Confirm.ToString()); //检查权限
+            ChkAdminLevel("storein_storage_order", DTEnums.ActionEnum.Confirm.ToString()); //检查权限
             int sucCount = 0;
             int errorCount = 0;
             BLL.StoreInOrder bll = new BLL.StoreInOrder();
@@ -182,7 +183,7 @@ namespace DTcms.Web.admin.business
                 CheckBox cb = (CheckBox)rptList.Items[i].FindControl("chkId");
                 if (cb.Checked)
                 {
-                    if (bll.UpdateField("id = "+id+" and Status = 1", "Status=2") > 0)
+                    if (bll.UpdateField("id = " + id + " and Status = 0", "Status=1") > 0)
                     {
                         sucCount += 1;
                     }
@@ -192,12 +193,12 @@ namespace DTcms.Web.admin.business
                     }
                 }
             }
-            AddAdminLog(DTEnums.ActionEnum.Audit.ToString(), "入库单审核成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
-            JscriptMsg("入库单审核成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
+            AddAdminLog(DTEnums.ActionEnum.Audit.ToString(), "确认入库单成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
+            JscriptMsg("确认入库单成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("storein_storage_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
                 this.customer_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime));
         }
 
-        protected string GetStatus(string status)
+        protected string GetStatus(string status) 
         {
             switch (status)
             {

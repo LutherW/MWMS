@@ -113,8 +113,8 @@ namespace DTcms.Model
         /// <summary>
         /// InvoicedTime
         /// </summary>		
-        private DateTime _invoicedtime;
-        public DateTime InvoicedTime
+        private DateTime? _invoicedtime;
+        public DateTime? InvoicedTime
         {
             get { return _invoicedtime; }
             set { _invoicedtime = value; }
