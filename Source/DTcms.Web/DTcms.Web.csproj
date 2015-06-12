@@ -76,6 +76,8 @@
   <ItemGroup>
     <Content Include="admin\business\store_in_order.aspx" />
     <Content Include="admin\business\store_in_order_edit.aspx" />
+    <Content Include="admin\business\store_out_order.aspx" />
+    <Content Include="admin\business\storeout_waiting_goods.aspx" />
     <Content Include="admin\business\store_waiting_edit.aspx" />
     <Content Include="admin\business\store_waiting.aspx" />
     <Content Include="admin\business\storein_storage_order.aspx" />
@@ -752,6 +754,20 @@
     </Compile>
     <Compile Include="admin\business\store_in_order_edit.aspx.designer.cs">
       <DependentUpon>store_in_order_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\business\store_out_order.aspx.cs">
+      <DependentUpon>store_out_order.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\business\store_out_order.aspx.designer.cs">
+      <DependentUpon>store_out_order.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\business\storeout_waiting_goods.aspx.cs">
+      <DependentUpon>storeout_waiting_goods.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\business\storeout_waiting_goods.aspx.designer.cs">
+      <DependentUpon>storeout_waiting_goods.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\business\store_waiting_edit.aspx.cs">
       <DependentUpon>store_waiting_edit.aspx</DependentUpon>

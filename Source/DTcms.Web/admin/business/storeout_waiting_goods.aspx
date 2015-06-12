@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="store_out_order.aspx.cs" Inherits="DTcms.Web.admin.business.store_out_order" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="storeout_waiting_goods.aspx.cs" Inherits="DTcms.Web.admin.business.storeout_waiting_goods" %>
 
 <%@ Import Namespace="DTcms.Common" %>
 
@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>出库单管理</title>
+    <title>待出库货物管理</title>
     <link href="../../scripts/artdialog/ui-dialog.css" rel="stylesheet" type="text/css" />
     <link href="../skin/default/style.css" rel="stylesheet" type="text/css" />
     <link href="../../css/pagination.css" rel="stylesheet" type="text/css" />
@@ -18,43 +18,30 @@
     <script type="text/javascript" charset="utf-8" src="../js/laymain.js"></script>
     <script type="text/javascript" charset="utf-8" src="../js/common.js"></script>
     <script type="text/javascript">
-        function showGoodsDialog(id) {
-            var goodsDialog = top.dialog({
-                id: 'goodsDialogId',
-                title: "入库货物",
-                url: 'dialog/dialog_store_in_goods_list.aspx?orderId=' + id,
-                width: 700,
+        function showAttachDialog(id, name) {
+            var objNum = arguments.length;
+            var attachDialog = top.dialog({
+                id: 'attachDialogId',
+                title: name + "的附件",
+                url: '/admin/dialog/dialog_goods_attach_list.aspx?goodsId=' + id,
+                width: 500,
+                height: 180,
                 onclose: function () {
 
                 }
             }).showModal();
         }
 
-        function showUnitpriceDialog(id) {
-            var attachDialog = top.dialog({
-                id: 'unitpriceDialogId',
-                title: "单价",
-                url: 'dialog/dialog_storein_unitprice_list.aspx?orderId=' + id,
-                width: 700
-            }).showModal();
-        }
-
-        function showCostDialog(id) {
-            var costDialog = top.dialog({
-                id: 'costDialogId',
-                title: "费用项",
-                url: 'dialog/dialog_storein_cost_list.aspx?orderId=' + id,
-                width: 700
-            }).showModal();
-        }
-
-        function showRemarkDialog(remark) {
+        function showVehicleDialog(id, name) {
             var objNum = arguments.length;
             var attachDialog = top.dialog({
-                id: 'remarkDialogId',
-                title: "备注信息",
-                content: remark,
-                width: 500
+                id: 'vehicleDialogId',
+                title: name + "的运输车辆",
+                url: '/admin/dialog/dialog_goods_vehicle_list.aspx?goodsId=' + id,
+                width: 700,
+                onclose: function () {
+
+                }
             }).showModal();
         }
     </script>
@@ -67,7 +54,7 @@
             <a href="javascript:history.back(-1);" class="back"><i></i><span>返回上一页</span></a>
             <a href="../center.aspx" class="home"><i></i><span>首页</span></a>
             <i class="arrow"></i>
-            <span>出库单列表</span>
+            <span>待出库货物列表</span>
         </div>
         <!--/导航栏-->
 
@@ -78,26 +65,27 @@
                     <a class="menu-btn"></a>
                     <div class="l-list">
                         <ul class="icon-list">
-                            <li><a class="add" href="store_out_order_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>新增</span></a></li>
+                            <li><a class="add" href="storeout_waiting_goods_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>新增</span></a></li>
                             <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
                             <li>
-                                <asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete','只允许删除未入库货物，是否继续？');" OnClick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>
-                            <li><asp:LinkButton ID="btnAudit" runat="server" CssClass="lock" OnClientClick="return ExePostBack('btnAudit','审核通过后出库单生效，是否继续？');" onclick="btnAudit_Click"><i></i><span>审核通过</span></asp:LinkButton></li>
+                                <asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete','只允许删除未出库货物，是否继续？');" OnClick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>
                         </ul>
                         <div class="menu-list">
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlCustomer" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCustomer_SelectedIndexChanged">
                                 </asp:DropDownList>
                             </div>
+                            <div class="rule-single-select">
+                                <asp:DropDownList ID="ddlGoods" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlGoods_SelectedIndexChanged">
+                                </asp:DropDownList>
+                            </div>
                         </div>
                     </div>
                     <div class="r-list">
-                        <span class="lable">出库时间</span>
+                        <span class="lable">计划出库时间</span>
                         <asp:TextBox ID="txtBeginTime" runat="server" CssClass="keyword" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'txtEndTime\',{d:-1})}'})"/>
                         <span class="lable">-</span>
-                        <asp:TextBox ID="txtEndTime" runat="server" Text="" CssClass="keyword" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'txtBeginTime\',{d:0})}'})"/>
-                        <span class="lable">关键字</span>
-                        <asp:TextBox ID="txtKeyWord" runat="server" Text="" CssClass="keyword"/>
+                        <asp:TextBox ID="txtEndTime" runat="server" Text="bbb" CssClass="keyword" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'txtBeginTime\',{d:0})}'})"/>
                         <asp:LinkButton ID="lbtnSearch" runat="server" CssClass="btn-search" OnClick="btnSearch_Click">查询</asp:LinkButton>
                     </div>
                 </div>
@@ -112,48 +100,35 @@
                     <table width="100%" bgoods="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
                             <th width="8%">选择</th>
-                            <th align="left">客户</th>
-                            <th align="left">入库单</th>
-                            <th align="left" width="8%">出库数量</th>
-                            <th align="left" width="10%">总价</th>
-                            <th align="left" width="10%">发票金额</th>
-                            <th align="left" width="10%">计划出库时间</th>
-                            <th align="left" width="10%">实际出库时间</th>
-                            <th align="left" width="8%">操作员</th>
-                            <th align="left" width="8%">状态</th>
-                            <th width="8%" >发票</th>
-                            <th width="12%">明细</th>
+                            <th align="left" width="10%">货物名称</th>
+                            <th align="left" width="10%">客户</th>
+                            <th align="left" width="15%">计划出库时间</th>
+                            <th align="left" width="10%">操作员</th>
+                            <th width="8%">其他</th>
                             <th width="8%">操作</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
                         <td align="center">
-                            <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Enabled='<%#Eval("Status").ToString().Equals("2") ? false : true %>' Style="vertical-align: middle;" />
+                            <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Enabled='True' Style="vertical-align: middle;" />
                             <asp:HiddenField ID="hidId" Value='<%#Eval("Id")%>' runat="server" />
                         </td>
+                        <td><a href="storeout_waiting_goods_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>"><%#Eval("GoodsName")%></a></td>
                         <td><%#Eval("CustomerName")%></td>
-                        <td><%#Eval("AccountNumber")%></td>
-                        <td><%#Eval("Count")%></td>
-                        <td><%#Eval("TotalMoney")%></td>
-                        <td><%#Eval("InvoiceMoney")%></td>
-                        <td><%#Convert.ToDateTime(Eval("StoringOutTime")).ToString("yyyy-MM-dd")%></td>
-                        <td><%#string.IsNullOrWhiteSpace(Eval("StoredOutTime").ToString()) ? "--" : Convert.ToDateTime(Eval("StoredOutTime")).ToString("yyyy-MM-dd")%></td>
+                        <td><%#Eval("StoringTime")%></td>
                         <td><%#Eval("Admin")%></td>
-                        <td><%#GetStatus(Eval("Status").ToString())%></td>
-                        <td><%#Eval("HasBeenInvoiced")%></td>
                         <td align="center">
-                            <a href="javascript:void(0);" onclick="showGoodsDialog(<%#Eval("Id") %>);">入库货物</a>&nbsp;|&nbsp;
-                            <a href="javascript:void(0);" onclick="showUnitpriceDialog(<%#Eval("Id") %>);">单价</a>&nbsp;|&nbsp;
-                            <a href="javascript:void(0);" onclick="showCostDialog(<%#Eval("Id") %>);">费用项</a>
+                            <a href="javascript:void(0);" onclick="showAttachDialog(<%#Eval("Id") %>, '<%#Eval("GoodsName") %>');">附件</a>&nbsp;|&nbsp;
+                            <a href="javascript:void(0);" onclick="showVehicleDialog(<%#Eval("Id") %>, '<%#Eval("GoodsName") %>');">车辆</a>
                         </td>
                         <td align="center">
-                            <a href="store_out_order_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
+                            <a href="storeout_waiting_goods_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
                         </td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"11\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"7\">暂无记录</td></tr>" : ""%>
 </table>
                 </FooterTemplate>
             </asp:Repeater>
