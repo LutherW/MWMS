@@ -99,6 +99,7 @@
     <Compile Include="StoreOutGoodsVehicle.cs" />
     <Compile Include="StoreOutOrder.cs" />
     <Compile Include="StoreOutUnitPrice.cs" />
+    <Compile Include="StoreOutWaitingGoods.cs" />
     <Compile Include="StoreWaitingGoods.cs" />
     <Compile Include="sys_config.cs" />
     <Compile Include="Unit.cs" />
