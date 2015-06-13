@@ -139,25 +139,38 @@ namespace DTcms.DAL
         /// </summary>
         public bool Delete(int Id)
         {
-
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("delete from StoreOutOrder ");
-            strSql.Append(" where Id=@Id");
-            SqlParameter[] parameters = {
-					new SqlParameter("@Id", SqlDbType.Int,4)
-			};
-            parameters[0].Value = Id;
-
-
-            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
-            if (rows > 0)
+            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
             {
-                return true;
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        StringBuilder strSql = new StringBuilder();
+                        strSql.Append("delete from StoreOutOrder ");
+                        strSql.Append(" where Id=@Id");
+                        SqlParameter[] parameters = {
+					            new SqlParameter("@Id", SqlDbType.Int,4)
+			            };
+                        parameters[0].Value = Id;
+
+                        DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+                        new StoreOutCost().Delete(conn, trans, Id);
+
+                        new StoreOutGoods().Delete(conn, trans, Id);
+
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
+                }
             }
-            else
-            {
-                return false;
-            }
+
+            return true;
         }
 
         /// <summary>
@@ -291,8 +304,8 @@ namespace DTcms.DAL
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select A.Id AS Id, A.Status, A.BeginChargingTime, A.Admin, A.ChargingCount, A.AccountNumber, A.InspectionNumber, A.SuttleWeight, A.Remark AS Remark,B.Name AS CustomerName FROM StoreOutOrder A, Customer B, StoreInOrder C ");
-            strSql.Append("where A.CustomerId = B.Id, A.StoreInOrderId = C.Id ");
+            strSql.Append("select A.Id AS Id, A.Status, A.StoredOutTime, A.Admin, A.Count, A.Remark AS Remark, C.Name AS CustomerName, B.AccountNumber FROM StoreOutOrder A, StoreInOrder B, Customer C ");
+            strSql.Append("where A.StoreInOrderId = B.Id and A.CustomerId = C.Id ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(strWhere);

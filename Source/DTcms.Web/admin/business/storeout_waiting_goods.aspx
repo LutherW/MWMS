@@ -18,30 +18,25 @@
     <script type="text/javascript" charset="utf-8" src="../js/laymain.js"></script>
     <script type="text/javascript" charset="utf-8" src="../js/common.js"></script>
     <script type="text/javascript">
-        function showAttachDialog(id, name) {
+        function showVehicleDialog(id, name) {
             var objNum = arguments.length;
             var attachDialog = top.dialog({
-                id: 'attachDialogId',
-                title: name + "的附件",
-                url: '/admin/dialog/dialog_goods_attach_list.aspx?goodsId=' + id,
-                width: 500,
-                height: 180,
+                id: 'vehicleDialogId',
+                title: name + "的运输车辆",
+                url: '/admin/dialog/dialog_storeout_vehicle_list.aspx?goodsId=' + id,
+                width: 700,
                 onclose: function () {
 
                 }
             }).showModal();
         }
 
-        function showVehicleDialog(id, name) {
-            var objNum = arguments.length;
+        function showAttributeDialog(goodsId, goodsName) {
             var attachDialog = top.dialog({
-                id: 'vehicleDialogId',
-                title: name + "的运输车辆",
-                url: '/admin/dialog/dialog_goods_vehicle_list.aspx?goodsId=' + id,
-                width: 700,
-                onclose: function () {
-
-                }
+                id: 'attachDialogId',
+                title: goodsName + "属性",
+                url: 'dialog/goods_attribute_list.aspx?goodsId=' + goodsId,
+                width: 700
             }).showModal();
         }
     </script>
@@ -72,7 +67,7 @@
                         </ul>
                         <div class="menu-list">
                             <div class="rule-single-select">
-                                <asp:DropDownList ID="ddlCustomer" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCustomer_SelectedIndexChanged">
+                                <asp:DropDownList ID="ddlStoreInOrder" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlStoreInOrder_SelectedIndexChanged">
                                 </asp:DropDownList>
                             </div>
                             <div class="rule-single-select">
@@ -100,11 +95,14 @@
                     <table width="100%" bgoods="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
                             <th width="8%">选择</th>
+                            <th align="left" width="10%">入库单号</th>
                             <th align="left" width="10%">货物名称</th>
-                            <th align="left" width="10%">客户</th>
+                            <th align="left" width="10%">仓库</th>
+                            <th align="left" width="10%">库存量</th>
+                            <th align="left" width="15%">入库时间</th>
                             <th align="left" width="15%">计划出库时间</th>
                             <th align="left" width="10%">操作员</th>
-                            <th width="8%">其他</th>
+                            <th width="8%">明细</th>
                             <th width="8%">操作</th>
                         </tr>
                 </HeaderTemplate>
@@ -114,12 +112,16 @@
                             <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Enabled='True' Style="vertical-align: middle;" />
                             <asp:HiddenField ID="hidId" Value='<%#Eval("Id")%>' runat="server" />
                         </td>
-                        <td><a href="storeout_waiting_goods_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>"><%#Eval("GoodsName")%></a></td>
-                        <td><%#Eval("CustomerName")%></td>
-                        <td><%#Eval("StoringTime")%></td>
+                        <td><%#Eval("AccountNumber")%></td>
+                        <td><%#Eval("GoodsName")%></td>
+                        <td><%#Eval("StoreName")%></td>
+                        <td><%#Eval("StoredInCount")%></td>
+                        <td><%#Eval("StoredInTime")%></td>
+                        <td><%#Eval("StoringOutTime")%></td>
                         <td><%#Eval("Admin")%></td>
                         <td align="center">
-                            <a href="javascript:void(0);" onclick="showAttachDialog(<%#Eval("Id") %>, '<%#Eval("GoodsName") %>');">附件</a>&nbsp;|&nbsp;
+                            <%--<a href="javascript:void(0);" onclick="showAttachDialog(<%#Eval("GoodsId") %>, '<%#Eval("GoodsName") %>');">附件</a>&nbsp;|&nbsp;--%>
+                            <a href="javascript:void(0);" onclick="showAttributeDialog(<%#Eval("GoodsId") %>, '<%#Eval("GoodsName") %>');">属性</a>&nbsp;|&nbsp;
                             <a href="javascript:void(0);" onclick="showVehicleDialog(<%#Eval("Id") %>, '<%#Eval("GoodsName") %>');">车辆</a>
                         </td>
                         <td align="center">
@@ -128,7 +130,7 @@
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"7\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"10\">暂无记录</td></tr>" : ""%>
 </table>
                 </FooterTemplate>
             </asp:Repeater>

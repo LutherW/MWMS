@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="goods_attribute_list.aspx.cs" Inherits="DTcms.Web.admin.dialog.goods_attribute_list" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="dialog_storeout_vehicle_list.aspx.cs" Inherits="DTcms.Web.admin.dialog.dialog_storeout_vehicle_list" %>
 
 <%@ Import Namespace="DTcms.Common" %>
 
@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>货物属性列表</title>
+    <title>运输车辆列表</title>
     <link href="../skin/default/style.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" charset="utf-8" src="../../scripts/jquery/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../scripts/webuploader/webuploader.min.js"></script>
@@ -18,15 +18,15 @@
 
 <body>
     <form id="form1" runat="server">
-        <div style="width: 700px; height: 280px; overflow: auto;">
+        <div style="width: 700px; overflow: auto;">
             <div class="div-content">
                 <asp:Repeater ID="rptList" runat="server">
                     <HeaderTemplate>
                         <table width="100%" bgoods="0" cellspacing="0" cellpadding="0" class="ltable">
                             <tr>
                                 <th width="5%"></th>
-                                <th align="left" width="20%">名称</th>
-                                <th align="left" width="20%">值</th>
+                                <th align="left" width="20%">车牌号</th>
+                                <th align="left" width="20%">运输数量</th>
                                 <th align="left">备注</th>
                             </tr>
                     </HeaderTemplate>
@@ -34,8 +34,8 @@
                         <tr>
                             <td align="center">
                             </td>
-                            <td><%#Eval("AttributeName")%></td>
-                            <td><%#Eval("AttributeValue")%></td>
+                            <td><%#Eval("VehicleName")%></td>
+                            <td><%#Eval("Count")%></td>
                             <td><%#Eval("Remark")%></td>
                         </tr>
                     </ItemTemplate>

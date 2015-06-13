@@ -116,13 +116,9 @@ namespace DTcms.BLL{
 				for (int n = 0; n < rowsCount; n++)
 				{
 					model = new DTcms.Model.StoreOutGoodsVehicle();					
-													if(dt.Rows[n]["StoreOutGoodsStoreOutOrderId"].ToString()!="")
-				{
-					model.StoreOutGoodsStoreOutOrderId=int.Parse(dt.Rows[n]["StoreOutGoodsStoreOutOrderId"].ToString());
-				}
 																																if(dt.Rows[n]["StoreOutGoodsId"].ToString()!="")
 				{
-					model.StoreOutGoodsId=int.Parse(dt.Rows[n]["StoreOutGoodsId"].ToString());
+					model.StoreOutWaitingGoodsId=int.Parse(dt.Rows[n]["StoreOutGoodsId"].ToString());
 				}
 																																if(dt.Rows[n]["VehicleId"].ToString()!="")
 				{

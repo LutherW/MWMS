@@ -164,6 +164,40 @@ SqlParameter[] parameters = {
 				return false;
 			}
 		}
+
+        public bool Delete(SqlConnection conn, SqlTransaction trans, int storeOutOrderId)
+        {
+            DataSet storeOutGoodsDS = GetList("StoreOutOderId = " + storeOutOrderId + "");
+            if (storeOutGoodsDS != null)
+            {
+                StoreInGoods storeInGoodsDAL = new StoreInGoods();
+                foreach (DataRow dr in storeOutGoodsDS.Tables[0].Rows)
+                {
+                    storeInGoodsDAL.UpdateField(conn, trans, Convert.ToInt32(dr["StoreInGoodsId"]), "Count = Count + " + Convert.ToDecimal(dr["Count"]) + "");
+                }
+                StringBuilder strSql = new StringBuilder();
+                strSql.Append("delete from StoreOutGoods ");
+                strSql.Append(" where StoreOutOrderId=@StoreOutOrderId");
+                SqlParameter[] parameters = {
+					    new SqlParameter("@StoreOutOrderId", SqlDbType.Int,4)
+			    };
+                parameters[0].Value = storeOutOrderId;
+
+
+                int rows = DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+                if (rows > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
 		
 				/// <summary>
 		/// 批量删除一批数据

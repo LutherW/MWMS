@@ -169,6 +169,17 @@ namespace DTcms.DAL
         }
 
 
+        public int UpdateField(SqlConnection conn, SqlTransaction trans, int id, string strValue)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update StoreInOrder set " + strValue);
+            strSql.Append(" where Id=" + id);
+
+            return DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString());
+        }
+
+
+
         /// <summary>
         /// 删除一条数据
         /// </summary>
@@ -334,6 +345,25 @@ namespace DTcms.DAL
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
+            }
+            strSql.Append(" order by " + filedOrder);
+            return DbHelperSQL.Query(strSql.ToString());
+        }
+
+        public DataSet GetSelectList(int Top, string strWhere, string filedOrder)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select ");
+            if (Top > 0)
+            {
+                strSql.Append(" top " + Top.ToString());
+            }
+            strSql.Append(" A.Id, A.Count as StoredInCount, A.GoodsId, B.Name as GoodsName, C.Name as CustomerName ");
+            strSql.Append(" from StoreInGoods A, Goods B, Customer C ");
+            strSql.Append(" where A.GoodsId = B.Id and A.CustomerId = C.Id ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(strWhere);
             }
             strSql.Append(" order by " + filedOrder);
             return DbHelperSQL.Query(strSql.ToString());

@@ -40,6 +40,8 @@ namespace DTcms.BLL
             return dal.Update(model);
         }
 
+        
+
         /// <summary>
         /// 删除一条数据
         /// </summary>
@@ -102,6 +104,11 @@ namespace DTcms.BLL
         public DataSet GetList(int Top, string strWhere, string filedOrder)
         {
             return dal.GetList(Top, strWhere, filedOrder);
+        }
+
+        public DataSet GetSelectList(int Top, string strWhere, string filedOrder) 
+        {
+            return dal.GetSelectList(Top, strWhere, filedOrder);
         }
         /// <summary>
         /// 获得数据列表

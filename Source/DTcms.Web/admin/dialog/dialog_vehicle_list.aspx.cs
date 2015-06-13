@@ -24,7 +24,7 @@ namespace DTcms.Web.admin.dialog
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
             {
-                ChkAdminLevel("vehicle_manage", DTEnums.ActionEnum.View.ToString()); //检查权限
+                //ChkAdminLevel("vehicle_manage", DTEnums.ActionEnum.View.ToString()); //检查权限
                 RptBind("1=1" + CombSqlTxt(this.keywords), "Id desc");
             }
         }
@@ -93,35 +93,5 @@ namespace DTcms.Web.admin.dialog
             }
             Response.Redirect(Utils.CombUrlTxt("dialog_vehicle_list.aspx", "keywords={0}", this.keywords));
         }
-
-        //批量删除
-        protected void btnDelete_Click(object sender, EventArgs e)
-        {
-            ChkAdminLevel("vehicle_manage", DTEnums.ActionEnum.Delete.ToString()); //检查权限
-            int sucCount = 0;
-            int errorCount = 0;
-            BLL.Vehicle bll = new BLL.Vehicle();
-            //批量删除
-            for (int i = 0; i < rptList.Items.Count; i++)
-            {
-                int id = Convert.ToInt32(((HiddenField)rptList.Items[i].FindControl("hidId")).Value);
-                CheckBox cb = (CheckBox)rptList.Items[i].FindControl("chkId");
-                if (cb.Checked)
-                {
-                    if (bll.Delete(id))
-                    {
-                        sucCount += 1;
-                    }
-                    else
-                    {
-                        errorCount += 1;
-                    }
-                }
-            }
-            AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除车辆成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
-            JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！",
-                Utils.CombUrlTxt("dialog_vehicle_list.aspx", "keywords={0}", txtKeywords.Text.Trim()));
-        }
-
     }
 }

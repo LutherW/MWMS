@@ -104,6 +104,21 @@ namespace DTcms.Model
             set { _storeinorderid = value; }
             get { return _storeinorderid; }
         }
+
+        /// <summary>
+        /// 车辆
+        /// </summary>
+        private IList<StoreOutGoodsVehicle> _goodsVehicle = new List<StoreOutGoodsVehicle>();
+        public IList<StoreOutGoodsVehicle> GoodsVehicles
+        {
+            private set { _goodsVehicle = value; }
+            get { return _goodsVehicle; }
+        }
+
+        public void AddGoodsVehicle(StoreOutGoodsVehicle goodsVehicle)
+        {
+            _goodsVehicle.Add(goodsVehicle);
+        }
         #endregion Model
 
     }

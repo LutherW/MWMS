@@ -15,14 +15,14 @@ namespace DTcms.Web.admin.business
         protected int page;
         protected int pageSize;
 
-        protected int customer_id;
+        protected int storein_order_id;
         protected int goods_id;
         protected string beginTime = string.Empty;
         protected string endTime = string.Empty;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            this.customer_id = DTRequest.GetQueryInt("customer_id");
+            this.storein_order_id = DTRequest.GetQueryInt("storein_order_id");
             this.goods_id = DTRequest.GetQueryInt("goods_id");
             this.beginTime = DTRequest.GetQueryString("beginTime");
             this.endTime = DTRequest.GetQueryString("endTime");
@@ -30,22 +30,22 @@ namespace DTcms.Web.admin.business
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
             {
-                ChkAdminLevel("store_waiting", DTEnums.ActionEnum.View.ToString()); //检查权限
+                ChkAdminLevel("storeout_waiting_manage", DTEnums.ActionEnum.View.ToString()); //检查权限
                 TreeBind("");
-                RptBind(" and A.Status = 0 " + CombSqlTxt(this.customer_id, this.goods_id, this.beginTime, this.endTime), "A.StoringTime ASC");
+                RptBind(" and A.Status = 0 " + CombSqlTxt(this.storein_order_id, this.goods_id, this.beginTime, this.endTime), "A.StoringOutTime ASC");
             }
         }
 
         private void TreeBind(string strWhere)
         {
-            BLL.Customer customerBLL = new BLL.Customer();
-            DataTable customerDT = customerBLL.GetList(0, strWhere, "Id desc").Tables[0];
+            BLL.StoreInOrder storeinOrderBLL = new BLL.StoreInOrder();
+            DataTable customerDT = storeinOrderBLL.GetList(0, " Status = 2 ", "Id desc").Tables[0];
 
-            this.ddlCustomer.Items.Clear();
-            this.ddlCustomer.Items.Add(new ListItem("所属客户", ""));
+            this.ddlStoreInOrder.Items.Clear();
+            this.ddlStoreInOrder.Items.Add(new ListItem("所属入库单", ""));
             foreach (DataRow dr in customerDT.Rows)
             {
-                this.ddlCustomer.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
+                this.ddlStoreInOrder.Items.Add(new ListItem(dr["AccountNumber"].ToString(), dr["Id"].ToString()));
             }
 
             BLL.Goods goodsBLL = new BLL.Goods();
@@ -64,9 +64,9 @@ namespace DTcms.Web.admin.business
         private void RptBind(string _strWhere, string _goodsby)
         {
             this.page = DTRequest.GetQueryInt("page", 1);
-            if (this.customer_id > 0)
+            if (this.storein_order_id > 0)
             {
-                this.ddlCustomer.SelectedValue = this.customer_id.ToString();
+                this.ddlStoreInOrder.SelectedValue = this.storein_order_id.ToString();
             }
             if (this.goods_id > 0)
             {
@@ -74,25 +74,25 @@ namespace DTcms.Web.admin.business
             }
             txtBeginTime.Text = this.beginTime;
             txtEndTime.Text = this.endTime;
-            BLL.StoreWaitingGoods bll = new BLL.StoreWaitingGoods();
+            BLL.StoreOutWaitingGoods bll = new BLL.StoreOutWaitingGoods();
             this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _goodsby, out this.totalCount);
             this.rptList.DataBind();
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("store_waiting.aspx", "customer_id={0}&goods_id={1}&beginTime={2}&endTime={3}&page={4}",
-                this.customer_id.ToString(), this.goods_id.ToString(), this.beginTime.ToString(), this.endTime, "__id__");
+            string pageUrl = Utils.CombUrlTxt("storeout_waiting_goods.aspx", "storein_order_id={0}&goods_id={1}&beginTime={2}&endTime={3}&page={4}",
+                this.storein_order_id.ToString(), this.goods_id.ToString(), this.beginTime.ToString(), this.endTime, "__id__");
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
         }
         #endregion
 
         #region 组合SQL查询语句==========================
-        protected string CombSqlTxt(int _customer_id, int _goods_id, string _beginTime, string _endTime)
+        protected string CombSqlTxt(int _storein_order_id, int _goods_id, string _beginTime, string _endTime)
         {
             StringBuilder strTemp = new StringBuilder();
-            if (_customer_id > 0)
+            if (_storein_order_id > 0)
             {
-                strTemp.Append(" and B.CustomerId=" + _customer_id);
+                strTemp.Append(" and A.StoreInOrderId=" + _storein_order_id);
             }
             if (_goods_id > 0)
             {
@@ -100,11 +100,11 @@ namespace DTcms.Web.admin.business
             }
             if (!string.IsNullOrEmpty(beginTime))
             {
-                strTemp.Append(" and A.StoringTime>='" + _beginTime + "'");
+                strTemp.Append(" and A.StoringOutTime>='" + _beginTime + "'");
             }
             if (!string.IsNullOrEmpty(endTime))
             {
-                strTemp.Append(" and A.StoringTime <='"+_endTime+"'");
+                strTemp.Append(" and A.StoringOutTime <='" + _endTime + "'");
             }
 
             return strTemp.ToString();
@@ -115,7 +115,7 @@ namespace DTcms.Web.admin.business
         private int GetPageSize(int _default_size)
         {
             int _pagesize;
-            if (int.TryParse(Utils.GetCookie("store_waiting_page_size", "DTcmsPage"), out _pagesize))
+            if (int.TryParse(Utils.GetCookie("storeout_waiting_page_size", "DTcmsPage"), out _pagesize))
             {
                 if (_pagesize > 0)
                 {
@@ -130,22 +130,22 @@ namespace DTcms.Web.admin.business
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("store_waiting.aspx", "customer_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
-                this.customer_id.ToString(), this.goods_id.ToString(), txtBeginTime.Text, txtEndTime.Text));
+            Response.Redirect(Utils.CombUrlTxt("storeout_waiting_goods.aspx", "storein_order_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
+                this.storein_order_id.ToString(), this.goods_id.ToString(), txtBeginTime.Text, txtEndTime.Text));
         }
 
-        //待入库状态
-        protected void ddlCustomer_SelectedIndexChanged(object sender, EventArgs e)
+        //待出库状态
+        protected void ddlStoreInOrder_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("store_waiting.aspx", "customer_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
-                ddlCustomer.SelectedValue, this.goods_id.ToString(), this.beginTime, this.endTime));
+            Response.Redirect(Utils.CombUrlTxt("storeout_waiting_goods.aspx", "storein_order_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
+                ddlStoreInOrder.SelectedValue, this.goods_id.ToString(), this.beginTime, this.endTime));
         }
 
         //支付状态
         protected void ddlGoods_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("store_waiting.aspx", "customer_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
-                this.customer_id.ToString(), ddlGoods.SelectedValue, this.beginTime, this.endTime));
+            Response.Redirect(Utils.CombUrlTxt("storeout_waiting_goods.aspx", "storein_order_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
+                this.storein_order_id.ToString(), ddlGoods.SelectedValue, this.beginTime, this.endTime));
         }
 
         //设置分页数量
@@ -156,20 +156,20 @@ namespace DTcms.Web.admin.business
             {
                 if (_pagesize > 0)
                 {
-                    Utils.WriteCookie("store_waiting_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
+                    Utils.WriteCookie("storeout_waiting_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("store_waiting.aspx", "customer_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
-                this.customer_id.ToString(), this.goods_id.ToString(), this.beginTime.ToString(), this.endTime));
+            Response.Redirect(Utils.CombUrlTxt("storeout_waiting_goods.aspx", "storein_order_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
+                this.storein_order_id.ToString(), this.goods_id.ToString(), this.beginTime.ToString(), this.endTime));
         }
 
         //批量删除
         protected void btnDelete_Click(object sender, EventArgs e)
         {
-            ChkAdminLevel("store_waiting", DTEnums.ActionEnum.Delete.ToString()); //检查权限
+            ChkAdminLevel("storeout_waiting_manage", DTEnums.ActionEnum.Delete.ToString()); //检查权限
             int sucCount = 0;
             int errorCount = 0;
-            BLL.StoreWaitingGoods bll = new BLL.StoreWaitingGoods();
+            BLL.StoreOutWaitingGoods bll = new BLL.StoreOutWaitingGoods();
             for (int i = 0; i < rptList.Items.Count; i++)
             {
                 int id = Convert.ToInt32(((HiddenField)rptList.Items[i].FindControl("hidId")).Value);
@@ -186,9 +186,9 @@ namespace DTcms.Web.admin.business
                     }
                 }
             }
-            AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除待入库成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
-            JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("store_waiting.aspx", "customer_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
-                this.customer_id.ToString(), this.goods_id.ToString(), this.beginTime.ToString(), this.endTime));
+            AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除待出库成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
+            JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("storeout_waiting_goods.aspx", "storein_order_id={0}&goods_id={1}&beginTime={2}&endTime={3}",
+                this.storein_order_id.ToString(), this.goods_id.ToString(), this.beginTime.ToString(), this.endTime));
         }
 
     }

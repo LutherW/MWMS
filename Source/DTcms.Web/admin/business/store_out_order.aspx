@@ -21,7 +21,7 @@
         function showGoodsDialog(id) {
             var goodsDialog = top.dialog({
                 id: 'goodsDialogId',
-                title: "入库货物",
+                title: "出库货物",
                 url: 'dialog/dialog_store_in_goods_list.aspx?orderId=' + id,
                 width: 700,
                 onclose: function () {
@@ -81,8 +81,7 @@
                             <li><a class="add" href="store_out_order_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>新增</span></a></li>
                             <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
                             <li>
-                                <asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete','只允许删除未入库货物，是否继续？');" OnClick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>
-                            <li><asp:LinkButton ID="btnAudit" runat="server" CssClass="lock" OnClientClick="return ExePostBack('btnAudit','审核通过后出库单生效，是否继续？');" onclick="btnAudit_Click"><i></i><span>审核通过</span></asp:LinkButton></li>
+                                <asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete','只允许删除未出库货物，是否继续？');" OnClick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>
                         </ul>
                         <div class="menu-list">
                             <div class="rule-single-select">
@@ -112,16 +111,14 @@
                     <table width="100%" bgoods="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
                             <th width="8%">选择</th>
-                            <th align="left">客户</th>
                             <th align="left">入库单</th>
+                            <th align="left" width="10%">总金额</th>
+                            <th align="left">客户</th>
+                            <th align="left" width="10%">出库时间</th>
                             <th align="left" width="8%">出库数量</th>
-                            <th align="left" width="10%">总价</th>
-                            <th align="left" width="10%">发票金额</th>
-                            <th align="left" width="10%">计划出库时间</th>
-                            <th align="left" width="10%">实际出库时间</th>
                             <th align="left" width="8%">操作员</th>
                             <th align="left" width="8%">状态</th>
-                            <th width="8%" >发票</th>
+                            <th width="8%" >备注</th>
                             <th width="12%">明细</th>
                             <th width="8%">操作</th>
                         </tr>
@@ -132,18 +129,16 @@
                             <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Enabled='<%#Eval("Status").ToString().Equals("2") ? false : true %>' Style="vertical-align: middle;" />
                             <asp:HiddenField ID="hidId" Value='<%#Eval("Id")%>' runat="server" />
                         </td>
-                        <td><%#Eval("CustomerName")%></td>
                         <td><%#Eval("AccountNumber")%></td>
-                        <td><%#Eval("Count")%></td>
                         <td><%#Eval("TotalMoney")%></td>
-                        <td><%#Eval("InvoiceMoney")%></td>
-                        <td><%#Convert.ToDateTime(Eval("StoringOutTime")).ToString("yyyy-MM-dd")%></td>
-                        <td><%#string.IsNullOrWhiteSpace(Eval("StoredOutTime").ToString()) ? "--" : Convert.ToDateTime(Eval("StoredOutTime")).ToString("yyyy-MM-dd")%></td>
+                        <td><%#Eval("CustomerName")%></td>
+                        <td><%#Convert.ToDateTime(Eval("StoredOutTime")).ToString("yyyy-MM-dd")%></td>
+                        <td><%#Eval("Count")%></td>
                         <td><%#Eval("Admin")%></td>
                         <td><%#GetStatus(Eval("Status").ToString())%></td>
-                        <td><%#Eval("HasBeenInvoiced")%></td>
+                        <td align="center"><a href="javascript:void(0);" onclick="showRemarkDialog( '<%#Eval("Remark") %>');">备注</a></td>
                         <td align="center">
-                            <a href="javascript:void(0);" onclick="showGoodsDialog(<%#Eval("Id") %>);">入库货物</a>&nbsp;|&nbsp;
+                            <a href="javascript:void(0);" onclick="showGoodsDialog(<%#Eval("Id") %>);">出库货物</a>&nbsp;|&nbsp;
                             <a href="javascript:void(0);" onclick="showUnitpriceDialog(<%#Eval("Id") %>);">单价</a>&nbsp;|&nbsp;
                             <a href="javascript:void(0);" onclick="showCostDialog(<%#Eval("Id") %>);">费用项</a>
                         </td>

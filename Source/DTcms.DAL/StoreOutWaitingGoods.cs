@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Data;
 using DTcms.DBUtility;
+using DTcms.Common;
 
 namespace DTcms.DAL
 {
@@ -39,97 +40,143 @@ namespace DTcms.DAL
             return DbHelperSQL.Exists(strSql.ToString(), parameters);
         }
 
-
-        /// <summary>
-        /// 增加一条数据
-        /// </summary>
         public bool Add(DTcms.Model.StoreOutWaitingGoods model)
         {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("insert into StoreOutWaitingGoods(");
-            strSql.Append("Id,CreateTime,StoringOutTime,StoredOutTime,Admin,Status,Remark,StoreInGoodsId,GoodsId,StoreInOrderId)");
-            strSql.Append(" values (");
-            strSql.Append("@Id,@CreateTime,@StoringOutTime,@StoredOutTime,@Admin,@Status,@Remark,@StoreInGoodsId,@GoodsId,@StoreInOrderId)");
-            SqlParameter[] parameters = {
-					new SqlParameter("@Id", SqlDbType.Int,4),
-					new SqlParameter("@CreateTime", SqlDbType.DateTime),
-					new SqlParameter("@StoringOutTime", SqlDbType.DateTime),
-					new SqlParameter("@StoredOutTime", SqlDbType.DateTime),
-					new SqlParameter("@Admin", SqlDbType.NVarChar,254),
-					new SqlParameter("@Status", SqlDbType.Int,4),
-					new SqlParameter("@Remark", SqlDbType.NVarChar,254),
-					new SqlParameter("@StoreInGoodsId", SqlDbType.Int,4),
-					new SqlParameter("@GoodsId", SqlDbType.Int,4),
-					new SqlParameter("@StoreInOrderId", SqlDbType.Int,4)};
-            parameters[0].Value = model.Id;
-            parameters[1].Value = model.CreateTime;
-            parameters[2].Value = model.StoringOutTime;
-            parameters[3].Value = model.StoredOutTime;
-            parameters[4].Value = model.Admin;
-            parameters[5].Value = model.Status;
-            parameters[6].Value = model.Remark;
-            parameters[7].Value = model.StoreInGoodsId;
-            parameters[8].Value = model.GoodsId;
-            parameters[9].Value = model.StoreInOrderId;
+            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
+            {
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        StringBuilder strSql = new StringBuilder();
+                        strSql.Append("insert into StoreOutWaitingGoods(");
+                        strSql.Append("CreateTime,StoringOutTime,StoredOutTime,Admin,Status,Remark,StoreInGoodsId,GoodsId,StoreInOrderId)");
+                        strSql.Append(" values (");
+                        strSql.Append("@CreateTime,@StoringOutTime,@StoredOutTime,@Admin,@Status,@Remark,@StoreInGoodsId,@GoodsId,@StoreInOrderId)");
+                        strSql.Append(";select @@IDENTITY");
+                        SqlParameter[] parameters = {
+					        new SqlParameter("@CreateTime", SqlDbType.DateTime),
+					        new SqlParameter("@StoringOutTime", SqlDbType.DateTime),
+					        new SqlParameter("@StoredOutTime", SqlDbType.DateTime),
+					        new SqlParameter("@Admin", SqlDbType.NVarChar,254),
+					        new SqlParameter("@Status", SqlDbType.Int,4),
+					        new SqlParameter("@Remark", SqlDbType.NVarChar,254),
+					        new SqlParameter("@StoreInGoodsId", SqlDbType.Int,4),
+					        new SqlParameter("@GoodsId", SqlDbType.Int,4),
+					        new SqlParameter("@StoreInOrderId", SqlDbType.Int,4)};
+                        parameters[0].Value = model.CreateTime;
+                        parameters[1].Value = model.StoringOutTime;
+                        parameters[2].Value = model.StoredOutTime;
+                        parameters[3].Value = model.Admin;
+                        parameters[4].Value = model.Status;
+                        parameters[5].Value = model.Remark;
+                        parameters[6].Value = model.StoreInGoodsId;
+                        parameters[7].Value = model.GoodsId;
+                        parameters[8].Value = model.StoreInOrderId;
 
-            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
-            if (rows > 0)
-            {
-                return true;
+                        object obj = DbHelperSQL.GetSingle(conn, trans, strSql.ToString(), parameters); //带事务
+                        model.Id = Convert.ToInt32(obj);
+
+                        #region 车辆====================
+                        if (model.GoodsVehicles.Count > 0)
+                        {
+                            StoreOutGoodsVehicle storeOutGoodsVehicleDAL = new StoreOutGoodsVehicle();
+                            foreach (Model.StoreOutGoodsVehicle goodsVehicle in model.GoodsVehicles)
+                            {
+                                goodsVehicle.StoreOutWaitingGoodsId = model.Id;
+                                storeOutGoodsVehicleDAL.Add(conn, trans, goodsVehicle);
+                            }
+                        }
+                        #endregion
+
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
+                }
             }
-            else
-            {
-                return false;
-            }
+
+            return model.Id > 0;
+
         }
+
         /// <summary>
         /// 更新一条数据
         /// </summary>
         public bool Update(DTcms.Model.StoreOutWaitingGoods model)
         {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("update StoreOutWaitingGoods set ");
-            strSql.Append("CreateTime=@CreateTime,");
-            strSql.Append("StoringOutTime=@StoringOutTime,");
-            strSql.Append("StoredOutTime=@StoredOutTime,");
-            strSql.Append("Admin=@Admin,");
-            strSql.Append("Status=@Status,");
-            strSql.Append("Remark=@Remark,");
-            strSql.Append("StoreInGoodsId=@StoreInGoodsId,");
-            strSql.Append("GoodsId=@GoodsId,");
-            strSql.Append("StoreInOrderId=@StoreInOrderId");
-            strSql.Append(" where Id=@Id ");
-            SqlParameter[] parameters = {
-					new SqlParameter("@CreateTime", SqlDbType.DateTime),
-					new SqlParameter("@StoringOutTime", SqlDbType.DateTime),
-					new SqlParameter("@StoredOutTime", SqlDbType.DateTime),
-					new SqlParameter("@Admin", SqlDbType.NVarChar,254),
-					new SqlParameter("@Status", SqlDbType.Int,4),
-					new SqlParameter("@Remark", SqlDbType.NVarChar,254),
-					new SqlParameter("@StoreInGoodsId", SqlDbType.Int,4),
-					new SqlParameter("@GoodsId", SqlDbType.Int,4),
-					new SqlParameter("@StoreInOrderId", SqlDbType.Int,4),
-					new SqlParameter("@Id", SqlDbType.Int,4)};
-            parameters[0].Value = model.CreateTime;
-            parameters[1].Value = model.StoringOutTime;
-            parameters[2].Value = model.StoredOutTime;
-            parameters[3].Value = model.Admin;
-            parameters[4].Value = model.Status;
-            parameters[5].Value = model.Remark;
-            parameters[6].Value = model.StoreInGoodsId;
-            parameters[7].Value = model.GoodsId;
-            parameters[8].Value = model.StoreInOrderId;
-            parameters[9].Value = model.Id;
+            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
+            {
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        StringBuilder strSql = new StringBuilder();
+                        strSql.Append("update StoreOutWaitingGoods set ");
+                        strSql.Append("CreateTime=@CreateTime,");
+                        strSql.Append("StoringOutTime=@StoringOutTime,");
+                        strSql.Append("StoredOutTime=@StoredOutTime,");
+                        strSql.Append("Admin=@Admin,");
+                        strSql.Append("Status=@Status,");
+                        strSql.Append("Remark=@Remark,");
+                        strSql.Append("StoreInGoodsId=@StoreInGoodsId,");
+                        strSql.Append("GoodsId=@GoodsId,");
+                        strSql.Append("StoreInOrderId=@StoreInOrderId");
+                        strSql.Append(" where Id=@Id ");
+                        SqlParameter[] parameters = {
+					        new SqlParameter("@CreateTime", SqlDbType.DateTime),
+					        new SqlParameter("@StoringOutTime", SqlDbType.DateTime),
+					        new SqlParameter("@StoredOutTime", SqlDbType.DateTime),
+					        new SqlParameter("@Admin", SqlDbType.NVarChar,254),
+					        new SqlParameter("@Status", SqlDbType.Int,4),
+					        new SqlParameter("@Remark", SqlDbType.NVarChar,254),
+					        new SqlParameter("@StoreInGoodsId", SqlDbType.Int,4),
+					        new SqlParameter("@GoodsId", SqlDbType.Int,4),
+					        new SqlParameter("@StoreInOrderId", SqlDbType.Int,4),
+					        new SqlParameter("@Id", SqlDbType.Int,4)};
+                        parameters[0].Value = model.CreateTime;
+                        parameters[1].Value = model.StoringOutTime;
+                        parameters[2].Value = model.StoredOutTime;
+                        parameters[3].Value = model.Admin;
+                        parameters[4].Value = model.Status;
+                        parameters[5].Value = model.Remark;
+                        parameters[6].Value = model.StoreInGoodsId;
+                        parameters[7].Value = model.GoodsId;
+                        parameters[8].Value = model.StoreInOrderId;
+                        parameters[9].Value = model.Id;
 
-            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
-            if (rows > 0)
-            {
-                return true;
+                        DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+                        #region 车辆====================
+
+                        StoreOutGoodsVehicle storeOutGoodsVehicleDAL = new StoreOutGoodsVehicle();
+                        storeOutGoodsVehicleDAL.Delete(conn, trans, model.Id);
+                        if (model.GoodsVehicles.Count > 0)
+                        {
+                            foreach (Model.StoreOutGoodsVehicle goodsVehicle in model.GoodsVehicles)
+                            {
+                                goodsVehicle.StoreOutWaitingGoodsId = model.Id;
+                                storeOutGoodsVehicleDAL.Add(conn, trans, goodsVehicle);
+                            }
+                        }
+                        #endregion
+
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
+                }
             }
-            else
-            {
-                return false;
-            }
+
+            return true;
         }
 
         /// <summary>
@@ -137,23 +184,37 @@ namespace DTcms.DAL
         /// </summary>
         public bool Delete(int Id)
         {
-
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("delete from StoreOutWaitingGoods ");
-            strSql.Append(" where Id=@Id ");
-            SqlParameter[] parameters = {
-					new SqlParameter("@Id", SqlDbType.Int,4)			};
-            parameters[0].Value = Id;
-
-            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
-            if (rows > 0)
+            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
             {
-                return true;
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        StringBuilder strSql = new StringBuilder();
+                        strSql.Append("delete from StoreOutWaitingGoods ");
+                        strSql.Append(" where Id=@Id ");
+                        SqlParameter[] parameters = {
+					        new SqlParameter("@Id", SqlDbType.Int,4)			
+                        };
+                        parameters[0].Value = Id;
+
+                        DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+                        new StoreOutGoodsVehicle().Delete(conn, trans, Id);
+
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+
+                        return false;
+                    }
+                }
             }
-            else
-            {
-                return false;
-            }
+
+            return true;
         }
         /// <summary>
         /// 批量删除数据
@@ -363,6 +424,21 @@ namespace DTcms.DAL
 
         #endregion  BasicMethod
         #region  ExtensionMethod
+
+
+        public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select A.StoringOutTime, A.Id as Id, A.Admin as Admin, A.StoreInGoodsId, A.GoodsId, A.StoreInOrderId, B.AccountNumber, C.Name as GoodsName, D.Count as StoredInCount, D.StoredInTime, E.Name as StoreName ");
+            strSql.Append(" FROM StoreOutWaitingGoods A, StoreInOrder B, Goods C, StoreInGoods D, Store E ");
+            strSql.Append("where A.StoreInOrderId = B.Id and A.GoodsId = C.Id and A.StoreInGoodsId = D.Id and D.StoreId = E.Id ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(strWhere);
+            }
+            recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
+            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
+        }
 
         #endregion  ExtensionMethod
     }

@@ -82,15 +82,15 @@ namespace DTcms.Web.admin.business
             }
             if (!string.IsNullOrEmpty(_keyword))
             {
-                strTemp.Append(" and (A.AccountNumber='" + _keyword + "' or A.InspectionNumber = '" + _keyword + "' or A.Admin = '" + _keyword + "')");
+                strTemp.Append(" and (A.Admin='" + _keyword + "' or A.Remark = '" + _keyword + "')");
             }
             if (!string.IsNullOrEmpty(beginTime))
             {
-                strTemp.Append(" and A.BeginChargingTime>='" + _beginTime + "'");
+                strTemp.Append(" and A.StoredOutTime>='" + _beginTime + "'");
             }
             if (!string.IsNullOrEmpty(endTime))
             {
-                strTemp.Append(" and A.BeginChargingTime <='" + _endTime + "'");
+                strTemp.Append(" and A.StoredOutTime <='" + _endTime + "'");
             }
 
             return strTemp.ToString();
@@ -120,7 +120,7 @@ namespace DTcms.Web.admin.business
                 this.customer_id.ToString(), txtKeyWord.Text, txtBeginTime.Text, txtEndTime.Text));
         }
 
-        //待入库状态
+        //待出库状态
         protected void ddlCustomer_SelectedIndexChanged(object sender, EventArgs e)
         {
             Response.Redirect(Utils.CombUrlTxt("store_out_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
@@ -165,35 +165,8 @@ namespace DTcms.Web.admin.business
                     }
                 }
             }
-            AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除待入库成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
+            AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除待出库成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
             JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("store_out_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
-                this.customer_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime));
-        }
-
-        protected void btnAudit_Click(object sender, EventArgs e)
-        {
-            ChkAdminLevel("store_out_order", DTEnums.ActionEnum.Confirm.ToString()); //检查权限
-            int sucCount = 0;
-            int errorCount = 0;
-            BLL.StoreOutOrder bll = new BLL.StoreOutOrder();
-            for (int i = 0; i < rptList.Items.Count; i++)
-            {
-                int id = Convert.ToInt32(((HiddenField)rptList.Items[i].FindControl("hidId")).Value);
-                CheckBox cb = (CheckBox)rptList.Items[i].FindControl("chkId");
-                if (cb.Checked)
-                {
-                    if (bll.UpdateField("id = "+id+" and Status = 1", "Status=2") > 0)
-                    {
-                        sucCount += 1;
-                    }
-                    else
-                    {
-                        errorCount += 1;
-                    }
-                }
-            }
-            AddAdminLog(DTEnums.ActionEnum.Audit.ToString(), "入库单审核成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
-            JscriptMsg("入库单审核成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("store_out_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
                 this.customer_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime));
         }
 
@@ -202,11 +175,11 @@ namespace DTcms.Web.admin.business
             switch (status)
             {
                 case "0":
-                    return "等待确认";
+                    return "等待仓库确认";
                 case "1":
-                    return "等待审核";
+                    return "等待财务确认";
                 case "2":
-                    return "已审核";
+                    return "完成";
                 default:
                     throw new NotImplementedException("未定义的状态");
             }

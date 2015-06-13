@@ -1,58 +1,57 @@
-﻿using System; 
+﻿using System;
 using System.Text;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using System.Data;
-namespace DTcms.Model{
-	 	//StoreOutGoodsVehicle
-		public class StoreOutGoodsVehicle
-	{
-   		     
-      	/// <summary>
-		/// StoreOutGoodsStoreOutOrderId
-        /// </summary>		
-		private int _storeoutgoodsstoreoutorderid;
-        public int StoreOutGoodsStoreOutOrderId
+namespace DTcms.Model
+{
+    //StoreOutGoodsVehicle
+    public class StoreOutGoodsVehicle
+    {
+        public StoreOutGoodsVehicle() { }
+
+        public StoreOutGoodsVehicle(int vehicleId, string remark, decimal count)
         {
-            get{ return _storeoutgoodsstoreoutorderid; }
-            set{ _storeoutgoodsstoreoutorderid = value; }
-        }        
-		/// <summary>
-		/// StoreOutGoodsId
+            _vehicleid = vehicleId;
+            _remark = remark;
+            _count = count;
+        }
+        /// <summary>
+        /// StoreOutGoodsId
         /// </summary>		
-		private int _storeoutgoodsid;
-        public int StoreOutGoodsId
+        private int _storeoutgoodswaitingid;
+        public int StoreOutWaitingGoodsId
         {
-            get{ return _storeoutgoodsid; }
-            set{ _storeoutgoodsid = value; }
-        }        
-		/// <summary>
-		/// VehicleId
+            get { return _storeoutgoodswaitingid; }
+            set { _storeoutgoodswaitingid = value; }
+        }
+        /// <summary>
+        /// VehicleId
         /// </summary>		
-		private int _vehicleid;
+        private int _vehicleid;
         public int VehicleId
         {
-            get{ return _vehicleid; }
-            set{ _vehicleid = value; }
-        }        
-		/// <summary>
-		/// Remark
+            get { return _vehicleid; }
+            set { _vehicleid = value; }
+        }
+        /// <summary>
+        /// Remark
         /// </summary>		
-		private string _remark;
+        private string _remark;
         public string Remark
         {
-            get{ return _remark; }
-            set{ _remark = value; }
-        }        
-		/// <summary>
-		/// Count
+            get { return _remark; }
+            set { _remark = value; }
+        }
+        /// <summary>
+        /// Count
         /// </summary>		
-		private decimal _count;
+        private decimal _count;
         public decimal Count
         {
-            get{ return _count; }
-            set{ _count = value; }
-        }        
-		   
-	}
+            get { return _count; }
+            set { _count = value; }
+        }
+
+    }
 }
 
