@@ -192,6 +192,48 @@ namespace DTcms.DAL
             }
         }
 
+        public DTcms.Model.Customer GetModelByStoreInOrder(int storeInOrderId)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select Id, Code, Name, LinkMan, LinkTel, LinkAddress, Email, Fax, Status, Remark  ");
+            strSql.Append("  from Customer ");
+            strSql.Append(" where Id in(select CustomerId from StoreInOrder where Id = @StoreInOrderId) ");
+            SqlParameter[] parameters = {
+					new SqlParameter("@StoreInOrderId", SqlDbType.Int,4)			};
+            parameters[0].Value = storeInOrderId;
+
+
+            DTcms.Model.Customer model = new DTcms.Model.Customer();
+            DataSet ds = DbHelperSQL.Query(strSql.ToString(), parameters);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                if (ds.Tables[0].Rows[0]["Id"].ToString() != "")
+                {
+                    model.Id = int.Parse(ds.Tables[0].Rows[0]["Id"].ToString());
+                }
+                model.Code = ds.Tables[0].Rows[0]["Code"].ToString();
+                model.Name = ds.Tables[0].Rows[0]["Name"].ToString();
+                model.LinkMan = ds.Tables[0].Rows[0]["LinkMan"].ToString();
+                model.LinkTel = ds.Tables[0].Rows[0]["LinkTel"].ToString();
+                model.LinkAddress = ds.Tables[0].Rows[0]["LinkAddress"].ToString();
+                model.Email = ds.Tables[0].Rows[0]["Email"].ToString();
+                model.Fax = ds.Tables[0].Rows[0]["Fax"].ToString();
+                if (ds.Tables[0].Rows[0]["Status"].ToString() != "")
+                {
+                    model.Status = int.Parse(ds.Tables[0].Rows[0]["Status"].ToString());
+                }
+                model.Remark = ds.Tables[0].Rows[0]["Remark"].ToString();
+
+                return model;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
 
         /// <summary>
         /// 获得数据列表

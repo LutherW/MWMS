@@ -41,13 +41,21 @@
                 var vehicleDialog = top.dialog({
                     id: 'goodsDialogId',
                     title: "选择出库货物",
-                    url: '/admin/dialog/dialog_store_waiting_goods_list.aspx?customer_id=' + $("#ddlCustomer").val(),
+                    url: '/admin/dialog/dialog_storeout_waiting_goods.aspx?storein_order_id=' + $("#ddlStoreInOrder").val(),
                     width: 700,
                     onclose: function () {
 
                     }
                 }).showModal();
                 vehicleDialog.data = $("#showGoodsList ul");
+            });
+
+            $("#txtChargingCount").blur(function () {
+                var val = $(this).val();
+                if (!isNaN(val)) {
+                    var totalMoney = $("#hidUnitPrice").val() * val;
+                    $("#txtTotalMoney").val(totalMoney);
+                }
             });
 
         });
@@ -63,10 +71,10 @@
     <form id="form1" runat="server">
         <!--导航栏-->
         <div class="location">
-            <a href="store_in_order.aspx" class="back"><i></i><span>返回列表页</span></a>
+            <a href="store_out_order.aspx" class="back"><i></i><span>返回列表页</span></a>
             <a href="../center.aspx" class="home"><i></i><span>首页</span></a>
             <i class="arrow"></i>
-            <a href="store_in_order.aspx"><span>出库单管理</span></a>
+            <a href="store_out_order.aspx"><span>出库单管理</span></a>
             <i class="arrow"></i>
             <span>编辑出库单</span>
         </div>
@@ -88,31 +96,45 @@
 
         <div class="tab-content" style="min-height: 800px;">
             <dl>
-                <dt>客户</dt>
+                <dt>入库单</dt>
                 <dd>
                     <div class="rule-single-select">
-                        <asp:DropDownList ID="ddlCustomer" runat="server" datatype="*" errormsg="请选择客户" sucmsg=" "></asp:DropDownList>
+                        <asp:HiddenField ID="hidUnitPrice" runat="server" Value="0.00" />
+                        <asp:DropDownList ID="ddlStoreInOrder" runat="server" datatype="*" errormsg="请选择入库单" sucmsg=" " AutoPostBack="True" OnSelectedIndexChanged="ddlStoreInOrder_SelectedIndexChanged"></asp:DropDownList>
                     </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>客户</dt>
+                <dd>
+                    <asp:HiddenField ID="hidCustomerId" runat="server" Value="0" />
+                    <asp:Label ID="labCustomerName" runat="server" Text=""></asp:Label>
+                </dd>
+            </dl>
+            <dl>
+                <dt>单价</dt>
+                <dd>
+                    <asp:Label ID="labUnitPrice" runat="server" Text=""></asp:Label>
                 </dd>
             </dl>
             <dl>
                 <dt>计费数量</dt>
                 <dd>
-                    <asp:TextBox ID="txtChargingCount" runat="server" CssClass="input small" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0</asp:TextBox>
+                    <asp:TextBox ID="txtChargingCount" runat="server" CssClass="input txt" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>
                     <span class="Validform_checktip">*</span>
                 </dd>
             </dl>
             <dl>
                 <dt>总价</dt>
                 <dd>
-                    <asp:TextBox ID="txtTotalMoney" runat="server" CssClass="input small" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0</asp:TextBox>
+                    <asp:TextBox ID="txtTotalMoney" runat="server" CssClass="input txt" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>
                     <span class="Validform_checktip">*</span>
                 </dd>
             </dl>
             <dl>
                 <dt>发票金额</dt>
                 <dd>
-                    <asp:TextBox ID="txtInvoiceMoney" runat="server" CssClass="input small" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0</asp:TextBox>
+                    <asp:TextBox ID="txtInvoiceMoney" runat="server" CssClass="input txt" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>
                     <span class="Validform_checktip">*</span>
                 </dd>
             </dl>
@@ -186,19 +208,19 @@
                                     <li>
                                         <a href="javascript:;" onclick="delNode(this);" class="del" title="删除"></a>
                                         <div class="btns">
-                                            <input type="hidden" name="StoreWaitingGoodsId" value="<%#Eval("StoreWaitingGoodsId") %>" />
-                                            <input type="hidden" name="CustomerId" value="<%#Eval("CustomerId") %>" />
-                                            <input type="hidden" name="GoodsId" value="<%#Eval("GoodsId") %>" />
-                                            货物：<%#Eval("GoodsName").ToString() + "(" + Eval("CustomerName").ToString() + ")"%>
+                                            <input type="hidden" name="StoreOutWaitingGoodsId" value="<%#Eval("StoreOutWaitingGoodsId") %>" />
+                                            <input type="hidden" name="StoreInOrderId" value="<%#Eval("StoreInOrderId") %>" />
+                                            <input type="hidden" name="StoreInGoodsId" value="<%#Eval("StoreInGoodsId") %>" />
+                                            货物：<%#Eval("GoodsName").ToString()%>
                                         </div>
                                         <div class="btns">
-                                            仓库：<select name="StoreId"><%#GetStoreOptions(Eval("StoreId").ToString()) %></select>
+                                            库存量：<%#Eval("StoredInCount").ToString()%>
                                         </div>
                                         <div class="btns">
-                                            数量：<input type="text" name="Count" value="<%#Eval("Count") %>" style="width: 70%;" />
+                                            出库量：<input type="text" name="StoreOutCount" value="<%#Eval("Count") %>" style="width: 70%;" />
                                         </div>
                                         <div class="btns">
-                                            备注：<input type="text" name="StoreInGoodsRemark" value="<%#Eval("Remark") %>" style="width: 70%;" />
+                                            备注：<input type="text" name="StoreOutGoodsRemark" value="<%#Eval("Remark") %>" style="width: 70%;" />
                                         </div>
                                     </li>
                                 </ItemTemplate>

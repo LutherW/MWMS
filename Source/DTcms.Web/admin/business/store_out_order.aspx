@@ -113,9 +113,10 @@
                             <th width="8%">选择</th>
                             <th align="left">入库单</th>
                             <th align="left" width="10%">总金额</th>
+                            <th align="left" width="8%">单价</th>
+                            <th align="left" width="8%">出库数量</th>
                             <th align="left">客户</th>
                             <th align="left" width="10%">出库时间</th>
-                            <th align="left" width="8%">出库数量</th>
                             <th align="left" width="8%">操作员</th>
                             <th align="left" width="8%">状态</th>
                             <th width="8%" >备注</th>
@@ -131,9 +132,10 @@
                         </td>
                         <td><%#Eval("AccountNumber")%></td>
                         <td><%#Eval("TotalMoney")%></td>
+                        <td><%#Eval("UnitPrice")%></td>
+                        <td><%#Eval("Count")%></td>
                         <td><%#Eval("CustomerName")%></td>
                         <td><%#Convert.ToDateTime(Eval("StoredOutTime")).ToString("yyyy-MM-dd")%></td>
-                        <td><%#Eval("Count")%></td>
                         <td><%#Eval("Admin")%></td>
                         <td><%#GetStatus(Eval("Status").ToString())%></td>
                         <td align="center"><a href="javascript:void(0);" onclick="showRemarkDialog( '<%#Eval("Remark") %>');">备注</a></td>

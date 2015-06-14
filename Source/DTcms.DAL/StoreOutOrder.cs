@@ -27,55 +27,110 @@ namespace DTcms.DAL
             return DbHelperSQL.Exists(strSql.ToString(), parameters);
         }
 
+        public bool Exists(int Id)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select count(1) from StoreOutOrder");
+            strSql.Append(" where ");
+            strSql.Append(" Id = @Id ");
+            SqlParameter[] parameters = {
+					new SqlParameter("@Id", SqlDbType.Int,4)};
+            parameters[0].Value = Id;
 
+            return DbHelperSQL.Exists(strSql.ToString(), parameters);
+        }
 
         /// <summary>
         /// 增加一条数据
         /// </summary>
-        public int Add(DTcms.Model.StoreOutOrder model)
+        public bool Add(DTcms.Model.StoreOutOrder model)
         {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("insert into StoreOutOrder(");
-            strSql.Append("CustomerId,StoreInUnitPriceStoreInOrderId,CreateTime,Admin,TotalMoney,InvoiceMoney,HasBeenInvoiced,Status,Remark");
-            strSql.Append(") values (");
-            strSql.Append("@CustomerId,@StoreInUnitPriceStoreInOrderId,@CreateTime,@Admin,@TotalMoney,@InvoiceMoney,@HasBeenInvoiced,@Status,@Remark");
-            strSql.Append(") ");
-            strSql.Append(";select @@IDENTITY");
-            SqlParameter[] parameters = {
-			            new SqlParameter("@CustomerId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@StoreInUnitPriceStoreInOrderId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@CreateTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@Admin", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@TotalMoney", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@InvoiceMoney", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@HasBeenInvoiced", SqlDbType.Bit,1) ,            
-                        new SqlParameter("@Status", SqlDbType.Int,4) ,            
-                        new SqlParameter("@Remark", SqlDbType.VarChar,254)             
+            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
+            {
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        StringBuilder strSql = new StringBuilder();
+                        strSql.Append("insert into StoreOutOrder(");
+                        strSql.Append("CustomerId,StoreInOrderId,CreateTime,Admin,TotalMoney,InvoiceMoney,HasBeenInvoiced,Status,Remark,StoredOutTime,Count,UnitPrice");
+                        strSql.Append(") values (");
+                        strSql.Append("@CustomerId,@StoreInUnitPriceStoreInOrderId,@CreateTime,@Admin,@TotalMoney,@InvoiceMoney,@HasBeenInvoiced,@Status,@Remark,@StoredOutTime,@Count,@UnitPrice");
+                        strSql.Append(") ");
+                        strSql.Append(";select @@IDENTITY");
+                        SqlParameter[] parameters = {
+			                        new SqlParameter("@CustomerId", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@StoreInUnitPriceStoreInOrderId", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@CreateTime", SqlDbType.DateTime) ,            
+                                    new SqlParameter("@Admin", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@TotalMoney", SqlDbType.Decimal) ,            
+                                    new SqlParameter("@InvoiceMoney", SqlDbType.Decimal) ,            
+                                    new SqlParameter("@HasBeenInvoiced", SqlDbType.Bit,1) ,            
+                                    new SqlParameter("@Status", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@Remark", SqlDbType.VarChar,254) ,
+                                    new SqlParameter("@StoredOutTime", SqlDbType.DateTime) ,            
+                                    new SqlParameter("@Count", SqlDbType.Decimal) ,            
+                                    new SqlParameter("@UnitPrice", SqlDbType.Decimal)  
               
-            };
+                        };
 
-            parameters[0].Value = model.CustomerId;
-            parameters[1].Value = model.StoreInUnitPriceStoreInOrderId;
-            parameters[2].Value = model.CreateTime;
-            parameters[3].Value = model.Admin;
-            parameters[4].Value = model.TotalMoney;
-            parameters[5].Value = model.InvoiceMoney;
-            parameters[6].Value = model.HasBeenInvoiced;
-            parameters[7].Value = model.Status;
-            parameters[8].Value = model.Remark;
+                        parameters[0].Value = model.CustomerId;
+                        parameters[1].Value = model.StoreInOrderId;
+                        parameters[2].Value = model.CreateTime;
+                        parameters[3].Value = model.Admin;
+                        parameters[4].Value = model.TotalMoney;
+                        parameters[5].Value = model.InvoiceMoney;
+                        parameters[6].Value = model.HasBeenInvoiced;
+                        parameters[7].Value = model.Status;
+                        parameters[8].Value = model.Remark;
+                        parameters[9].Value = model.StoredOutTime;
+                        parameters[10].Value = model.Count;
+                        parameters[11].Value = model.UnitPrice;
 
-            object obj = DbHelperSQL.GetSingle(strSql.ToString(), parameters);
-            if (obj == null)
-            {
-                return 0;
+                        object obj = DbHelperSQL.GetSingle(conn, trans, strSql.ToString(), parameters); //带事务
+                        model.Id = Convert.ToInt32(obj);
+
+                        new StoreInOrder().UpdateField(model.StoreInOrderId, "ChargingCount = ChargingCount - " + model.Count + "");
+
+
+                        #region 费用====================
+                        if (model.StoreOutCosts.Count > 0)
+                        {
+                            StoreOutCost storeOutCostDAL = new StoreOutCost();
+                            foreach (Model.StoreOutCost storeInCost in model.StoreOutCosts)
+                            {
+                                storeInCost.StoreOutOrderId = model.Id;
+                                storeOutCostDAL.Add(conn, trans, storeInCost);
+                            }
+                        }
+                        #endregion
+
+                        #region 入库货物====================
+                        if (model.StoreOutGoods.Count > 0)
+                        {
+                            StoreOutGoods storeOutGoodsDAL = new StoreOutGoods();
+                            foreach (Model.StoreOutGoods storeInGoods in model.StoreOutGoods)
+                            {
+                                storeInGoods.StoreOutOrderId = model.Id;
+                                storeOutGoodsDAL.Add(conn, trans, storeInGoods);
+                            }
+                        }
+                        #endregion
+
+                        trans.Commit();
+
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+
+                        return false;
+                    }
+                }
             }
-            else
-            {
 
-                return Convert.ToInt32(obj);
-
-            }
-
+            return model.Id > 0;
         }
 
 
@@ -84,53 +139,96 @@ namespace DTcms.DAL
         /// </summary>
         public bool Update(DTcms.Model.StoreOutOrder model)
         {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("update StoreOutOrder set ");
+            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
+            {
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        StringBuilder strSql = new StringBuilder();
+                        strSql.Append("update StoreOutOrder set ");
+                        strSql.Append(" CustomerId = @CustomerId , ");
+                        strSql.Append(" StoreInOrderId = @StoreInOrderId , ");
+                        strSql.Append(" Admin = @Admin , ");
+                        strSql.Append(" TotalMoney = @TotalMoney , ");
+                        strSql.Append(" InvoiceMoney = @InvoiceMoney , ");
+                        strSql.Append(" Status = @Status , ");
+                        strSql.Append(" StoredOutTime = @StoredOutTime , ");
+                        strSql.Append(" Count = @Count , ");
+                        strSql.Append(" UnitPrice = @UnitPrice , ");
+                        strSql.Append(" Remark = @Remark  ");
+                        strSql.Append(" where Id=@Id ");
 
-            strSql.Append(" CustomerId = @CustomerId , ");
-            strSql.Append(" StoreInUnitPriceStoreInOrderId = @StoreInUnitPriceStoreInOrderId , ");
-            strSql.Append(" CreateTime = @CreateTime , ");
-            strSql.Append(" Admin = @Admin , ");
-            strSql.Append(" TotalMoney = @TotalMoney , ");
-            strSql.Append(" InvoiceMoney = @InvoiceMoney , ");
-            strSql.Append(" HasBeenInvoiced = @HasBeenInvoiced , ");
-            strSql.Append(" Status = @Status , ");
-            strSql.Append(" Remark = @Remark  ");
-            strSql.Append(" where Id=@Id ");
-
-            SqlParameter[] parameters = {
-			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@CustomerId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@StoreInUnitPriceStoreInOrderId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@CreateTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@Admin", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@TotalMoney", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@InvoiceMoney", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@HasBeenInvoiced", SqlDbType.Bit,1) ,            
-                        new SqlParameter("@Status", SqlDbType.Int,4) ,            
-                        new SqlParameter("@Remark", SqlDbType.VarChar,254)             
+                        SqlParameter[] parameters = {
+			                        new SqlParameter("@Id", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@CustomerId", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@StoreInOrderId", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@Admin", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@TotalMoney", SqlDbType.Decimal) ,            
+                                    new SqlParameter("@InvoiceMoney", SqlDbType.Decimal) ,            
+                                    new SqlParameter("@Status", SqlDbType.Int,4) ,  
+                                    new SqlParameter("@StoredOutTime", SqlDbType.DateTime) ,   
+                                    new SqlParameter("@Count", SqlDbType.Decimal) ,   
+                                    new SqlParameter("@UnitPrice", SqlDbType.Decimal) ,   
+                                    new SqlParameter("@Remark", SqlDbType.VarChar,254)             
               
-            };
+                        };
 
-            parameters[0].Value = model.Id;
-            parameters[1].Value = model.CustomerId;
-            parameters[2].Value = model.StoreInUnitPriceStoreInOrderId;
-            parameters[3].Value = model.CreateTime;
-            parameters[4].Value = model.Admin;
-            parameters[5].Value = model.TotalMoney;
-            parameters[6].Value = model.InvoiceMoney;
-            parameters[7].Value = model.HasBeenInvoiced;
-            parameters[8].Value = model.Status;
-            parameters[9].Value = model.Remark;
-            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
-            if (rows > 0)
-            {
-                return true;
+                        parameters[0].Value = model.Id;
+                        parameters[1].Value = model.CustomerId;
+                        parameters[2].Value = model.StoreInOrderId;
+                        parameters[3].Value = model.CreateTime;
+                        parameters[4].Value = model.Admin;
+                        parameters[5].Value = model.TotalMoney;
+                        parameters[6].Value = model.InvoiceMoney;
+                        parameters[7].Value = model.Status;
+                        parameters[8].Value = model.StoredOutTime;
+                        parameters[9].Value = model.Count;
+                        parameters[10].Value = model.UnitPrice;
+                        parameters[11].Value = model.Remark;
+
+                        DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+                        #region 费用====================
+
+                        StoreOutCost storeOutCostDAL = new StoreOutCost();
+                        storeOutCostDAL.Delete(conn, trans, model.Id);
+                        if (model.StoreOutCosts.Count > 0)
+                        {
+                            foreach (Model.StoreOutCost storeInCost in model.StoreOutCosts)
+                            {
+                                storeInCost.StoreOutOrderId = model.Id;
+                                storeOutCostDAL.Add(conn, trans, storeInCost);
+                            }
+                        }
+                        #endregion
+
+                        #region 入库货物====================
+                        StoreOutGoods storeOutGoodsDAL = new StoreOutGoods();
+                        storeOutGoodsDAL.Delete(conn, trans, model.Id);
+                        if (model.StoreOutGoods.Count > 0)
+                        {
+                            foreach (Model.StoreOutGoods storeInGoods in model.StoreOutGoods)
+                            {
+                                storeInGoods.StoreInOrderId = model.Id;
+                                storeOutGoodsDAL.Add(conn, trans, storeInGoods);
+                            }
+                        }
+                        #endregion
+
+
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
+                }
             }
-            else
-            {
-                return false;
-            }
+
+            return true;
         }
 
 
@@ -200,7 +298,7 @@ namespace DTcms.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select Id, CustomerId, StoreInUnitPriceStoreInOrderId, CreateTime, Admin, TotalMoney, InvoiceMoney, HasBeenInvoiced, Status, Remark  ");
+            strSql.Append("select * ");
             strSql.Append("  from StoreOutOrder ");
             strSql.Append(" where Id=@Id");
             SqlParameter[] parameters = {
@@ -222,9 +320,9 @@ namespace DTcms.DAL
                 {
                     model.CustomerId = int.Parse(ds.Tables[0].Rows[0]["CustomerId"].ToString());
                 }
-                if (ds.Tables[0].Rows[0]["StoreInUnitPriceStoreInOrderId"].ToString() != "")
+                if (ds.Tables[0].Rows[0]["StoreInOrderId"].ToString() != "")
                 {
-                    model.StoreInUnitPriceStoreInOrderId = int.Parse(ds.Tables[0].Rows[0]["StoreInUnitPriceStoreInOrderId"].ToString());
+                    model.StoreInOrderId = int.Parse(ds.Tables[0].Rows[0]["StoreInOrderId"].ToString());
                 }
                 if (ds.Tables[0].Rows[0]["CreateTime"].ToString() != "")
                 {
@@ -255,6 +353,22 @@ namespace DTcms.DAL
                     model.Status = int.Parse(ds.Tables[0].Rows[0]["Status"].ToString());
                 }
                 model.Remark = ds.Tables[0].Rows[0]["Remark"].ToString();
+                if (ds.Tables[0].Rows[0]["StoringOutTime"].ToString() != "")
+                {
+                    model.StoringOutTime = DateTime.Parse(ds.Tables[0].Rows[0]["StoringOutTime"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["StoredOutTime"].ToString() != "")
+                {
+                    model.StoredOutTime = DateTime.Parse(ds.Tables[0].Rows[0]["StoredOutTime"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["Count"].ToString() != "")
+                {
+                    model.Count = decimal.Parse(ds.Tables[0].Rows[0]["Count"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["UnitPrice"].ToString() != "")
+                {
+                    model.UnitPrice = decimal.Parse(ds.Tables[0].Rows[0]["UnitPrice"].ToString());
+                }
 
                 return model;
             }
@@ -304,7 +418,7 @@ namespace DTcms.DAL
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select A.Id AS Id, A.Status, A.StoredOutTime, A.Admin, A.Count, A.Remark AS Remark, C.Name AS CustomerName, B.AccountNumber FROM StoreOutOrder A, StoreInOrder B, Customer C ");
+            strSql.Append("select A.Id AS Id, A.Status, A.StoredOutTime, A.TotalMoney, A.UnitPrice, A.InvoiceMoney, A.Admin, A.Count, A.Remark AS Remark, C.Name AS CustomerName, B.AccountNumber FROM StoreOutOrder A, StoreInOrder B, Customer C ");
             strSql.Append("where A.StoreInOrderId = B.Id and A.CustomerId = C.Id ");
             if (strWhere.Trim() != "")
             {

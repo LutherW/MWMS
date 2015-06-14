@@ -261,6 +261,15 @@ namespace DTcms.DAL
             return DbHelperSQL.ExecuteSql(strSql.ToString());
         }
 
+        public int UpdateField(SqlConnection conn, SqlTransaction trans, int id, string strValue)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update StoreInOrder set " + strValue);
+            strSql.Append(" where Id=" + id);
+
+            return DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString());
+        }
+
         public int UpdateField(string strWhere, string strValue)
         {
             StringBuilder strSql = new StringBuilder();

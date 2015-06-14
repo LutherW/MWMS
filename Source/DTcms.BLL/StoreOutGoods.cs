@@ -135,22 +135,9 @@ namespace DTcms.BLL{
 				{
 					model.StoreInOrderId=int.Parse(dt.Rows[n]["StoreInOrderId"].ToString());
 				}
-																																if(dt.Rows[n]["StoreInGoodsStoreInOrderId"].ToString()!="")
-				{
-					model.StoreInGoodsStoreInOrderId=int.Parse(dt.Rows[n]["StoreInGoodsStoreInOrderId"].ToString());
-				}
 																																if(dt.Rows[n]["StoreInGoodsId"].ToString()!="")
 				{
 					model.StoreInGoodsId=int.Parse(dt.Rows[n]["StoreInGoodsId"].ToString());
-				}
-																																				model.Remark= dt.Rows[n]["Remark"].ToString();
-																												if(dt.Rows[n]["StoringOutTime"].ToString()!="")
-				{
-					model.StoringOutTime=DateTime.Parse(dt.Rows[n]["StoringOutTime"].ToString());
-				}
-																																if(dt.Rows[n]["FactStoringOutTime"].ToString()!="")
-				{
-					model.FactStoringOutTime=DateTime.Parse(dt.Rows[n]["FactStoringOutTime"].ToString());
 				}
 																																if(dt.Rows[n]["Status"].ToString()!="")
 				{

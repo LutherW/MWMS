@@ -58,6 +58,11 @@ namespace DTcms.BLL
             return dal.GetModel(Id);
         }
 
+        public DTcms.Model.Customer GetModelByStoreInOrder(int storeInOrderId) 
+        {
+            return dal.GetModelByStoreInOrder(storeInOrderId);
+        }
+
         /// <summary>
         /// 得到一个对象实体，从缓存中
         /// </summary>

@@ -40,20 +40,18 @@ namespace DTcms.DAL
 		public int Add(DTcms.Model.StoreOutGoods model)
 		{
 			StringBuilder strSql=new StringBuilder();
-			strSql.Append("insert into StoreOutGoods(");			
-            strSql.Append("StoreOutOrderId,StoreInOrderId,StoreInGoodsStoreInOrderId,StoreInGoodsId,Remark,StoringOutTime,FactStoringOutTime,Status,Count");
+			strSql.Append("insert into StoreOutGoods(");
+            strSql.Append("StoreOutOrderId,StoreInOrderId,StoreInGoodsId,StoreOutWaitingGoodsId,Remark,Status,Count");
 			strSql.Append(") values (");
-            strSql.Append("@StoreOutOrderId,@StoreInOrderId,@StoreInGoodsStoreInOrderId,@StoreInGoodsId,@Remark,@StoringOutTime,@FactStoringOutTime,@Status,@Count");            
+            strSql.Append("@StoreOutOrderId,@StoreInOrderId,@StoreInGoodsId,@StoreOutWaitingGoodsId,@Remark,@Status,@Count");            
             strSql.Append(") ");            
             strSql.Append(";select @@IDENTITY");		
 			SqlParameter[] parameters = {
 			            new SqlParameter("@StoreOutOrderId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@StoreInOrderId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@StoreInGoodsStoreInOrderId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@StoreInGoodsId", SqlDbType.Int,4) ,            
+                        new SqlParameter("@StoreInOrderId", SqlDbType.Int,4) ,   
+                        new SqlParameter("@StoreInGoodsId", SqlDbType.Int,4) , 
+                        new SqlParameter("@StoreOutWaitingGoodsId", SqlDbType.Int,4) ,            
                         new SqlParameter("@Remark", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@StoringOutTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@FactStoringOutTime", SqlDbType.DateTime) ,            
                         new SqlParameter("@Status", SqlDbType.Int,4) ,            
                         new SqlParameter("@Count", SqlDbType.Decimal,9)             
               
@@ -61,13 +59,11 @@ namespace DTcms.DAL
 			            
             parameters[0].Value = model.StoreOutOrderId;                        
             parameters[1].Value = model.StoreInOrderId;                        
-            parameters[2].Value = model.StoreInGoodsStoreInOrderId;                        
-            parameters[3].Value = model.StoreInGoodsId;                        
+            parameters[2].Value = model.StoreInGoodsId;                        
+            parameters[3].Value = model.StoreOutWaitingGoodsId;                        
             parameters[4].Value = model.Remark;                        
-            parameters[5].Value = model.StoringOutTime;                        
-            parameters[6].Value = model.FactStoringOutTime;                        
-            parameters[7].Value = model.Status;                        
-            parameters[8].Value = model.Count;                        
+            parameters[5].Value = model.Status;                        
+            parameters[6].Value = model.Count;                        
 			   
 			object obj = DbHelperSQL.GetSingle(strSql.ToString(),parameters);			
 			if (obj == null)
@@ -82,8 +78,42 @@ namespace DTcms.DAL
 			}			   
             			
 		}
-		
-		
+
+        public void Add(SqlConnection conn, SqlTransaction trans, DTcms.Model.StoreOutGoods model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("insert into StoreOutGoods(");
+            strSql.Append("StoreOutOrderId,StoreInOrderId,StoreInGoodsId,StoreOutWaitingGoodsId,Remark,Status,Count");
+            strSql.Append(") values (");
+            strSql.Append("@StoreOutOrderId,@StoreInOrderId,@StoreInGoodsId,@StoreOutWaitingGoodsId,@Remark,@Status,@Count");
+            strSql.Append(") ");
+            strSql.Append(";select @@IDENTITY");
+            SqlParameter[] parameters = {
+			            new SqlParameter("@StoreOutOrderId", SqlDbType.Int,4) ,            
+                        new SqlParameter("@StoreInOrderId", SqlDbType.Int,4) ,   
+                        new SqlParameter("@StoreInGoodsId", SqlDbType.Int,4) , 
+                        new SqlParameter("@StoreOutWaitingGoodsId", SqlDbType.Int,4) ,            
+                        new SqlParameter("@Remark", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@Status", SqlDbType.Int,4) ,            
+                        new SqlParameter("@Count", SqlDbType.Decimal,9)             
+              
+            };
+
+            parameters[0].Value = model.StoreOutOrderId;
+            parameters[1].Value = model.StoreInOrderId;
+            parameters[2].Value = model.StoreInGoodsId;
+            parameters[3].Value = model.StoreOutWaitingGoodsId;
+            parameters[4].Value = model.Remark;
+            parameters[5].Value = model.Status;
+            parameters[6].Value = model.Count;
+
+            new StoreInGoods().UpdateField(conn, trans, model.StoreInGoodsId, " Count = Count - " + model.Count + " ");
+
+            new StoreOutWaitingGoods().UpdateField(conn, trans, model.StoreOutWaitingGoodsId, " Status = 1 ");
+
+            DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+        }
 		/// <summary>
 		/// 更新一条数据
 		/// </summary>
@@ -120,11 +150,10 @@ SqlParameter[] parameters = {
             parameters[0].Value = model.Id;                        
             parameters[1].Value = model.StoreOutOrderId;                        
             parameters[2].Value = model.StoreInOrderId;                        
-            parameters[3].Value = model.StoreInGoodsStoreInOrderId;                        
+                      
             parameters[4].Value = model.StoreInGoodsId;                        
             parameters[5].Value = model.Remark;                        
-            parameters[6].Value = model.StoringOutTime;                        
-            parameters[7].Value = model.FactStoringOutTime;                        
+                 
             parameters[8].Value = model.Status;                        
             parameters[9].Value = model.Count;                        
             int rows=DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
@@ -252,22 +281,9 @@ SqlParameter[] parameters = {
 				{
 					model.StoreInOrderId=int.Parse(ds.Tables[0].Rows[0]["StoreInOrderId"].ToString());
 				}
-																																if(ds.Tables[0].Rows[0]["StoreInGoodsStoreInOrderId"].ToString()!="")
-				{
-					model.StoreInGoodsStoreInOrderId=int.Parse(ds.Tables[0].Rows[0]["StoreInGoodsStoreInOrderId"].ToString());
-				}
 																																if(ds.Tables[0].Rows[0]["StoreInGoodsId"].ToString()!="")
 				{
 					model.StoreInGoodsId=int.Parse(ds.Tables[0].Rows[0]["StoreInGoodsId"].ToString());
-				}
-																																				model.Remark= ds.Tables[0].Rows[0]["Remark"].ToString();
-																												if(ds.Tables[0].Rows[0]["StoringOutTime"].ToString()!="")
-				{
-					model.StoringOutTime=DateTime.Parse(ds.Tables[0].Rows[0]["StoringOutTime"].ToString());
-				}
-																																if(ds.Tables[0].Rows[0]["FactStoringOutTime"].ToString()!="")
-				{
-					model.FactStoringOutTime=DateTime.Parse(ds.Tables[0].Rows[0]["FactStoringOutTime"].ToString());
 				}
 																																if(ds.Tables[0].Rows[0]["Status"].ToString()!="")
 				{
@@ -292,14 +308,16 @@ SqlParameter[] parameters = {
 		/// </summary>
 		public DataSet GetList(string strWhere)
 		{
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select * ");
-			strSql.Append(" FROM StoreOutGoods ");
-			if(strWhere.Trim()!="")
-			{
-				strSql.Append(" where "+strWhere);
-			}
-			return DbHelperSQL.Query(strSql.ToString());
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select A.StoreOutWaitingGoodsId,A.StoreInOrderId,A.StoreInGoodsId, E.CustomerId, A.Count, A.Remark as Remark, C.Name as GoodsName, C.Id as GoodsId, D.Name as CustomerName, E.Count AS StoredInCount ");
+            strSql.Append(" FROM StoreOutGoods A, StoreOutWaitingGoods B, Goods C, Customer D, StoreInGoods E");
+            strSql.Append(" where A.StoreOutWaitingGoodsId = B.Id and B.GoodsId = C.Id and E.CustomerId = D.Id and A.StoreInGoodsId = E.Id");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(strWhere);
+            }
+            return DbHelperSQL.Query(strSql.ToString());
+
 		}
 		
 		/// <summary>

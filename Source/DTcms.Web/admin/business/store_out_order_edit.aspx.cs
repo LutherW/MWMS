@@ -28,7 +28,7 @@ namespace DTcms.Web.admin.business
                     JscriptMsg("传输参数不正确！", "back");
                     return;
                 }
-                if (!new BLL.StoreInOrder().Exists(this.id))
+                if (!new BLL.StoreOutOrder().Exists(this.id))
                 {
                     JscriptMsg("信息不存在或已被删除！", "back");
                     return;
@@ -38,7 +38,7 @@ namespace DTcms.Web.admin.business
             {
                 ChkAdminLevel("store_out_order", DTEnums.ActionEnum.View.ToString()); //检查权限
                 
-                TreeBind("Status = 0 "); //绑定类别
+                TreeBind("Status = 2 "); //绑定类别
                 if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
                 {
                     ShowInfo(this.id);
@@ -54,51 +54,89 @@ namespace DTcms.Web.admin.business
         #region 绑定类别=================================
         private void TreeBind(string strWhere)
         {
-            BLL.Customer customerBLL = new BLL.Customer();
-            DataTable customerDT = customerBLL.GetList(0, strWhere, "Id desc").Tables[0];
+            BLL.StoreInOrder stroeInOrderBLL = new BLL.StoreInOrder();
+            DataTable stroeInOrderDT = stroeInOrderBLL.GetList(0, strWhere, "Id desc").Tables[0];
 
-            this.ddlCustomer.Items.Clear();
-            this.ddlCustomer.Items.Add(new ListItem("客户", ""));
-            foreach (DataRow dr in customerDT.Rows)
+            this.ddlStoreInOrder.Items.Clear();
+            this.ddlStoreInOrder.Items.Add(new ListItem("选择入库单", ""));
+            foreach (DataRow dr in stroeInOrderDT.Rows)
             {
-                this.ddlCustomer.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
+                this.ddlStoreInOrder.Items.Add(new ListItem(dr["AccountNumber"].ToString(), dr["Id"].ToString()));
             }
 
             BLL.Store storeBLL = new BLL.Store();
             storeDT = storeBLL.GetAllList().Tables[0];
-
         }
+
+        protected void ddlStoreInOrder_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int StoreOutOrderId;
+            if (int.TryParse(ddlStoreInOrder.SelectedValue, out StoreOutOrderId))
+            {
+                StoreInInfoBind(StoreOutOrderId);
+            }
+        }
+
+        private void StoreInInfoBind(int StoreInOrderId)
+        {
+            BLL.StoreInUnitPrice unitPriceBLL = new BLL.StoreInUnitPrice();
+            DataTable unitPriceDT = unitPriceBLL.GetList(1, " StoreInOrderId = " + StoreInOrderId + " and BeginTime <= '" + DateTime.Now + "' and EndTime >= '" + DateTime.Now + "'", "BeginTime asc").Tables[0];
+            if (unitPriceDT.Rows.Count == 1)
+            {
+                hidUnitPrice.Value = unitPriceDT.Rows[0]["Price"].ToString();
+                labUnitPrice.Text = unitPriceDT.Rows[0]["Price"].ToString();
+                txtTotalMoney.Text = string.Format("{0:N2}" ,Convert.ToDecimal(hidUnitPrice.Value) * Convert.ToDecimal(txtChargingCount.Text));
+            }
+
+            BLL.Customer customerBLL = new BLL.Customer();
+            Customer customer = customerBLL.GetModelByStoreInOrder(StoreInOrderId);
+            if (customer != null)
+            {
+                hidCustomerId.Value = customer.Id.ToString();
+                labCustomerName.Text = customer.Name;
+            }
+        }
+
         #endregion
 
         #region 赋值操作=================================
         private void ShowInfo(int _id)
         {
-            BLL.StoreInOrder bll = new BLL.StoreInOrder();
-            Model.StoreInOrder model = bll.GetModel(_id);
+            BLL.StoreOutOrder bll = new BLL.StoreOutOrder();
+            Model.StoreOutOrder model = bll.GetModel(_id);
 
-            ddlCustomer.SelectedValue = model.CustomerId.ToString();
-            txtAccountNumber.Text = model.AccountNumber;
-            txtInspectionNumber.Text = model.InspectionNumber;
-            txtBeginChargingTime.Text = model.BeginChargingTime.ToString("yyyy-MM-dd");
-            txtChargingCount.Text = model.ChargingCount.ToString();
-            txtSuttleWeight.Text = model.SuttleWeight.ToString("0.00");
+            ddlStoreInOrder.SelectedValue = model.StoreInOrderId.ToString();
+            hidUnitPrice.Value = model.UnitPrice.ToString();
+            hidCustomerId.Value = model.CustomerId.ToString();
+            labCustomerName.Text = GetCustomerName(model.CustomerId);
+            txtChargingCount.Text = model.Count.ToString("0.00");
+            txtTotalMoney.Text = model.TotalMoney.ToString("0.00");
+            txtInvoiceMoney.Text = model.InvoiceMoney.ToString("0.00");
+            labUnitPrice.Text = model.UnitPrice.ToString("0.00");
+            txtStoredOutTime.Text = model.StoredOutTime.HasValue ? model.StoredOutTime.Value.ToString("yyyy-MM-dd") : "";
             txtAdmin.Text = model.Admin;
             txtRemark.Text = model.Remark;
 
-            BLL.StoreInUnitPrice unitpriceBLL = new BLL.StoreInUnitPrice();
-            DataTable unitpriceDT = unitpriceBLL.GetList(" StoreInOrderId = " + _id + "").Tables[0];
-            this.rptUnitPriceList.DataSource = unitpriceDT;
-            this.rptUnitPriceList.DataBind();
-
-            BLL.StoreInCost costBLL = new BLL.StoreInCost();
-            DataTable costDT = costBLL.GetList(" StoreInOrderId = " + _id + "").Tables[0];
+            BLL.StoreOutCost costBLL = new BLL.StoreOutCost();
+            DataTable costDT = costBLL.GetList(" StoreOutOrderId = " + _id + "").Tables[0];
             this.rptCostList.DataSource = costDT;
             this.rptCostList.DataBind();
 
-            BLL.StoreInGoods goodsBLL = new BLL.StoreInGoods();
-            DataTable goodsDT = goodsBLL.GetList(" and A.StoreInOrderId = " + _id + " ").Tables[0];
+            BLL.StoreOutGoods goodsBLL = new BLL.StoreOutGoods();
+            DataTable goodsDT = goodsBLL.GetList(" and A.StoreOutOrderId = " + _id + " ").Tables[0];
             this.rptGoodsList.DataSource = goodsDT;
             this.rptGoodsList.DataBind();
+        }
+
+        private string GetCustomerName(int customerId)
+        {
+            Model.Customer customer = new BLL.Customer().GetModel(customerId);
+            if (customer != null)
+	        {
+                return customer.Name;
+	        }
+
+            return "";
         }
 
         protected string GetStoreOptions(string storeId) 
@@ -128,49 +166,21 @@ namespace DTcms.Web.admin.business
         private bool DoAdd()
         {
             bool result = false;
-            Model.StoreInOrder model = new Model.StoreInOrder();
-            BLL.StoreInOrder bll = new BLL.StoreInOrder();
+            Model.StoreOutOrder model = new Model.StoreOutOrder();
+            BLL.StoreOutOrder bll = new BLL.StoreOutOrder();
 
-            model.CustomerId = int.Parse(ddlCustomer.SelectedValue);
-            model.BeginChargingTime = DateTime.Parse(txtBeginChargingTime.Text);
-            model.ChargingTime = new DateTime(model.BeginChargingTime.Year, model.BeginChargingTime.Month, model.BeginChargingTime.Day + 1);
-            model.AccountNumber = txtAccountNumber.Text;
-            model.InspectionNumber = txtInspectionNumber.Text;
-            model.ChargingCount = decimal.Parse(txtChargingCount.Text);
-            model.SuttleWeight = decimal.Parse(txtSuttleWeight.Text);
+            model.CustomerId = int.Parse(hidCustomerId.Value);
+            model.StoreInOrderId = int.Parse(ddlStoreInOrder.SelectedValue);
+            model.StoredOutTime = DateTime.Parse(txtStoredOutTime.Text);
+            model.Count = decimal.Parse(txtChargingCount.Text);
+            model.TotalMoney = decimal.Parse(txtTotalMoney.Text);
+            model.InvoiceMoney = decimal.Parse(txtInvoiceMoney.Text);
+            model.UnitPrice = decimal.Parse(hidUnitPrice.Value);
+            model.HasBeenInvoiced = false;
             model.Admin = txtAdmin.Text;
             model.Remark = txtRemark.Text;
             model.Status = 0;
             model.CreateTime = DateTime.Now;
-
-            #region 单价
-            string[] unitpriceBeginTime = Request.Form.GetValues("UnitpriceBeginTime");
-            string[] unitpriceEndTime = Request.Form.GetValues("UnitpriceEndTime");
-            string[] unitprice = Request.Form.GetValues("Unitprice");
-            string[] unitpriceRemark = Request.Form.GetValues("UnitpriceRemark");
-            if (unitpriceBeginTime != null && unitpriceEndTime != null && unitprice != null && unitpriceRemark != null
-                && unitpriceBeginTime.Length > 0 && unitpriceEndTime.Length > 0 && unitprice.Length > 0 && unitpriceRemark.Length > 0)
-            {
-                for (int i = 0; i < unitpriceBeginTime.Length; i++)
-                {
-                    if (string.IsNullOrWhiteSpace(unitpriceBeginTime[i]))
-                    {
-                        unitpriceBeginTime[i] = DTDateTime.MinDateTime.ToString();
-                    }
-                    if (string.IsNullOrWhiteSpace(unitpriceEndTime[i]))
-                    {
-                        unitpriceEndTime[i] = DTDateTime.MaxDateTime.ToString();
-                    }
-                    decimal price;
-                    DateTime begintime, endtime;
-                    if (DateTime.TryParse(unitpriceBeginTime[i], out begintime) && DateTime.TryParse(unitpriceEndTime[i], out endtime)
-                        && decimal.TryParse(unitprice[i], out price))
-                    {
-                        model.AddUnitPrice(new StoreInUnitPrice(begintime, endtime, price, unitpriceRemark[i]));
-                    }
-                }
-            }
-            #endregion
 
             #region 费用
             string[] costName = Request.Form.GetValues("CostName");
@@ -190,31 +200,31 @@ namespace DTcms.Web.admin.business
                         {
                             totalPrice *= -1;
                         }
-                        model.AddStoreInCost(new StoreInCost(costName[i], count, totalPrice, costCustomer[i], ""));
+                        model.AddStoreInCost(new StoreOutCost(costName[i], count, totalPrice, costCustomer[i], ""));
                     }
                 }
             }
             #endregion
 
-            #region 入库货物
-            string[] storeWaitingGoodsIds = Request.Form.GetValues("StoreWaitingGoodsId");
-            string[] customerIds = Request.Form.GetValues("CustomerId");
-            string[] goodsIds = Request.Form.GetValues("GoodsId");
-            string[] storeIds = Request.Form.GetValues("StoreId");
-            string[] storeInCounts = Request.Form.GetValues("Count");
-            string[] storeInGoodsRemark = Request.Form.GetValues("StoreInGoodsRemark");
-            if (storeWaitingGoodsIds != null && customerIds != null && storeIds != null && storeInCounts != null && storeInGoodsRemark != null
-                && storeWaitingGoodsIds.Length > 0 && customerIds.Length > 0 && storeIds.Length > 0 && storeInCounts.Length > 0 && storeInGoodsRemark.Length > 0)
+            #region 出库货物
+            string[] storeOutWaitingGoodsIds = Request.Form.GetValues("StoreOutWaitingGoodsId");
+            string[] storeInOrderIds = Request.Form.GetValues("StoreInOrderId");
+            string[] storeInGoodsIds = Request.Form.GetValues("StoreInGoodsId");
+            string[] storeOutCounts = Request.Form.GetValues("StoreOutCount");
+            string[] storeOutGoodsRemark = Request.Form.GetValues("StoreOutGoodsRemark");
+            if (storeOutWaitingGoodsIds != null && storeInOrderIds != null && storeOutCounts != null && storeOutGoodsRemark != null
+                && storeOutWaitingGoodsIds.Length > 0 && storeInOrderIds.Length > 0 && storeOutCounts.Length > 0 && storeOutGoodsRemark.Length > 0)
             {
-                for (int i = 0; i < storeWaitingGoodsIds.Length; i++)
+                for (int i = 0; i < storeOutWaitingGoodsIds.Length; i++)
                 {
-                    int storeWaitingGoodsId, customerId, storeId, goodsId;
-                    decimal storeInCount;
-                    if (int.TryParse(storeWaitingGoodsIds[i], out storeWaitingGoodsId) && int.TryParse(customerIds[i], out customerId)
-                        && int.TryParse(storeIds[i], out storeId) && decimal.TryParse(storeInCounts[i], out storeInCount) 
-                        && int.TryParse(goodsIds[i], out goodsId))
+                    int storeOutWaitingGoodsId, storeInOrderId, storeInGoodsId;
+                    decimal storeOutCount;
+                    if (int.TryParse(storeOutWaitingGoodsIds[i], out storeOutWaitingGoodsId)
+                        && int.TryParse(storeInOrderIds[i], out storeInOrderId)
+                        && int.TryParse(storeInGoodsIds[i], out storeInGoodsId)
+                        && decimal.TryParse(storeOutCounts[i], out storeOutCount))
                     {
-                        model.AddStoreInGoods(new StoreInGoods(storeId, storeWaitingGoodsId, customerId, goodsId, storeInCount, storeInGoodsRemark[i]));
+                        model.AddStoreOutGoods(new StoreOutGoods(storeInOrderId, storeInGoodsId, storeOutWaitingGoodsId, storeOutCount, storeOutGoodsRemark[i]));
                     }
                 }
             }
@@ -222,7 +232,7 @@ namespace DTcms.Web.admin.business
 
             if (bll.Add(model))
             {
-                AddAdminLog(DTEnums.ActionEnum.Add.ToString(), "添加入库单:" + model.AccountNumber); //记录日志
+                AddAdminLog(DTEnums.ActionEnum.Add.ToString(), "添加出库单:" + model.Id); //记录日志
                 result = true;
             }
             return result;
@@ -233,50 +243,19 @@ namespace DTcms.Web.admin.business
         private bool DoEdit(int _id)
         {
             bool result = false;
-            BLL.StoreInOrder bll = new BLL.StoreInOrder();
-            Model.StoreInOrder model = bll.GetModel(_id);
+            BLL.StoreOutOrder bll = new BLL.StoreOutOrder();
+            Model.StoreOutOrder model = bll.GetModel(_id);
 
-            model.CustomerId = int.Parse(ddlCustomer.SelectedValue);
-            model.BeginChargingTime = DateTime.Parse(txtBeginChargingTime.Text);
-            model.ChargingTime = new DateTime(model.BeginChargingTime.Year, model.BeginChargingTime.Month, model.BeginChargingTime.Day + 1);
-            model.AccountNumber = txtAccountNumber.Text;
-            model.InspectionNumber = txtInspectionNumber.Text;
-            model.ChargingCount = decimal.Parse(txtChargingCount.Text);
-            model.SuttleWeight = decimal.Parse(txtSuttleWeight.Text);
+            model.CustomerId = int.Parse(hidCustomerId.Value);
+            model.StoreInOrderId = int.Parse(ddlStoreInOrder.SelectedValue);
+            model.StoredOutTime = DateTime.Parse(txtStoredOutTime.Text);
+            model.Count = decimal.Parse(txtChargingCount.Text);
+            model.TotalMoney = decimal.Parse(txtTotalMoney.Text);
+            model.InvoiceMoney = decimal.Parse(txtInvoiceMoney.Text);
+            model.UnitPrice = decimal.Parse(hidUnitPrice.Value);
+            model.HasBeenInvoiced = false;
             model.Admin = txtAdmin.Text;
             model.Remark = txtRemark.Text;
-            model.Status = 0;
-            model.CreateTime = DateTime.Now;
-
-            #region 单价
-            string[] unitpriceBeginTime = Request.Form.GetValues("UnitpriceBeginTime");
-            string[] unitpriceEndTime = Request.Form.GetValues("UnitpriceEndTime");
-            string[] unitprice = Request.Form.GetValues("Unitprice");
-            string[] unitpriceRemark = Request.Form.GetValues("UnitpriceRemark");
-
-            if (unitpriceBeginTime != null && unitpriceEndTime != null && unitprice != null && unitpriceRemark != null
-                && unitpriceBeginTime.Length > 0 && unitpriceEndTime.Length > 0 && unitprice.Length > 0 && unitpriceRemark.Length > 0)
-            {
-                for (int i = 0; i < unitpriceBeginTime.Length; i++)
-                {
-                    decimal price;
-                    DateTime begintime, endtime;
-                    if (string.IsNullOrWhiteSpace(unitpriceBeginTime[i]))
-                    {
-                        unitpriceBeginTime[i] = DTDateTime.MinDateTime.ToString();
-                    }
-                    if (string.IsNullOrWhiteSpace(unitpriceEndTime[i]))
-                    {
-                        unitpriceEndTime[i] = DTDateTime.MaxDateTime.ToString();
-                    }
-                    if (DateTime.TryParse(unitpriceBeginTime[i], out begintime) && DateTime.TryParse(unitpriceEndTime[i], out endtime)
-                        && decimal.TryParse(unitprice[i], out price))
-                    {
-                        model.AddUnitPrice(new StoreInUnitPrice(begintime, endtime, price, unitpriceRemark[i]));
-                    }
-                }
-            }
-            #endregion
 
             #region 费用
             string[] costName = Request.Form.GetValues("CostName");
@@ -296,31 +275,31 @@ namespace DTcms.Web.admin.business
                         {
                             totalPrice *= -1;
                         }
-                        model.AddStoreInCost(new StoreInCost(costName[i], count, totalPrice, costCustomer[i], ""));
+                        model.AddStoreInCost(new StoreOutCost(costName[i], count, totalPrice, costCustomer[i], ""));
                     }
                 }
             }
             #endregion
 
-            #region 入库货物
-            string[] storeWaitingGoodsIds = Request.Form.GetValues("StoreWaitingGoodsId");
-            string[] customerIds = Request.Form.GetValues("CustomerId");
-            string[] goodsIds = Request.Form.GetValues("GoodsId");
-            string[] storeIds = Request.Form.GetValues("StoreId");
-            string[] storeInCounts = Request.Form.GetValues("Count");
-            string[] storeInGoodsRemark = Request.Form.GetValues("StoreInGoodsRemark");
-            if (storeWaitingGoodsIds != null && customerIds != null && storeIds != null && storeInCounts != null && storeInGoodsRemark != null
-                && storeWaitingGoodsIds.Length > 0 && customerIds.Length > 0 && storeIds.Length > 0 && storeInCounts.Length > 0 && storeInGoodsRemark.Length > 0)
+            #region 出库货物
+            string[] storeOutWaitingGoodsIds = Request.Form.GetValues("StoreOutWaitingGoodsId");
+            string[] storeInOrderIds = Request.Form.GetValues("StoreInOrderId");
+            string[] storeInGoodsIds = Request.Form.GetValues("StoreInGoodsId");
+            string[] storeOutCounts = Request.Form.GetValues("StoreOutCount");
+            string[] storeOutGoodsRemark = Request.Form.GetValues("StoreOutGoodsRemark");
+            if (storeOutWaitingGoodsIds != null && storeInOrderIds != null && storeOutCounts != null && storeOutGoodsRemark != null
+                && storeOutWaitingGoodsIds.Length > 0 && storeInOrderIds.Length > 0 && storeOutCounts.Length > 0 && storeOutGoodsRemark.Length > 0)
             {
-                for (int i = 0; i < storeWaitingGoodsIds.Length; i++)
+                for (int i = 0; i < storeOutWaitingGoodsIds.Length; i++)
                 {
-                    int storeWaitingGoodsId, customerId, storeId, goodsId;
-                    decimal storeInCount;
-                    if (int.TryParse(storeWaitingGoodsIds[i], out storeWaitingGoodsId) && int.TryParse(customerIds[i], out customerId)
-                        && int.TryParse(storeIds[i], out storeId) && decimal.TryParse(storeInCounts[i], out storeInCount)
-                        && int.TryParse(goodsIds[i], out goodsId))
+                    int storeOutWaitingGoodsId, storeInOrderId, storeInGoodsId;
+                    decimal storeOutCount;
+                    if (int.TryParse(storeOutWaitingGoodsIds[i], out storeOutWaitingGoodsId)
+                        && int.TryParse(storeInOrderIds[i], out storeInOrderId)
+                        && int.TryParse(storeInGoodsIds[i], out storeInGoodsId)
+                        && decimal.TryParse(storeOutCounts[i], out storeOutCount))
                     {
-                        model.AddStoreInGoods(new StoreInGoods(storeId, storeWaitingGoodsId, customerId, goodsId, storeInCount, storeInGoodsRemark[i]));
+                        model.AddStoreOutGoods(new StoreOutGoods(storeInOrderId, storeInGoodsId, storeOutWaitingGoodsId, storeOutCount, storeOutGoodsRemark[i]));
                     }
                 }
             }
@@ -328,7 +307,7 @@ namespace DTcms.Web.admin.business
 
             if (bll.Update(model))
             {
-                AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "修改入库单信息:" + model.AccountNumber); //记录日志
+                AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "修改出库单信息:" + model.Id); //记录日志
                 result = true;
             }
 
@@ -347,7 +326,7 @@ namespace DTcms.Web.admin.business
                     JscriptMsg("保存过程中发生错误！", "");
                     return;
                 }
-                JscriptMsg("修改入库单成功！", "store_out_order.aspx");
+                JscriptMsg("修改出库单成功！", "store_out_order.aspx");
             }
             else //添加
             {
@@ -357,7 +336,7 @@ namespace DTcms.Web.admin.business
                     JscriptMsg("保存过程中发生错误！", "");
                     return;
                 }
-                JscriptMsg("添加入库单成功！", "store_out_order.aspx");
+                JscriptMsg("添加出库单成功！", "store_out_order.aspx");
             }
         }
 

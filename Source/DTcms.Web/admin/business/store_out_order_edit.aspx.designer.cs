@@ -22,13 +22,49 @@ namespace DTcms.Web.admin.business {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// ddlCustomer 控件。
+        /// hidUnitPrice 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCustomer;
+        protected global::System.Web.UI.WebControls.HiddenField hidUnitPrice;
+        
+        /// <summary>
+        /// ddlStoreInOrder 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlStoreInOrder;
+        
+        /// <summary>
+        /// hidCustomerId 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hidCustomerId;
+        
+        /// <summary>
+        /// labCustomerName 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label labCustomerName;
+        
+        /// <summary>
+        /// labUnitPrice 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label labUnitPrice;
         
         /// <summary>
         /// txtChargingCount 控件。

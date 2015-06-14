@@ -23,10 +23,15 @@ namespace DTcms.BLL
             return dal.Exists(Id, CustomerId);
         }
 
+        public bool Exists(int Id)
+        {
+            return dal.Exists(Id);
+        }
+
         /// <summary>
         /// 增加一条数据
         /// </summary>
-        public int Add(DTcms.Model.StoreOutOrder model)
+        public bool Add(DTcms.Model.StoreOutOrder model)
         {
             return dal.Add(model);
 
@@ -134,7 +139,7 @@ namespace DTcms.BLL
                     }
                     if (dt.Rows[n]["StoreInUnitPriceStoreInOrderId"].ToString() != "")
                     {
-                        model.StoreInUnitPriceStoreInOrderId = int.Parse(dt.Rows[n]["StoreInUnitPriceStoreInOrderId"].ToString());
+                        model.StoreInOrderId = int.Parse(dt.Rows[n]["StoreInUnitPriceStoreInOrderId"].ToString());
                     }
                     if (dt.Rows[n]["CreateTime"].ToString() != "")
                     {

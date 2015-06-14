@@ -179,6 +179,15 @@ namespace DTcms.DAL
             return true;
         }
 
+        public int UpdateField(SqlConnection conn, SqlTransaction trans, int id, string strValue)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update StoreOutWaitingGoods set " + strValue);
+            strSql.Append(" where Id=" + id);
+
+            return DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString());
+        }
+
         /// <summary>
         /// 删除一条数据
         /// </summary>
