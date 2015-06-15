@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="store_out_order.aspx.cs" Inherits="DTcms.Web.admin.business.store_out_order" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="storeout_storage_order.aspx.cs" Inherits="DTcms.Web.admin.business.storeout_storage_order" %>
 
 <%@ Import Namespace="DTcms.Common" %>
 
@@ -78,10 +78,10 @@
                     <a class="menu-btn"></a>
                     <div class="l-list">
                         <ul class="icon-list">
-                            <li><a class="add" href="store_out_order_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>新增</span></a></li>
+                            <li><asp:LinkButton ID="btnOK" runat="server" CssClass="lock" OnClientClick="return ExePostBack('btnOK','确认信息无误后点击确定！');" onclick="btnOK_Click"><i></i><span>确认</span></asp:LinkButton></li>
                             <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
-                            <li>
-                                <asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete','只允许删除未出库货物，是否继续？');" OnClick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>
+                            <%--<li>
+                                <asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete','只允许删除未出库货物，是否继续？');" OnClick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>--%>
                         </ul>
                         <div class="menu-list">
                             <div class="rule-single-select">
@@ -121,7 +121,7 @@
                             <th align="left" width="8%">状态</th>
                             <th width="8%" >备注</th>
                             <th width="12%">明细</th>
-                            <th width="8%">操作</th>
+                            <%--<th width="8%">操作</th>--%>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
@@ -143,13 +143,13 @@
                             <a href="javascript:void(0);" onclick="showGoodsDialog(<%#Eval("Id") %>);">出库货物</a>&nbsp;|&nbsp;
                             <a href="javascript:void(0);" onclick="showCostDialog(<%#Eval("Id") %>);">费用项</a>
                         </td>
-                        <td align="center">
+                        <%--<td align="center">
                             <a href="store_out_order_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
-                        </td>
+                        </td>--%>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"11\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"10\">暂无记录</td></tr>" : ""%>
 </table>
                 </FooterTemplate>
             </asp:Repeater>

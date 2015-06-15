@@ -178,15 +178,14 @@ namespace DTcms.DAL
                         parameters[0].Value = model.Id;
                         parameters[1].Value = model.CustomerId;
                         parameters[2].Value = model.StoreInOrderId;
-                        parameters[3].Value = model.CreateTime;
-                        parameters[4].Value = model.Admin;
-                        parameters[5].Value = model.TotalMoney;
-                        parameters[6].Value = model.InvoiceMoney;
-                        parameters[7].Value = model.Status;
-                        parameters[8].Value = model.StoredOutTime;
-                        parameters[9].Value = model.Count;
-                        parameters[10].Value = model.UnitPrice;
-                        parameters[11].Value = model.Remark;
+                        parameters[3].Value = model.Admin;
+                        parameters[4].Value = model.TotalMoney;
+                        parameters[5].Value = model.InvoiceMoney;
+                        parameters[6].Value = model.Status;
+                        parameters[7].Value = model.StoredOutTime;
+                        parameters[8].Value = model.Count;
+                        parameters[9].Value = model.UnitPrice;
+                        parameters[10].Value = model.Remark;
 
                         DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
 
@@ -204,15 +203,16 @@ namespace DTcms.DAL
                         }
                         #endregion
 
-                        #region 入库货物====================
+                        #region 出库货物====================
                         StoreOutGoods storeOutGoodsDAL = new StoreOutGoods();
                         storeOutGoodsDAL.Delete(conn, trans, model.Id);
                         if (model.StoreOutGoods.Count > 0)
                         {
-                            foreach (Model.StoreOutGoods storeInGoods in model.StoreOutGoods)
+                            foreach (Model.StoreOutGoods storeOutGoods in model.StoreOutGoods)
                             {
-                                storeInGoods.StoreInOrderId = model.Id;
-                                storeOutGoodsDAL.Add(conn, trans, storeInGoods);
+                                
+                                storeOutGoods.StoreOutOrderId = model.Id;
+                                storeOutGoodsDAL.Add(conn, trans, storeOutGoods);
                             }
                         }
                         #endregion
@@ -229,6 +229,40 @@ namespace DTcms.DAL
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// 修改一列数据
+        /// </summary>
+        public int UpdateField(int id, string strValue)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update StoreOutOrder set " + strValue);
+            strSql.Append(" where Id=" + id);
+
+            return DbHelperSQL.ExecuteSql(strSql.ToString());
+        }
+
+        public int UpdateField(SqlConnection conn, SqlTransaction trans, int id, string strValue)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update StoreOutOrder set " + strValue);
+            strSql.Append(" where Id=" + id);
+
+            return DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString());
+        }
+
+        public int UpdateField(string strWhere, string strValue)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update StoreOutOrder set " + strValue);
+            if (!string.IsNullOrWhiteSpace(strWhere))
+            {
+                strSql.Append(" where " + strWhere);
+            }
+
+
+            return DbHelperSQL.ExecuteSql(strSql.ToString());
         }
 
 

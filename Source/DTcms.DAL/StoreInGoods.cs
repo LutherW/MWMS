@@ -33,7 +33,27 @@ namespace DTcms.DAL
             return DbHelperSQL.Exists(strSql.ToString(), parameters);
         }
 
+        public bool MyExists(int StoreInOrderId, int GoodsId, int StoreId, int CustomerId)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select count(1) from StoreInGoods");
+            strSql.Append(" where ");
+            strSql.Append(" StoreInOrderId = @StoreInOrderId and  ");
+            strSql.Append(" GoodsId = @GoodsId and  ");
+            strSql.Append(" StoreId = @StoreId and  ");
+            strSql.Append(" CustomerId = @CustomerId  ");
+            SqlParameter[] parameters = {
+					new SqlParameter("@StoreInOrderId", SqlDbType.Int,4),
+					new SqlParameter("@GoodsId", SqlDbType.Int,4),
+					new SqlParameter("@StoreId", SqlDbType.Int,4),
+					new SqlParameter("@CustomerId", SqlDbType.Int,4)			};
+            parameters[0].Value = StoreInOrderId;
+            parameters[1].Value = GoodsId;
+            parameters[2].Value = StoreId;
+            parameters[3].Value = CustomerId;
 
+            return DbHelperSQL.Exists(strSql.ToString(), parameters);
+        }
 
         /// <summary>
         /// 增加一条数据
@@ -219,6 +239,27 @@ namespace DTcms.DAL
 
 
             int rows = DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+            if (rows > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool Delete(SqlConnection conn, SqlTransaction trans, string strWhere)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from StoreInGoods ");
+            if (!string.IsNullOrWhiteSpace(strWhere))
+            {
+                strSql.Append(" where " + strWhere);
+            }
+
+            int rows = DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString());
             if (rows > 0)
             {
                 return true;

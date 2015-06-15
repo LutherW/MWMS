@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="dialog_storein_cost_list.aspx.cs" Inherits="DTcms.Web.admin.dialog.dialog_storein_cost_list" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="dialog_storeout_cost_list.aspx.cs" Inherits="DTcms.Web.admin.dialog.dialog_storeout_cost_list" %>
 
 <%@ Import Namespace="DTcms.Common" %>
 
@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>入库费用列表</title>
+    <title>出库费用列表</title>
     <link href="../skin/default/style.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" charset="utf-8" src="../../scripts/jquery/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../scripts/webuploader/webuploader.min.js"></script>
