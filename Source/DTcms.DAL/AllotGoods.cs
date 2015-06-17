@@ -371,7 +371,7 @@ namespace DTcms.DAL
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select A.Id as Id, A.Count as Count, A.Remark as Remark, B.AccountNumber,D.Name as GoodsName, E.Name as SourceStoreName , F.Name as PurposeStoreName");
+            strSql.Append("select A.Id as Id, A.Count as Count, A.Remark as Remark, B.AccountNumber,D.Name as GoodsName, E.Name as SourceStoreName, F.Name as PurposeStoreName ");
             strSql.Append("from AllotGoods A, StoreInOrder B, StoreInGoods C, Goods D, Store E, Store F  ");
             strSql.Append("where A.StoreInOrderId = B.Id and A.StoreInGoodsId = C.Id and C.GoodsId = D.Id and A.SourceStoreId = E.Id and A.PurposeStoreId = F.Id ");
             if (strWhere.Trim() != "")

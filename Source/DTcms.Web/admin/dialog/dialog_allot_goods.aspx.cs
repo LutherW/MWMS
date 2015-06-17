@@ -30,7 +30,7 @@ namespace DTcms.Web.admin.dialog
             this.storein_goods_id = DTRequest.GetQueryInt("storein_goods_id");
             this.beginTime = DTRequest.GetQueryString("beginTime");
             this.endTime = DTRequest.GetQueryString("endTime");
-            allotOrderId = DTRequest.GetQueryInt("order_id");
+            allotOrderId = DTRequest.GetQueryInt("orderId");
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
             {

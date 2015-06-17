@@ -53,8 +53,8 @@ namespace DTcms.DAL
                 conn.Open();
                 using (SqlTransaction trans = conn.BeginTransaction())
                 {
-                    //try
-                    //{
+                    try
+                    {
                         StringBuilder strSql = new StringBuilder();
                         strSql.Append("insert into AllotOrder(");
                         strSql.Append("AllotTime,Status,Remark,CreateTime,Admin");
@@ -93,12 +93,12 @@ namespace DTcms.DAL
                         #endregion
 
                         trans.Commit();
-                    //}
-                    //catch
-                    //{
-                    //    trans.Rollback();
-                    //    return false;
-                    //}
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
                 }
             }
 
@@ -117,8 +117,8 @@ namespace DTcms.DAL
                 conn.Open();
                 using (SqlTransaction trans = conn.BeginTransaction())
                 {
-                    //try
-                    //{
+                    try
+                    {
                         StringBuilder strSql = new StringBuilder();
                         strSql.Append("update AllotOrder set ");
                         strSql.Append(" Remark = @Remark , ");
@@ -159,12 +159,12 @@ namespace DTcms.DAL
 
 
                         trans.Commit();
-                    //}
-                    //catch
-                    //{
-                    //    trans.Rollback();
-                    //    return false;
-                    //}
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
                 }
             }
 

@@ -60,7 +60,18 @@ namespace DTcms.Model{
         {
             get{ return _endchargingtime; }
             set{ _endchargingtime = value; }
-        }        
+        }
+
+        /// <summary>
+        /// ReceivedTime
+        /// </summary>		
+        private DateTime _receivedTime;
+        public DateTime ReceivedTime
+        {
+            get { return _receivedTime; }
+            set { _receivedTime = value; }
+        } 
+
 		/// <summary>
 		/// ChargingCount
         /// </summary>		
@@ -78,16 +89,17 @@ namespace DTcms.Model{
         {
             get{ return _totalprice; }
             set{ _totalprice = value; }
-        }        
-		/// <summary>
-		/// FactTotalPrice
+        }
+        /// <summary>
+        /// InvoicedPrice
         /// </summary>		
-		private decimal _facttotalprice;
-        public decimal FactTotalPrice
+        private decimal _invoicedPrice;
+        public decimal InvoicedPrice
         {
-            get{ return _facttotalprice; }
-            set{ _facttotalprice = value; }
-        }        
+            get { return _invoicedPrice; }
+            set { _invoicedPrice = value; }
+        } 
+
 		/// <summary>
 		/// CreateTime
         /// </summary>		
@@ -123,8 +135,45 @@ namespace DTcms.Model{
         {
             get{ return _status; }
             set{ _status = value; }
-        }        
-		   
+        }
+
+        /// <summary>
+        /// HasBeenInvoiced
+        /// </summary>		
+        private bool _hasBeenInvoiced;
+        public bool HasBeenInvoiced
+        {
+            get { return _hasBeenInvoiced; }
+            set { _hasBeenInvoiced = value; }
+        }
+        /// <summary>
+        /// InvoicedTime
+        /// </summary>		
+        private DateTime? _invoicedTime;
+        public DateTime? InvoicedTime
+        {
+            get { return _invoicedTime; }
+            set { _invoicedTime = value; }
+        }
+        /// <summary>
+        /// InvoicedOperator
+        /// </summary>		
+        private string _invoicedOperator;
+        public string InvoicedOperator
+        {
+            get { return _invoicedOperator; }
+            set { _invoicedOperator = value; }
+        }
+
+        /// <summary>
+        /// UnitPriceDetails
+        /// </summary>		
+        private string _unitPriceDetails;
+        public string UnitPriceDetails
+        {
+            get { return _unitPriceDetails; }
+            set { _unitPriceDetails = value; }
+        } 
 	}
 }
 

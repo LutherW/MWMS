@@ -121,7 +121,7 @@
                             <th align="left" width="8%">状态</th>
                             <th width="8%" >备注</th>
                             <th width="12%">明细</th>
-                            <%--<th width="8%">操作</th>--%>
+                            <th width="8%">操作</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
@@ -143,9 +143,9 @@
                             <a href="javascript:void(0);" onclick="showGoodsDialog(<%#Eval("Id") %>);">出库货物</a>&nbsp;|&nbsp;
                             <a href="javascript:void(0);" onclick="showCostDialog(<%#Eval("Id") %>);">费用项</a>
                         </td>
-                        <%--<td align="center">
+                        <td align="center">
                             <a href="store_out_order_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
-                        </td>--%>
+                        </td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>

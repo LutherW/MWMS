@@ -49,7 +49,7 @@
                 <HeaderTemplate>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="table_list">
                         <tr>
-                            <th width="8%"></th>
+                            <th width="4%"></th>
                             <th align="left" width="10%">入库单</th>
                             <th align="left" width="10%">入库货物</th>
                             <th align="left" width="15%">原仓库</th>

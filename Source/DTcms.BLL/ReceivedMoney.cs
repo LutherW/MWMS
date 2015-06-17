@@ -1,34 +1,32 @@
-﻿using System; 
+﻿using System;
 using System.Text;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using System.Data;
 using DTcms.Common;
 using DTcms.Model;
-namespace DTcms.BLL{
-	 	//ReceivedMoney
-		public partial class ReceivedMoney
-	{
-   		     
-		private readonly DTcms.DAL.ReceivedMoney dal=new DTcms.DAL.ReceivedMoney();
-		public ReceivedMoney()
-		{}
-		
-		#region  Method
-		/// <summary>
+namespace DTcms.BLL
+{
+    //ReceivedMoney
+    public partial class ReceivedMoney
+    {
+        private readonly DTcms.DAL.ReceivedMoney dal = new DTcms.DAL.ReceivedMoney();
+        public ReceivedMoney()
+        { }
+        #region  BasicMethod
+        /// <summary>
 		/// 是否存在该记录
 		/// </summary>
-		public bool Exists(int Id,int StoreInOrderId,int CustomerId)
+		public bool Exists(int Id)
 		{
-			return dal.Exists(Id,StoreInOrderId,CustomerId);
+			return dal.Exists(Id);
 		}
 
 		/// <summary>
 		/// 增加一条数据
 		/// </summary>
-		public int  Add(DTcms.Model.ReceivedMoney model)
+		public bool Add(DTcms.Model.ReceivedMoney model)
 		{
-						return dal.Add(model);
-						
+			return dal.Add(model);
 		}
 
 		/// <summary>
@@ -47,14 +45,14 @@ namespace DTcms.BLL{
 			
 			return dal.Delete(Id);
 		}
-				/// <summary>
-		/// 批量删除一批数据
+		/// <summary>
+		/// 删除一条数据
 		/// </summary>
 		public bool DeleteList(string Idlist )
 		{
 			return dal.DeleteList(Idlist );
 		}
-		
+
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
@@ -122,53 +120,11 @@ namespace DTcms.BLL{
 				DTcms.Model.ReceivedMoney model;
 				for (int n = 0; n < rowsCount; n++)
 				{
-					model = new DTcms.Model.ReceivedMoney();					
-													if(dt.Rows[n]["Id"].ToString()!="")
-				{
-					model.Id=int.Parse(dt.Rows[n]["Id"].ToString());
-				}
-																																if(dt.Rows[n]["StoreInOrderId"].ToString()!="")
-				{
-					model.StoreInOrderId=int.Parse(dt.Rows[n]["StoreInOrderId"].ToString());
-				}
-																																if(dt.Rows[n]["CustomerId"].ToString()!="")
-				{
-					model.CustomerId=int.Parse(dt.Rows[n]["CustomerId"].ToString());
-				}
-																																				model.Name= dt.Rows[n]["Name"].ToString();
-																												if(dt.Rows[n]["BeginChargingTime"].ToString()!="")
-				{
-					model.BeginChargingTime=DateTime.Parse(dt.Rows[n]["BeginChargingTime"].ToString());
-				}
-																																if(dt.Rows[n]["EndChargingTime"].ToString()!="")
-				{
-					model.EndChargingTime=DateTime.Parse(dt.Rows[n]["EndChargingTime"].ToString());
-				}
-																																if(dt.Rows[n]["ChargingCount"].ToString()!="")
-				{
-					model.ChargingCount=decimal.Parse(dt.Rows[n]["ChargingCount"].ToString());
-				}
-																																if(dt.Rows[n]["TotalPrice"].ToString()!="")
-				{
-					model.TotalPrice=decimal.Parse(dt.Rows[n]["TotalPrice"].ToString());
-				}
-																																if(dt.Rows[n]["FactTotalPrice"].ToString()!="")
-				{
-					model.FactTotalPrice=decimal.Parse(dt.Rows[n]["FactTotalPrice"].ToString());
-				}
-																																if(dt.Rows[n]["CreateTime"].ToString()!="")
-				{
-					model.CreateTime=DateTime.Parse(dt.Rows[n]["CreateTime"].ToString());
-				}
-																																				model.Admin= dt.Rows[n]["Admin"].ToString();
-																																model.Remark= dt.Rows[n]["Remark"].ToString();
-																												if(dt.Rows[n]["Status"].ToString()!="")
-				{
-					model.Status=int.Parse(dt.Rows[n]["Status"].ToString());
-				}
-																										
-				
-					modelList.Add(model);
+					model = dal.DataRowToModel(dt.Rows[n]);
+					if (model != null)
+					{
+						modelList.Add(model);
+					}
 				}
 			}
 			return modelList;
@@ -181,7 +137,30 @@ namespace DTcms.BLL{
 		{
 			return GetList("");
 		}
-#endregion
-   
-	}
+
+		/// <summary>
+		/// 分页获取数据列表
+		/// </summary>
+		public int GetRecordCount(string strWhere)
+		{
+			return dal.GetRecordCount(strWhere);
+		}
+		/// <summary>
+		/// 分页获取数据列表
+		/// </summary>
+		public DataSet GetListByPage(string strWhere, string orderby, int startIndex, int endIndex)
+		{
+			return dal.GetListByPage( strWhere,  orderby,  startIndex,  endIndex);
+		}
+
+        /// <summary>
+        /// 获得查询分页数据
+        /// </summary>
+        public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            return dal.GetList(pageSize, pageIndex, strWhere, filedOrder, out recordCount);
+        }
+        #endregion
+
+    }
 }

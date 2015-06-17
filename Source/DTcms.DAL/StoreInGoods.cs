@@ -423,6 +423,20 @@ namespace DTcms.DAL
             recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
             return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
         }
+
+        public DataSet GetAllotStoreInGoodsList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select A.StoreInOrderId, B.AccountNumber, A.Id as Id, A.Count as StoredInCount, A.StoredInTime as StoredInTime, A.StoreId as SourceStoreId, C.Name as CustomerName, D.Name as SourceStoreName, E.Name as GoodsName ");
+            strSql.Append("from StoreInGoods A, StoreInOrder B, Customer C, Store D, Goods E ");
+            strSql.Append("where A.StoreInOrderId = B.Id and b.CustomerId = c.Id and A.StoreId = D.Id and A.GoodsId = E.Id ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(strWhere);
+            }
+            recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
+            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
+        }
     }
 }
 

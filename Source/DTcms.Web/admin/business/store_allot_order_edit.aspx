@@ -28,7 +28,7 @@
                     id: 'allotGoodsDialogId',
                     title: "选择调拨货物",
                     url: '/admin/dialog/dialog_allot_storein_goods.aspx',
-                    width: 700,
+                    width: 800,
                     onclose: function () {
 
                     }
@@ -101,7 +101,7 @@
                                         <a href="javascript:;" onclick="delNode(this);" class="del" title="删除"></a>
                                         <div class="btns">
                                             <input type="hidden" name="StoreInOrderId" value="<%#Eval("StoreInOrderId") %>" style="width: 70%;" />
-                                            入库单：<%#Eval("AccountName") %>
+                                            入库单号：<%#Eval("AccountName") %>
                                         </div>
                                         <div class="btns">
                                             <input type="hidden" name="StoreInGoodsId" value="<%#Eval("StoreInGoodsId") %>" style="width: 70%;" />
@@ -109,7 +109,7 @@
                                         </div>
                                         <div class="btns">
                                             <input type="hidden" name="SourceStoreId" value="<%#Eval("SourceStoreId") %>" style="width: 70%;" />
-                                            原仓库：<%#Eval("SourceStoreName") %>
+                                            存储仓库：<%#Eval("SourceStoreName") %>
                                         </div>
                                         <div class="btns">
                                             目的仓库：<select name="PurposeStoreId"><%#GetStoreOptions(Eval("PurposeStoreId").ToString()) %></select>

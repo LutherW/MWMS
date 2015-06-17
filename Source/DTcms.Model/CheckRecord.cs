@@ -69,7 +69,16 @@ namespace DTcms.Model{
         {
             get{ return _createtime; }
             set{ _createtime = value; }
-        }        
+        }
+        /// <summary>
+        /// CreateTime
+        /// </summary>		
+        private DateTime _checktime;
+        public DateTime CheckTime
+        {
+            get { return _checktime; }
+            set { _checktime = value; }
+        } 
 		/// <summary>
 		/// Admin
         /// </summary>		
@@ -118,11 +127,11 @@ namespace DTcms.Model{
 		/// <summary>
 		/// LinkMan
         /// </summary>		
-		private string _linkman;
-        public string LinkMan
+		private string _linktel;
+        public string LinkTel
         {
-            get{ return _linkman; }
-            set{ _linkman = value; }
+            get{ return _linktel; }
+            set{ _linktel = value; }
         }        
 		/// <summary>
 		/// Remark
@@ -132,8 +141,21 @@ namespace DTcms.Model{
         {
             get{ return _remark; }
             set{ _remark = value; }
-        }        
-		   
+        }
+        /// <summary>
+        /// 费用
+        /// </summary>
+        private IList<CheckCost> _checkCosts = new List<CheckCost>();
+        public IList<CheckCost> CheckCosts
+        {
+            private set { _checkCosts = value; }
+            get { return _checkCosts; }
+        }
+
+        public void AddCheckCost(CheckCost checkCost)
+        {
+            _checkCosts.Add(checkCost);
+        }
 	}
 }
 
