@@ -12,6 +12,7 @@
 <script type="text/javascript" charset="utf-8" src="../scripts/jquery/jquery-1.11.2.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="../scripts/jquery/jquery.nicescroll.js"></script>
 <script type="text/javascript" charset="utf-8" src="../scripts/artdialog/dialog-plus-min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../scripts/datepicker/WdatePicker.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/layindex.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/common.js"></script>
 <script type="text/javascript">

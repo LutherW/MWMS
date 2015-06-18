@@ -37,6 +37,11 @@ namespace DTcms.BLL
 			return dal.Update(model);
 		}
 
+        public int UpdateField(int id, string strValue) 
+        {
+            return dal.UpdateField(id, strValue);
+        }
+
 		/// <summary>
 		/// 删除一条数据
 		/// </summary>

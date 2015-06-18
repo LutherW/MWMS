@@ -54,9 +54,9 @@ namespace DTcms.DAL
                     {
                         StringBuilder strSql = new StringBuilder();
                         strSql.Append("insert into StoreOutOrder(");
-                        strSql.Append("CustomerId,StoreInOrderId,CreateTime,Admin,TotalMoney,InvoiceMoney,HasBeenInvoiced,Status,Remark,StoredOutTime,Count,UnitPrice");
+                        strSql.Append("CustomerId,StoreInOrderId,CreateTime,Admin,TotalMoney,InvoiceMoney,HasBeenInvoiced,Status,Remark,StoredOutTime,Count,UnitPrice,BeginChargingTime,EndChargingTime,UnitPriceDetails");
                         strSql.Append(") values (");
-                        strSql.Append("@CustomerId,@StoreInUnitPriceStoreInOrderId,@CreateTime,@Admin,@TotalMoney,@InvoiceMoney,@HasBeenInvoiced,@Status,@Remark,@StoredOutTime,@Count,@UnitPrice");
+                        strSql.Append("@CustomerId,@StoreInUnitPriceStoreInOrderId,@CreateTime,@Admin,@TotalMoney,@InvoiceMoney,@HasBeenInvoiced,@Status,@Remark,@StoredOutTime,@Count,@UnitPrice,@BeginChargingTime,@EndChargingTime,@UnitPriceDetails");
                         strSql.Append(") ");
                         strSql.Append(";select @@IDENTITY");
                         SqlParameter[] parameters = {
@@ -71,7 +71,10 @@ namespace DTcms.DAL
                                     new SqlParameter("@Remark", SqlDbType.VarChar,254) ,
                                     new SqlParameter("@StoredOutTime", SqlDbType.DateTime) ,            
                                     new SqlParameter("@Count", SqlDbType.Decimal) ,            
-                                    new SqlParameter("@UnitPrice", SqlDbType.Decimal)  
+                                    new SqlParameter("@UnitPrice", SqlDbType.Decimal) ,
+                                    new SqlParameter("@BeginChargingTime", SqlDbType.DateTime) ,            
+                                    new SqlParameter("@EndChargingTime", SqlDbType.Decimal) ,            
+                                    new SqlParameter("@UnitPriceDetails", SqlDbType.Decimal) 
               
                         };
 
@@ -87,6 +90,9 @@ namespace DTcms.DAL
                         parameters[9].Value = model.StoredOutTime;
                         parameters[10].Value = model.Count;
                         parameters[11].Value = model.UnitPrice;
+                        parameters[12].Value = model.BeginChargingTime;
+                        parameters[13].Value = model.EndChargingTime;
+                        parameters[14].Value = model.UnitPriceDetails;
 
                         object obj = DbHelperSQL.GetSingle(conn, trans, strSql.ToString(), parameters); //带事务
                         model.Id = Convert.ToInt32(obj);
@@ -157,7 +163,10 @@ namespace DTcms.DAL
                         strSql.Append(" StoredOutTime = @StoredOutTime , ");
                         strSql.Append(" Count = @Count , ");
                         strSql.Append(" UnitPrice = @UnitPrice , ");
-                        strSql.Append(" Remark = @Remark  ");
+                        strSql.Append(" Remark = @Remark,  ");
+                        strSql.Append(" BeginChargingTime = @BeginChargingTime , ");
+                        strSql.Append(" EndChargingTime = @EndChargingTime , ");
+                        strSql.Append(" UnitPriceDetails = @UnitPriceDetails  ");
                         strSql.Append(" where Id=@Id ");
 
                         SqlParameter[] parameters = {
@@ -171,7 +180,10 @@ namespace DTcms.DAL
                                     new SqlParameter("@StoredOutTime", SqlDbType.DateTime) ,   
                                     new SqlParameter("@Count", SqlDbType.Decimal) ,   
                                     new SqlParameter("@UnitPrice", SqlDbType.Decimal) ,   
-                                    new SqlParameter("@Remark", SqlDbType.VarChar,254)             
+                                    new SqlParameter("@Remark", SqlDbType.VarChar,254),
+                                    new SqlParameter("@BeginChargingTime", SqlDbType.DateTime) ,            
+                                    new SqlParameter("@EndChargingTime", SqlDbType.Decimal) ,            
+                                    new SqlParameter("@UnitPriceDetails", SqlDbType.Decimal) 
               
                         };
 
@@ -186,6 +198,9 @@ namespace DTcms.DAL
                         parameters[8].Value = model.Count;
                         parameters[9].Value = model.UnitPrice;
                         parameters[10].Value = model.Remark;
+                        parameters[11].Value = model.BeginChargingTime;
+                        parameters[12].Value = model.EndChargingTime;
+                        parameters[13].Value = model.UnitPriceDetails;
 
                         DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
 
@@ -402,6 +417,18 @@ namespace DTcms.DAL
                 if (ds.Tables[0].Rows[0]["UnitPrice"].ToString() != "")
                 {
                     model.UnitPrice = decimal.Parse(ds.Tables[0].Rows[0]["UnitPrice"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["EndChargingTime"] != null && ds.Tables[0].Rows[0]["EndChargingTime"].ToString() != "")
+                {
+                    model.EndChargingTime = DateTime.Parse(ds.Tables[0].Rows[0]["EndChargingTime"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["BeginChargingTime"] != null && ds.Tables[0].Rows[0]["BeginChargingTime"].ToString() != "")
+                {
+                    model.BeginChargingTime = DateTime.Parse(ds.Tables[0].Rows[0]["BeginChargingTime"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["UnitPriceDetails"] != null)
+                {
+                    model.UnitPriceDetails = ds.Tables[0].Rows[0]["UnitPriceDetails"].ToString();
                 }
 
                 return model;

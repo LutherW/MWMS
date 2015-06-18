@@ -96,10 +96,22 @@
 
         <div class="tab-content" style="min-height: 800px;">
             <dl>
+                <dt>出库时间</dt>
+                <dd>
+                    <asp:TextBox ID="txtStoredOutTime" runat="server" CssClass="input rule-date-input" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+            <dl>
+                <dt>出库数量</dt>
+                <dd>
+                    <asp:TextBox ID="txtChargingCount" runat="server" CssClass="input txt" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>
+                    <span class="Validform_checktip">*</span>
+                </dd>
+            </dl>
+            <dl>
                 <dt>入库单</dt>
                 <dd>
                     <div class="rule-single-select">
-                        <asp:HiddenField ID="hidUnitPrice" runat="server" Value="0.00" />
                         <asp:DropDownList ID="ddlStoreInOrder" runat="server" datatype="*" errormsg="请选择入库单" sucmsg=" " AutoPostBack="True" OnSelectedIndexChanged="ddlStoreInOrder_SelectedIndexChanged"></asp:DropDownList>
                     </div>
                 </dd>
@@ -112,16 +124,11 @@
                 </dd>
             </dl>
             <dl>
-                <dt>单价</dt>
+                <dt>单价明细</dt>
                 <dd>
-                    <asp:Label ID="labUnitPrice" runat="server" Text=""></asp:Label>
-                </dd>
-            </dl>
-            <dl>
-                <dt>计费数量</dt>
-                <dd>
-                    <asp:TextBox ID="txtChargingCount" runat="server" CssClass="input txt" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>
-                    <span class="Validform_checktip">*</span>
+                    <asp:HiddenField ID="hidReceivedEndTime" runat="server" Value="" />
+                    <asp:HiddenField ID="hidReceivedBeginTime" runat="server" Value="" />
+                    <asp:TextBox ID="txtUnitPriceDetails" runat="server" CssClass="input" TextMode="MultiLine"  ReadOnly="true" style="width:600px;" />
                 </dd>
             </dl>
             <dl>
@@ -138,12 +145,7 @@
                     <span class="Validform_checktip">*</span>
                 </dd>
             </dl>
-            <dl>
-                <dt>实际出库时间</dt>
-                <dd>
-                    <asp:TextBox ID="txtStoredOutTime" runat="server" CssClass="input rule-date-input" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox>
-                    <span class="Validform_checktip">*</span></dd>
-            </dl>
+            
             <dl>
                 <dt>操作员</dt>
                 <dd>

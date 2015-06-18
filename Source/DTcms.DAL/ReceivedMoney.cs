@@ -40,8 +40,8 @@ namespace DTcms.DAL
                 conn.Open();
                 using (SqlTransaction trans = conn.BeginTransaction())
                 {
-                    try
-                    {
+                    //try
+                    //{
                         StringBuilder strSql = new StringBuilder();
                         strSql.Append("insert into ReceivedMoney(");
                         strSql.Append("StoreInOrderId,CustomerId,Name,EndChargingTime,BeginChargingTime,ReceivedTime,ChargingCount,TotalPrice,InvoicedPrice,CreateTime,Admin,Remark,Status,HasBeenInvoiced,InvoicedTime,InvoicedOperator,UnitPriceDetails)");
@@ -91,12 +91,12 @@ namespace DTcms.DAL
    
 
                         trans.Commit();
-                    }
-                    catch
-                    {
-                        trans.Rollback();
-                        return false;
-                    }
+                    //}
+                    //catch
+                    //{
+                    //    trans.Rollback();
+                    //    return false;
+                    //}
                 }
             }
 
@@ -112,8 +112,8 @@ namespace DTcms.DAL
                 conn.Open();
                 using (SqlTransaction trans = conn.BeginTransaction())
                 {
-                    try
-                    {
+                    //try
+                    //{
                         StringBuilder strSql = new StringBuilder();
                         strSql.Append("update ReceivedMoney set ");
                         strSql.Append("StoreInOrderId=@StoreInOrderId,");
@@ -177,16 +177,25 @@ namespace DTcms.DAL
                         new StoreInOrder().UpdateField(conn, trans, model.StoreInOrderId, "ChargingTime = '" + model.ReceivedTime + "'");
 
                         trans.Commit();
-                    }
-                    catch
-                    {
-                        trans.Rollback();
-                        return false;
-                    }
+                    //}
+                    //catch
+                    //{
+                    //    trans.Rollback();
+                    //    return false;
+                    //}
                 }
             }
 
             return true;
+        }
+
+        public int UpdateField(int id, string strValue)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update ReceivedMoney set " + strValue);
+            strSql.Append(" where Id=" + id);
+
+            return DbHelperSQL.ExecuteSql(strSql.ToString());
         }
 
         /// <summary>
@@ -465,7 +474,7 @@ namespace DTcms.DAL
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select A.Id as Id, A.Remark as Remark, A.StoreInOrderId, A.CustomerId, A.Name as Name, A.ReceivedTime, A.ChargingCount, A.TotalPrice, A.InvoicedPrice, A.Admin, A.HasBeenInvoiced, B.AccountNumber, C.Name as CustomerName ");
+            strSql.Append("select A.Id as Id, A.Remark as Remark, A.StoreInOrderId, A.CustomerId, A.Name as Name, A.ReceivedTime, A.ChargingCount, A.TotalPrice, A.InvoicedPrice, A.Admin, A.HasBeenInvoiced, A.UnitPriceDetails, A.InvoicedTime, A.InvoicedOperator, B.AccountNumber, C.Name as CustomerName ");
             strSql.Append("from ReceivedMoney A, StoreInOrder B, Customer C ");
             strSql.Append("where A.StoreInOrderId = B.Id and A.CustomerId = C.Id ");
             if (strWhere.Trim() != "")

@@ -71,6 +71,9 @@ namespace DTcms.Web.tools
                 case "get_builder_html": //生成静态页面
                     get_builder_html(context);
                     break;
+                case "doInvoiced": //生成静态页面
+                    doInvoiced(context);
+                    break;
             }
         }
 
@@ -1092,6 +1095,42 @@ namespace DTcms.Web.tools
                 return -3;
             else
                 return 1;
+        }
+        #endregion
+
+        #region 填写发票信息====================================
+        private void doInvoiced(HttpContext context)
+        {
+            int id = DTRequest.GetFormInt("id");
+            string invoicedTime = DTRequest.GetFormString("invoicedTime");
+            string invoicedOperator = DTRequest.GetFormString("invoicedOperator");
+            if (id < 1)
+            {
+                context.Response.Write("{\"status\": 0, \"msg\": \"ID不能为空！\"}");
+                return;
+            }
+            DateTime d;
+            if (!DateTime.TryParse(invoicedTime, out d))
+            {
+                context.Response.Write("{\"status\": 0, \"msg\": \"开票时间不是时间类型！\"}");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(invoicedOperator))
+            {
+                context.Response.Write("{\"status\": 0, \"msg\": \"开票人不能为空！\"}");
+                return;
+            }
+            //开始发送
+            bool result = new BLL.ReceivedMoney().UpdateField(id, "InvoicedTime = '" + d + "', InvoicedOperator = '" + invoicedOperator + "', HasBeenInvoiced = 1") > 0;
+            if (result)
+            {
+                context.Response.Write("{\"status\": 1, \"msg\": \"执行成功\"}");
+                return;
+            }
+            context.Response.Write("{\"status\": 0, \"msg\": \"执行失败\"}");
+            return;
+
+
         }
         #endregion
 

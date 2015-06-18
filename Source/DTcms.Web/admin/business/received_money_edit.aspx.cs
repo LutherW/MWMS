@@ -129,7 +129,11 @@ namespace DTcms.Web.admin.business
                     }
                     if (i == rowsCount - 1)
                     {
-                        DateTime et = DateTime.Now.AddDays(1);
+                        DateTime et;
+                        if (!DateTime.TryParse(txtReceivedTime.Text, out et))
+                        {
+                            et = DateTime.Now;
+                        }
                         endTime = new DateTime(et.Year, et.Month, et.Day);
                         _receivedEndTime = endTime;
                     }
@@ -145,8 +149,9 @@ namespace DTcms.Web.admin.business
 
                     totalPrice += totalUnitPrice;
                 }
-                txtChargingCount.Text = string.Format("{0:N2}", _chargingCount);
-                txtTotalMoney.Text = string.Format("{0:N2}", totalPrice);
+                txtChargingCount.Text = _chargingCount.ToString("f2");
+                txtTotalMoney.Text = totalPrice.ToString("f2");
+                txtInvoiceMoney.Text = totalPrice.ToString("f2");
                 hidReceivedBeginTime.Value = _receivedBeginTime.ToString();
                 hidReceivedEndTime.Value = _receivedEndTime.ToString();
                 txtUnitPriceDetails.Text = unitPriceText.ToString();
@@ -165,8 +170,10 @@ namespace DTcms.Web.admin.business
             BLL.ReceivedMoney bll = new BLL.ReceivedMoney();
             Model.ReceivedMoney model = bll.GetModel(_id);
 
+            txtName.Text = model.Name;
             ddlCustomer.SelectedValue = model.CustomerId.ToString();
-            ddlSotreInOrder.SelectedValue = model.StoreInOrderId.ToString();
+            StoreInOrderBind(model.CustomerId.ToString());
+            ddlSotreInOrder.SelectedValue = model.StoreInOrderId.ToString() + "|" + model.ReceivedTime.ToString() + "|" + model.ChargingCount.ToString();
             hidReceivedBeginTime.Value = model.BeginChargingTime.ToString();
             hidReceivedEndTime.Value = model.EndChargingTime.ToString();
             txtReceivedTime.Text = model.ReceivedTime.ToString("yyyy-MM-dd");
@@ -188,11 +195,13 @@ namespace DTcms.Web.admin.business
         private bool DoAdd()
         {
             bool result = false;
+            string[] storeInOrderValues = ddlSotreInOrder.SelectedValue.Split('|');
             Model.ReceivedMoney model = new Model.ReceivedMoney();
             BLL.ReceivedMoney bll = new BLL.ReceivedMoney();
 
+            model.Name = txtName.Text;
             model.CustomerId = int.Parse(ddlCustomer.SelectedValue);
-            model.StoreInOrderId = int.Parse(ddlSotreInOrder.SelectedValue);
+            model.StoreInOrderId = int.Parse(storeInOrderValues[0]);
             model.BeginChargingTime = DateTime.Parse(hidReceivedBeginTime.Value);
             model.EndChargingTime = DateTime.Parse(hidReceivedEndTime.Value);
             model.ReceivedTime = DateTime.Parse(txtReceivedTime.Text);
@@ -224,23 +233,28 @@ namespace DTcms.Web.admin.business
         private bool DoEdit(int _id)
         {
             bool result = false;
+            string[] storeInOrderValues = ddlSotreInOrder.SelectedValue.Split('|');
             BLL.ReceivedMoney bll = new BLL.ReceivedMoney();
             Model.ReceivedMoney model = bll.GetModel(_id);
 
+            model.Name = txtName.Text;
             model.CustomerId = int.Parse(ddlCustomer.SelectedValue);
-            //model.GoodsId = int.Parse(ddlGoods.SelectedValue);
-            //model.VehicleId = int.Parse(ddlVehicle.SelectedValue);
-            //model.HandlingModeId = int.Parse(ddlHandlingMode.SelectedValue);
-            //model.InspectionNumber = txtInspectionNumber.Text;
-            //model.CaseNumber = txtCaseNumber.Text;
-            //model.CheckResult = txtCheckResult.Text;
-            //model.RealName = txtRealName.Text;
-            //model.LinkTel = txtLinkTel.Text;
-            //model.CheckTime = DateTime.Parse(txtCheckTime.Text);
+            model.StoreInOrderId = int.Parse(storeInOrderValues[0]);
+            model.BeginChargingTime = DateTime.Parse(hidReceivedBeginTime.Value);
+            model.EndChargingTime = DateTime.Parse(hidReceivedEndTime.Value);
+            model.ReceivedTime = DateTime.Parse(txtReceivedTime.Text);
+            model.ChargingCount = decimal.Parse(txtChargingCount.Text);
+            model.TotalPrice = decimal.Parse(txtTotalMoney.Text);
+            model.InvoicedPrice = decimal.Parse(txtInvoiceMoney.Text);
+            model.HasBeenInvoiced = rblHasBeenInvoiced.Checked;
+            if (!string.IsNullOrWhiteSpace(txtReceivedTime.Text))
+            {
+                model.InvoicedTime = DateTime.Parse(txtReceivedTime.Text);
+            }
             model.Admin = txtAdmin.Text;
+            model.InvoicedOperator = txtInvoicedOperator.Text;
+            model.UnitPriceDetails = txtUnitPriceDetails.Text;
             model.Remark = txtRemark.Text;
-            model.Status = 0;
-            model.CreateTime = DateTime.Now;
 
             if (bll.Update(model))
             {

@@ -27,13 +27,92 @@
             }).showModal();
         }
 
-        function showRemarkDialog(remark) {
-            var objNum = arguments.length;
-            var attachDialog = top.dialog({
-                id: 'remarkDialogId',
-                title: "备注信息",
-                content: remark,
-                width: 500
+        function showContentDialog(title, content) {
+            var contentDialog = top.dialog({
+                "id": 'contentDialogId',
+                "title": title,
+                "content": content,
+                "width": 500
+            }).showModal();
+        }
+
+        function doInvoiced(id) {
+            if (!id || id < 1) {
+                top.dialog({
+                    title: '提示',
+                    content: '对不起，ID不能为空！',
+                    okValue: '确定',
+                    ok: function () { }
+                }).showModal();
+                return false;
+            }
+
+            var invoicedContent = "";
+            invoicedContent += "开票的时间：<input type='text' id='txtInvoicedTime' onfocus=\"WdatePicker({readonly:true,dateFmt:'yyyy-MM-dd'})\" value=''><br/><br/>";
+            invoicedContent += "开票人姓名：<input type='text' id='txtInvoicedOperator'  value=''>";
+
+            var smsdialog = parent.dialog({
+                title: '填写发票信息',
+                content: invoicedContent,
+                okValue: '确定',
+                ok: function () {
+                    var invoicedTime = $("#txtInvoicedTime", parent.document).val();
+                    var invoicedOperator = $("#txtInvoicedOperator", parent.document).val();
+                    if (invoicedTime == "") {
+                        top.dialog({
+                            title: '提示',
+                            content: '对不起，请填写开发票时间！',
+                            okValue: '确定',
+                            ok: function () { }
+                        }).showModal(smsdialog);
+                        return false;
+                    }
+                    if (invoicedOperator == "") {
+                        top.dialog({
+                            title: '提示',
+                            content: '对不起，请填写开发票人姓名！',
+                            okValue: '确定',
+                            ok: function () { }
+                        }).showModal(smsdialog);
+                        return false;
+                    }
+                    var postData = { "id": id, "invoicedTime": invoicedTime, "invoicedOperator": invoicedOperator };
+                    //发送AJAX请求
+                    $.ajax({
+                        type: "post",
+                        url: "../../tools/admin_ajax.ashx?action=doInvoiced",
+                        data: postData,
+                        dataType: "json",
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            top.dialog({
+                                title: '提示',
+                                content: '尝试发送失败，错误信息：' + errorThrown,
+                                okValue: '确定',
+                                ok: function () { }
+                            }).showModal(smsdialog);
+                        },
+                        success: function (data, textStatus) {
+                            if (data.status == 1) {
+                                smsdialog.close().remove();
+                                var d = top.dialog({ content: data.msg }).show();
+                                setTimeout(function () {
+                                    d.close().remove();
+                                    location.reload();
+                                }, 2000);
+                            } else {
+                                top.dialog({
+                                    title: '提示',
+                                    content: '错误提示：' + data.msg,
+                                    okValue: '确定',
+                                    ok: function () { }
+                                }).showModal(smsdialog);
+                            }
+                        }
+                    });
+                    return false;
+                },
+                cancelValue: '取消',
+                cancel: function () { }
             }).showModal();
         }
     </script>
@@ -119,16 +198,15 @@
                         <td><%#Eval("Name")%></td>
                         <td><%#Eval("ReceivedTime")%></td>
                         <td><%#Eval("ChargingCount")%></td>
-                        <td><%#Eval("UnitPriceDetails")%></td>
+                        <td><a href="javascript:void(0);" onclick="showContentDialog('单价明细','<%#Eval("UnitPriceDetails").ToString().Replace("\r\n", "")%>');">单价</a></td>
                         <td><%#Eval("TotalPrice")%></td>
                         <td><%#Eval("InvoicedPrice")%></td>
                         <td><%#Eval("Admin")%></td>
                         <td>
-                            <a href="javascript:void(0);" onclick="showRemarkDialog(<%#Eval("Remark")%>);">备注</a>
+                            <a href="javascript:void(0);" onclick="showContentDialog('备注信息','<%#Eval("Remark").ToString()%>');">备注</a>
                         </td>
-                        <td align="center">
-                            <%#Eval("HasBeenInvoiced").ToString() %>
-                            <a href="javascript:void(0);" onclick="showCostDialog(<%#Eval("Id") %>);">发票</a>
+                        <td>
+                            <%#Eval("HasBeenInvoiced").ToString().Equals("True")? "<a href=\"javascript:void(0);\" onclick=\"showContentDialog('发票信息', '开票时间："+Eval("InvoicedTime")+",开票人："+Eval("InvoicedOperator")+",价格："+Eval("InvoicedPrice")+"');\">发票</a>" : "<a href=\"javascript:void(0);\" onclick=\"doInvoiced("+Eval("Id")+");\">开发票</a>"%>
                         </td>
                         <td align="center">
                             <a href="received_money_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>

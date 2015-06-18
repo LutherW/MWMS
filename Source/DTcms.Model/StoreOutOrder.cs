@@ -126,6 +126,33 @@ namespace DTcms.Model
             get { return _remark; }
             set { _remark = value; }
         }
+        /// <summary>
+        /// BeginChargingTime
+        /// </summary>		
+        private DateTime _beginchargingtime;
+        public DateTime BeginChargingTime
+        {
+            get { return _beginchargingtime; }
+            set { _beginchargingtime = value; }
+        }
+        /// <summary>
+        /// EndChargingTime
+        /// </summary>		
+        private DateTime _endchargingtime;
+        public DateTime EndChargingTime
+        {
+            get { return _endchargingtime; }
+            set { _endchargingtime = value; }
+        }
+        /// <summary>
+        /// UnitPriceDetails
+        /// </summary>		
+        private string _unitPriceDetails;
+        public string UnitPriceDetails
+        {
+            get { return _unitPriceDetails; }
+            set { _unitPriceDetails = value; }
+        } 
 
 
         /// <summary>

@@ -22,13 +22,22 @@ namespace DTcms.Web.admin.business {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// hidUnitPrice 控件。
+        /// txtStoredOutTime 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hidUnitPrice;
+        protected global::System.Web.UI.WebControls.TextBox txtStoredOutTime;
+        
+        /// <summary>
+        /// txtChargingCount 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtChargingCount;
         
         /// <summary>
         /// ddlStoreInOrder 控件。
@@ -58,22 +67,31 @@ namespace DTcms.Web.admin.business {
         protected global::System.Web.UI.WebControls.Label labCustomerName;
         
         /// <summary>
-        /// labUnitPrice 控件。
+        /// hidReceivedEndTime 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labUnitPrice;
+        protected global::System.Web.UI.WebControls.HiddenField hidReceivedEndTime;
         
         /// <summary>
-        /// txtChargingCount 控件。
+        /// hidReceivedBeginTime 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtChargingCount;
+        protected global::System.Web.UI.WebControls.HiddenField hidReceivedBeginTime;
+        
+        /// <summary>
+        /// txtUnitPriceDetails 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtUnitPriceDetails;
         
         /// <summary>
         /// txtTotalMoney 控件。
@@ -92,15 +110,6 @@ namespace DTcms.Web.admin.business {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtInvoiceMoney;
-        
-        /// <summary>
-        /// txtStoredOutTime 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtStoredOutTime;
         
         /// <summary>
         /// txtAdmin 控件。
