@@ -188,6 +188,11 @@ namespace DTcms.BLL
             return dal.GetList(pageSize, pageIndex, strWhere, filedOrder, out recordCount);
         }
 
+        public DataSet GetSearchList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            return dal.GetSearchList(pageSize, pageIndex, strWhere, filedOrder, out recordCount);
+        }
+
         public DataSet GetAllotStoreInGoodsList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
         {
             return dal.GetAllotStoreInGoodsList(pageSize, pageIndex, strWhere, filedOrder, out recordCount);

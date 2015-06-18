@@ -153,6 +153,8 @@
     <Content Include="admin\order\order_list.aspx" />
     <Content Include="admin\order\payment_edit.aspx" />
     <Content Include="admin\order\payment_list.aspx" />
+    <Content Include="admin\search\storein_cost_list.aspx" />
+    <Content Include="admin\search\storein_goods_list.aspx" />
     <Content Include="admin\search\storein_order_list.aspx" />
     <Content Include="admin\settings\builder_html.aspx" />
     <Content Include="admin\settings\nav_edit.aspx" />
@@ -1256,6 +1258,20 @@
     </Compile>
     <Compile Include="admin\order\payment_list.aspx.designer.cs">
       <DependentUpon>payment_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\search\storein_cost_list.aspx.cs">
+      <DependentUpon>storein_cost_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\search\storein_cost_list.aspx.designer.cs">
+      <DependentUpon>storein_cost_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\search\storein_goods_list.aspx.cs">
+      <DependentUpon>storein_goods_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\search\storein_goods_list.aspx.designer.cs">
+      <DependentUpon>storein_goods_list.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\search\storein_order_list.aspx.cs">
       <DependentUpon>storein_order_list.aspx</DependentUpon>
