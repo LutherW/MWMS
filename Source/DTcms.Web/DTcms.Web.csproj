@@ -122,6 +122,7 @@
     <Content Include="admin\dialog\dialog_allot_goods.aspx" />
     <Content Include="admin\dialog\dialog_allot_storein_goods.aspx" />
     <Content Include="admin\dialog\dialog_check_cost_list.aspx" />
+    <Content Include="admin\dialog\dialog_storein_cost_invoiced.aspx" />
     <Content Include="admin\goods\goods_list.aspx" />
     <Content Include="admin\goods\goods_edit.aspx" />
     <Content Include="admin\goods\vehicle_list.aspx" />
@@ -156,6 +157,7 @@
     <Content Include="admin\search\storein_cost_list.aspx" />
     <Content Include="admin\search\storein_goods_list.aspx" />
     <Content Include="admin\search\storein_order_list.aspx" />
+    <Content Include="admin\search\storein_received_list.aspx" />
     <Content Include="admin\settings\builder_html.aspx" />
     <Content Include="admin\settings\nav_edit.aspx" />
     <Content Include="admin\settings\nav_list.aspx" />
@@ -1077,6 +1079,13 @@
     <Compile Include="admin\dialog\dialog_check_cost_list.aspx.designer.cs">
       <DependentUpon>dialog_check_cost_list.aspx</DependentUpon>
     </Compile>
+    <Compile Include="admin\dialog\dialog_storein_cost_invoiced.aspx.cs">
+      <DependentUpon>dialog_storein_cost_invoiced.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\dialog\dialog_storein_cost_invoiced.aspx.designer.cs">
+      <DependentUpon>dialog_storein_cost_invoiced.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\goods\goods_list.aspx.cs">
       <DependentUpon>goods_list.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1279,6 +1288,13 @@
     </Compile>
     <Compile Include="admin\search\storein_order_list.aspx.designer.cs">
       <DependentUpon>storein_order_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\search\storein_received_list.aspx.cs">
+      <DependentUpon>storein_received_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\search\storein_received_list.aspx.designer.cs">
+      <DependentUpon>storein_received_list.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\settings\builder_html.aspx.cs">
       <DependentUpon>builder_html.aspx</DependentUpon>

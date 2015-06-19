@@ -10,7 +10,7 @@
 namespace DTcms.Web.admin.search {
     
     
-    public partial class storein_cost_list {
+    public partial class storein_received_list {
         
         /// <summary>
         /// form1 控件。
@@ -22,6 +22,15 @@ namespace DTcms.Web.admin.search {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
+        /// ddlCustomer 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlCustomer;
+        
+        /// <summary>
         /// ddlStoreInOrder 控件。
         /// </summary>
         /// <remarks>
@@ -29,24 +38,6 @@ namespace DTcms.Web.admin.search {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlStoreInOrder;
-        
-        /// <summary>
-        /// ddlType 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlType;
-        
-        /// <summary>
-        /// ddlStatus 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlStatus;
         
         /// <summary>
         /// txtBeginTime 控件。
