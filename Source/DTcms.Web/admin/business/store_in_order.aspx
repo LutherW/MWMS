@@ -89,6 +89,14 @@
                                 <asp:DropDownList ID="ddlCustomer" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCustomer_SelectedIndexChanged">
                                 </asp:DropDownList>
                             </div>
+                            <div class="rule-single-select">
+                                <asp:DropDownList ID="ddlStatus" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlStatus_SelectedIndexChanged">
+                                    <asp:ListItem Text="状态" Value="-1"></asp:ListItem>
+                                    <asp:ListItem Text="等待确认" Value="0"></asp:ListItem>
+                                    <asp:ListItem Text="等待审核" Value="1"></asp:ListItem>
+                                    <asp:ListItem Text="已审核" Value="2"></asp:ListItem>
+                                </asp:DropDownList>
+                            </div>
                         </div>
                     </div>
                     <div class="r-list">

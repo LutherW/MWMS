@@ -73,8 +73,8 @@ namespace DTcms.DAL
                                     new SqlParameter("@Count", SqlDbType.Decimal) ,            
                                     new SqlParameter("@UnitPrice", SqlDbType.Decimal) ,
                                     new SqlParameter("@BeginChargingTime", SqlDbType.DateTime) ,            
-                                    new SqlParameter("@EndChargingTime", SqlDbType.Decimal) ,            
-                                    new SqlParameter("@UnitPriceDetails", SqlDbType.Decimal) 
+                                    new SqlParameter("@EndChargingTime", SqlDbType.DateTime) ,            
+                                    new SqlParameter("@UnitPriceDetails", SqlDbType.VarChar,1000) 
               
                         };
 
@@ -182,8 +182,8 @@ namespace DTcms.DAL
                                     new SqlParameter("@UnitPrice", SqlDbType.Decimal) ,   
                                     new SqlParameter("@Remark", SqlDbType.VarChar,254),
                                     new SqlParameter("@BeginChargingTime", SqlDbType.DateTime) ,            
-                                    new SqlParameter("@EndChargingTime", SqlDbType.Decimal) ,            
-                                    new SqlParameter("@UnitPriceDetails", SqlDbType.Decimal) 
+                                    new SqlParameter("@EndChargingTime", SqlDbType.DateTime) ,            
+                                    new SqlParameter("@UnitPriceDetails", SqlDbType.VarChar,1000) 
               
                         };
 
@@ -479,7 +479,7 @@ namespace DTcms.DAL
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select A.Id AS Id, A.Status, A.StoredOutTime, A.TotalMoney, A.UnitPrice, A.InvoiceMoney, A.Admin, A.Count, A.Remark AS Remark, C.Name AS CustomerName, B.AccountNumber FROM StoreOutOrder A, StoreInOrder B, Customer C ");
+            strSql.Append("select A.Id AS Id, A.Status, A.StoreInOrderId, A.StoredOutTime, A.TotalMoney, A.UnitPrice, A.InvoiceMoney, A.Admin, A.Count, A.BeginChargingTime, A.EndChargingTime, A.UnitPriceDetails, A.Remark AS Remark, C.Name AS CustomerName, B.AccountNumber FROM StoreOutOrder A, StoreInOrder B, Customer C ");
             strSql.Append("where A.StoreInOrderId = B.Id and A.CustomerId = C.Id ");
             if (strWhere.Trim() != "")
             {

@@ -32,9 +32,9 @@ namespace DTcms.Web.admin.search
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
             {
-                ChkAdminLevel("storein_goods", DTEnums.ActionEnum.View.ToString()); //检查权限
+                ChkAdminLevel("storein_received", DTEnums.ActionEnum.View.ToString()); //检查权限
                 TreeBind("");
-                RptBind(CombSqlTxt(this.customer_id, this.storein_order_id, this.keyword, this.beginTime, this.endTime), "A.StoredInTime DESC");
+                RptBind(CombSqlTxt(this.customer_id, this.storein_order_id, this.keyword, this.beginTime, this.endTime), "A.ReceivedTime DESC");
             }
         }
 
@@ -51,7 +51,7 @@ namespace DTcms.Web.admin.search
             }
 
             BLL.StoreInOrder storeInOrderBLL = new BLL.StoreInOrder();
-            DataTable storeInOrderDT = storeInOrderBLL.GetList(0, strWhere, "Id desc").Tables[0];
+            DataTable storeInOrderDT = storeInOrderBLL.GetList(0, "Status > 1", "Id desc").Tables[0];
 
             this.ddlStoreInOrder.Items.Clear();
             this.ddlStoreInOrder.Items.Add(new ListItem("选择入库单", ""));
@@ -76,13 +76,13 @@ namespace DTcms.Web.admin.search
             txtKeyWord.Text = this.keyword;
             txtBeginTime.Text = this.beginTime;
             txtEndTime.Text = this.endTime;
-            BLL.StoreInGoods bll = new BLL.StoreInGoods();
-            this.rptList.DataSource = bll.GetSearchList(this.pageSize, this.page, _strWhere, _goodsby, out this.totalCount);
+            BLL.ReceivedMoney bll = new BLL.ReceivedMoney();
+            this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _goodsby, out this.totalCount);
             this.rptList.DataBind();
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("storein_goods_list.aspx", "customer_id={0}&storein_order_id={1}&keyword={2}&beginTime={3}&endTime={4}&page={5}",
+            string pageUrl = Utils.CombUrlTxt("storein_received_list.aspx", "customer_id={0}&storein_order_id={1}&keyword={2}&beginTime={3}&endTime={4}&page={5}",
                 this.customer_id.ToString(), this.storein_order_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime, "__id__");
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
         }
@@ -102,15 +102,15 @@ namespace DTcms.Web.admin.search
             }
             if (!string.IsNullOrEmpty(_keyword))
             {
-                strTemp.Append(" and (GoodsName like '%" + _keyword + "%' or StoreName like '%" + _keyword + "%' or A.Admin = '" + _keyword + "')");
+                strTemp.Append(" and (Name like '%" + _keyword + "%' or A.Admin = '" + _keyword + "')");
             }
             if (!string.IsNullOrEmpty(beginTime))
             {
-                strTemp.Append(" and A.StoredInTime>='" + _beginTime + "'");
+                strTemp.Append(" and A.ReceivedTime>='" + _beginTime + "'");
             }
             if (!string.IsNullOrEmpty(endTime))
             {
-                strTemp.Append(" and A.StoredInTime <='" + _endTime + "'");
+                strTemp.Append(" and A.ReceivedTime <='" + _endTime + "'");
             }
 
             return strTemp.ToString();
@@ -121,7 +121,7 @@ namespace DTcms.Web.admin.search
         private int GetPageSize(int _default_size)
         {
             int _pagesize;
-            if (int.TryParse(Utils.GetCookie("storein_goods_page_size", "DTcmsPage"), out _pagesize))
+            if (int.TryParse(Utils.GetCookie("storein_received_page_size", "DTcmsPage"), out _pagesize))
             {
                 if (_pagesize > 0)
                 {
@@ -136,20 +136,20 @@ namespace DTcms.Web.admin.search
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("storein_goods_list.aspx", "customer_id={0}&storein_order_id={1}&keyword={2}&beginTime={3}&endTime={4}",
+            Response.Redirect(Utils.CombUrlTxt("storein_received_list.aspx", "customer_id={0}&storein_order_id={1}&keyword={2}&beginTime={3}&endTime={4}",
                 this.customer_id.ToString(), this.storein_order_id.ToString(), txtKeyWord.Text, txtBeginTime.Text, txtEndTime.Text));
         }
 
         //待入库状态
         protected void ddlCustomer_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("storein_goods_list.aspx", "customer_id={0}&storein_order_id={1}&keyword={2}&beginTime={3}&endTime={4}",
+            Response.Redirect(Utils.CombUrlTxt("storein_received_list.aspx", "customer_id={0}&storein_order_id={1}&keyword={2}&beginTime={3}&endTime={4}",
                 ddlCustomer.SelectedValue, this.storein_order_id.ToString(), this.keyword, this.beginTime, this.endTime));
         }
 
         protected void ddlStoreInOrder_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("storein_goods_list.aspx", "customer_id={0}&storein_order_id={1}&keyword={2}&beginTime={3}&endTime={4}",
+            Response.Redirect(Utils.CombUrlTxt("storein_received_list.aspx", "customer_id={0}&storein_order_id={1}&keyword={2}&beginTime={3}&endTime={4}",
                 this.customer_id.ToString(), ddlStoreInOrder.SelectedValue, this.keyword, this.beginTime, this.endTime));
         }
 
@@ -161,7 +161,7 @@ namespace DTcms.Web.admin.search
             {
                 if (_pagesize > 0)
                 {
-                    Utils.WriteCookie("storein_goods_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
+                    Utils.WriteCookie("storein_received_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
             Response.Redirect(Utils.CombUrlTxt("user_list.aspx", "customer_id={0}&storein_order_id={1}&keyword={2}&beginTime={3}&endTime={4}",

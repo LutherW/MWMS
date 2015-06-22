@@ -120,6 +120,7 @@
                         <tr>
                             <th width="8%">选择</th>
                             <th align="left" width="10%">货物名称</th>
+                            <th align="left" width="10%">仓库</th>
                             <th align="left" width="10%">库存量</th>
                             <th align="left" width="15%">计划出库时间</th>
                             <th align="left" width="10%">操作员</th>
@@ -138,13 +139,14 @@
                                 class="checkall" />
                         </td>
                         <td><%#Eval("GoodsName")%></td>
+                        <td><%#Eval("StoreName")%></td>
                         <td><%#Eval("StoredInCount")%></td>
                         <td><%#Convert.ToDateTime(Eval("StoringOutTime")).ToString("yyyy-MM-dd")%></td>
                         <td><%#Eval("Admin")%></td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"5\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"6\">暂无记录</td></tr>" : ""%>
 </table>
                 </FooterTemplate>
             </asp:Repeater>

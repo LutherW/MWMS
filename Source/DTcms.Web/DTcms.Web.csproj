@@ -77,6 +77,7 @@
     <Content Include="admin\business\store_in_order.aspx" />
     <Content Include="admin\business\store_in_order_edit.aspx" />
     <Content Include="admin\business\storeout_waiting_goods.aspx" />
+    <Content Include="admin\business\storeout_storage_order_edit.aspx" />
     <Content Include="admin\business\store_waiting_edit.aspx" />
     <Content Include="admin\business\store_waiting.aspx" />
     <Content Include="admin\business\storein_storage_order.aspx" />
@@ -88,7 +89,6 @@
     <Content Include="admin\business\storeout_financial_order.aspx" />
     <Content Include="admin\business\store_allot_order.aspx" />
     <Content Include="admin\business\store_allot_order_edit.aspx" />
-    <Content Include="admin\business\storeout_storage_order_edit.aspx" />
     <Content Include="admin\business\check_record_list.aspx" />
     <Content Include="admin\business\check_record_edit.aspx" />
     <Content Include="admin\business\received_money_list.aspx" />
@@ -108,6 +108,8 @@
     <Content Include="admin\dialog\dialog_rewrite.aspx" />
     <Content Include="admin\dialog\dialog_spec.aspx" />
     <Content Include="admin\dialog\dialog_goods_attach_list.aspx" />
+    <Content Include="admin\dialog\dialog_storeout_cost_invoiced.aspx" />
+    <Content Include="admin\dialog\dialog_storein_received_invoiced.aspx" />
     <Content Include="admin\dialog\dialog_storeout_waiting_goods.aspx" />
     <Content Include="admin\dialog\goods_attribute_list.aspx" />
     <Content Include="admin\dialog\dialog_spec_item.aspx" />
@@ -154,8 +156,14 @@
     <Content Include="admin\order\order_list.aspx" />
     <Content Include="admin\order\payment_edit.aspx" />
     <Content Include="admin\order\payment_list.aspx" />
+    <Content Include="admin\search\check_record_list.aspx" />
+    <Content Include="admin\search\check_cost_list.aspx" />
+    <Content Include="admin\search\storeout_cost_list.aspx" />
     <Content Include="admin\search\storein_cost_list.aspx" />
+    <Content Include="admin\search\allot_goods_list.aspx" />
+    <Content Include="admin\search\storeout_goods_list.aspx" />
     <Content Include="admin\search\storein_goods_list.aspx" />
+    <Content Include="admin\search\storeout_order_list.aspx" />
     <Content Include="admin\search\storein_order_list.aspx" />
     <Content Include="admin\search\storein_received_list.aspx" />
     <Content Include="admin\settings\builder_html.aspx" />
@@ -785,6 +793,13 @@
     <Compile Include="admin\business\storeout_waiting_goods.aspx.designer.cs">
       <DependentUpon>storeout_waiting_goods.aspx</DependentUpon>
     </Compile>
+    <Compile Include="admin\business\storeout_storage_order_edit.aspx.cs">
+      <DependentUpon>storeout_storage_order_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\business\storeout_storage_order_edit.aspx.designer.cs">
+      <DependentUpon>storeout_storage_order_edit.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\business\store_waiting_edit.aspx.cs">
       <DependentUpon>store_waiting_edit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -861,13 +876,6 @@
     </Compile>
     <Compile Include="admin\business\store_allot_order_edit.aspx.designer.cs">
       <DependentUpon>store_allot_order_edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\business\storeout_storage_order_edit.aspx.cs">
-      <DependentUpon>storeout_storage_order_edit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\business\storeout_storage_order_edit.aspx.designer.cs">
-      <DependentUpon>storeout_storage_order_edit.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\business\check_record_list.aspx.cs">
       <DependentUpon>check_record_list.aspx</DependentUpon>
@@ -980,6 +988,20 @@
     </Compile>
     <Compile Include="admin\dialog\dialog_goods_attach_list.aspx.designer.cs">
       <DependentUpon>dialog_goods_attach_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\dialog\dialog_storeout_cost_invoiced.aspx.cs">
+      <DependentUpon>dialog_storeout_cost_invoiced.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\dialog\dialog_storeout_cost_invoiced.aspx.designer.cs">
+      <DependentUpon>dialog_storeout_cost_invoiced.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\dialog\dialog_storein_received_invoiced.aspx.cs">
+      <DependentUpon>dialog_storein_received_invoiced.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\dialog\dialog_storein_received_invoiced.aspx.designer.cs">
+      <DependentUpon>dialog_storein_received_invoiced.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\dialog\dialog_storeout_waiting_goods.aspx.cs">
       <DependentUpon>dialog_storeout_waiting_goods.aspx</DependentUpon>
@@ -1268,6 +1290,27 @@
     <Compile Include="admin\order\payment_list.aspx.designer.cs">
       <DependentUpon>payment_list.aspx</DependentUpon>
     </Compile>
+    <Compile Include="admin\search\check_record_list.aspx.cs">
+      <DependentUpon>check_record_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\search\check_record_list.aspx.designer.cs">
+      <DependentUpon>check_record_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\search\check_cost_list.aspx.cs">
+      <DependentUpon>check_cost_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\search\check_cost_list.aspx.designer.cs">
+      <DependentUpon>check_cost_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\search\storeout_cost_list.aspx.cs">
+      <DependentUpon>storeout_cost_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\search\storeout_cost_list.aspx.designer.cs">
+      <DependentUpon>storeout_cost_list.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\search\storein_cost_list.aspx.cs">
       <DependentUpon>storein_cost_list.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1275,12 +1318,33 @@
     <Compile Include="admin\search\storein_cost_list.aspx.designer.cs">
       <DependentUpon>storein_cost_list.aspx</DependentUpon>
     </Compile>
+    <Compile Include="admin\search\allot_goods_list.aspx.cs">
+      <DependentUpon>allot_goods_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\search\allot_goods_list.aspx.designer.cs">
+      <DependentUpon>allot_goods_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\search\storeout_goods_list.aspx.cs">
+      <DependentUpon>storeout_goods_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\search\storeout_goods_list.aspx.designer.cs">
+      <DependentUpon>storeout_goods_list.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\search\storein_goods_list.aspx.cs">
       <DependentUpon>storein_goods_list.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="admin\search\storein_goods_list.aspx.designer.cs">
       <DependentUpon>storein_goods_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\search\storeout_order_list.aspx.cs">
+      <DependentUpon>storeout_order_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\search\storeout_order_list.aspx.designer.cs">
+      <DependentUpon>storeout_order_list.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\search\storein_order_list.aspx.cs">
       <DependentUpon>storein_order_list.aspx</DependentUpon>

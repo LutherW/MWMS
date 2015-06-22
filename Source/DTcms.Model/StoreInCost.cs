@@ -14,7 +14,7 @@ namespace DTcms.Model
             _count = count;
             _totalprice = totalprice;
             _customer = customer;
-            _unitprice = _totalprice / _count;
+            _unitprice = _count > 0 ? _totalprice / _count : 0;
             _status = 0;
             _remark = remark;
             _hasbeeninvoiced = false;

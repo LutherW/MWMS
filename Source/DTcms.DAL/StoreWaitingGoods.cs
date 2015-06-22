@@ -82,9 +82,10 @@ namespace DTcms.DAL
                         #region 车辆====================
                         if (model.GoodsVehicles.Count > 0)
                         {
-                            StringBuilder strSql2 = new StringBuilder();
+                            StringBuilder strSql2;
                             foreach (Model.StoreInGoodsVehicle goodsVehicle in model.GoodsVehicles)
                             {
+                                strSql2 = new StringBuilder();
                                 strSql2.Append("insert into StoreInGoodsVehicle(");
                                 strSql2.Append("StoreWaitingGoodsId,VehicleId,Remark,Count");
                                 strSql2.Append(") values (");
@@ -203,9 +204,10 @@ namespace DTcms.DAL
 
                         if (model.GoodsVehicles.Count > 0)
                         {
-                            StringBuilder strSql2 = new StringBuilder();
+                            StringBuilder strSql2;
                             foreach (Model.StoreInGoodsVehicle goodsVehicle in model.GoodsVehicles)
                             {
+                                strSql2 = new StringBuilder();
                                 strSql2.Append("insert into StoreInGoodsVehicle(");
                                 strSql2.Append("StoreWaitingGoodsId,VehicleId,Remark,Count");
                                 strSql2.Append(") values (");
@@ -213,7 +215,7 @@ namespace DTcms.DAL
                                 strSql2.Append(") ");
 
                                 SqlParameter[] vehicleParameters = {
-			                                new SqlParameter("@StoreWaitingGoodsId", SqlDbType.Int,4) ,            
+                                            new SqlParameter("@StoreWaitingGoodsId", SqlDbType.Int,4) ,            
                                             new SqlParameter("@VehicleId", SqlDbType.Int,4) ,            
                                             new SqlParameter("@Remark", SqlDbType.VarChar,254) ,            
                                             new SqlParameter("@Count", SqlDbType.Decimal,9)             

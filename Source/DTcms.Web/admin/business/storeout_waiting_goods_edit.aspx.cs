@@ -82,7 +82,7 @@ namespace DTcms.Web.admin.business
             this.ddlStoreInGoods.Items.Add(new ListItem("选择入库货物", ""));
             foreach (DataRow dr in storeInGoodsDT.Rows)
             {
-                this.ddlStoreInGoods.Items.Add(new ListItem(string.Format("{0}(客户：{1},库存：{2})", dr["GoodsName"].ToString(), dr["CustomerName"].ToString(), dr["StoredInCount"].ToString()), string.Format("{0}|{1}", dr["Id"].ToString(), dr["GoodsId"].ToString())));
+                this.ddlStoreInGoods.Items.Add(new ListItem(string.Format("{0}(客户：{1},仓库：{2},库存：{3})", dr["GoodsName"].ToString(), dr["CustomerName"].ToString(), dr["StoreName"].ToString(), dr["StoredInCount"].ToString()), string.Format("{0}|{1}", dr["Id"].ToString(), dr["GoodsId"].ToString())));
             }
         }
 

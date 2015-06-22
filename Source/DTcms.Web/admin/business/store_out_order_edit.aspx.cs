@@ -103,7 +103,7 @@ namespace DTcms.Web.admin.business
                 && Decimal.TryParse(txtChargingCount.Text, out _chargingCount))
             {
                 BLL.StoreInUnitPrice unitPriceBLL = new BLL.StoreInUnitPrice();
-                DataTable unitPriceDT = unitPriceBLL.GetList(0, "StoreInOrderId = " + _storeInOrderId + "", "BeginTime asc").Tables[0];
+                DataTable unitPriceDT = unitPriceBLL.GetList(0, "StoreInOrderId = " + _storeInOrderId + " and EndTime <= '" + _chargingTime + "' ", "BeginTime asc").Tables[0];
                 int rowsCount = unitPriceDT.Rows.Count;
                 StringBuilder unitPriceText = new StringBuilder();
                 decimal totalPrice = 0.00M;

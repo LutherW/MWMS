@@ -159,6 +159,7 @@ namespace DTcms.Web.admin.business
             if (vehicleIds != null && vehicleCount != null && vehicleRemark != null
                 && vehicleIds.Length > 0 && vehicleCount.Length > 0 && vehicleRemark.Length > 0)
             {
+                model.GoodsVehicles.Clear();
                 for (int i = 0; i < vehicleIds.Length; i++)
                 {
                     decimal count;
@@ -169,6 +170,7 @@ namespace DTcms.Web.admin.business
                     }
                 }
             }
+
 
             string[] fileNames = Request.Form.GetValues("hid_attach_filename");
             string[] filePaths = Request.Form.GetValues("hid_attach_filepath");

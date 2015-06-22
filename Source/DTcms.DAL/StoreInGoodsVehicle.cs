@@ -122,9 +122,10 @@ SqlParameter[] parameters = {
 			}
 		}
 
-        public void DeleteList(SqlConnection conn, SqlTransaction trans, int storeWaitingGoodsId)
+        public int DeleteList(SqlConnection conn, SqlTransaction trans, int storeWaitingGoodsId)
         {
             int rows = DbHelperSQL.ExecuteSql(conn, trans, "delete from StoreInGoodsVehicle where StoreWaitingGoodsId=" + storeWaitingGoodsId.ToString());
+            return rows;
         }	
 		
 		/// <summary>

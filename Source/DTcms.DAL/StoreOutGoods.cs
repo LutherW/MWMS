@@ -357,6 +357,21 @@ namespace DTcms.DAL
             recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
             return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
         }
+
+        public DataSet GetSearchList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select A.Count as StoredOutCount, A.StoreOutWaitingGoodsId, C.Name as GoodsName, E.Name as StoreName, D.AccountNumber, F.StoredInTime, F.Count as StoredInCount, B.StoredOutTime as StoredOutTime ");
+            strSql.Append("from StoreOutGoods A, StoreOutOrder B, Goods C, StoreInOrder D, Store E, StoreInGoods F, StoreOutWaitingGoods G ");
+            strSql.Append("where A.StoreOutOrderId = B.Id and A.StoreInOrderId = D.Id and A.StoreInGoodsId = F.Id and A.StoreOutWaitingGoodsId = G.Id and G.GoodsId = C.Id and F.StoreId = E.Id ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(strWhere);
+            }
+            recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
+            //throw new Exception(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
+            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
+        }
     }
 }
 

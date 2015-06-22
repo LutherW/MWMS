@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Collections.Generic; 
 using System.Data;
 using DTcms.DBUtility;
+using DTcms.Common;
 namespace DTcms.DAL
 {
 	 	//CheckCost
@@ -337,7 +338,19 @@ SqlParameter[] parameters = {
 			return DbHelperSQL.Query(strSql.ToString());
 		}
 
-   
+        public DataSet GetSearchList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select A.Id as Id, A.CheckRecordId, A.Name, A.UnitPrice, A.Count, A.TotalPrice, A.Status, A.PaidTime, A.Admin, A.Customer, A.HasBeenInvoiced, A.Remark as Remark ");
+            strSql.Append(" from CheckCost A, CheckRecord B ");
+            strSql.Append(" where A.CheckRecordId = B.Id ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(strWhere);
+            }
+            recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
+            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
+        }
 	}
 }
 

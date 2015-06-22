@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Data;
 using DTcms.DBUtility;
+using DTcms.Common;
 namespace DTcms.DAL
 {
     //StoreOutCost
@@ -23,7 +24,18 @@ namespace DTcms.DAL
             return DbHelperSQL.Exists(strSql.ToString(), parameters);
         }
 
+        public bool ExistsById(int id)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select count(1) from StoreOutCost");
+            strSql.Append(" where ");
+            strSql.Append(" Id = @Id  ");
+            SqlParameter[] parameters = {
+					new SqlParameter("@Id", SqlDbType.Int,4)			};
+            parameters[0].Value = id;
 
+            return DbHelperSQL.Exists(strSql.ToString(), parameters);
+        }
 
         /// <summary>
         /// 增加一条数据
@@ -299,6 +311,76 @@ namespace DTcms.DAL
             }
         }
 
+        public DTcms.Model.StoreOutCost GetModelById(int id)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select StoreInOrderId, Name, Count, UnitPrice, TotalPrice, Status, PaidTime, Admin, Customer, HasBeenInvoiced, InvoicedTime, InvoicedOperator, Remark  ");
+            strSql.Append("  from StoreInCost ");
+            strSql.Append(" where Id=@Id ");
+            SqlParameter[] parameters = {
+					new SqlParameter("@Id", SqlDbType.Int,4)			};
+            parameters[0].Value = id;
+
+
+            DTcms.Model.StoreOutCost model = new DTcms.Model.StoreOutCost();
+            DataSet ds = DbHelperSQL.Query(strSql.ToString(), parameters);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                if (ds.Tables[0].Rows[0]["StoreOutOrderId"].ToString() != "")
+                {
+                    model.StoreOutOrderId = int.Parse(ds.Tables[0].Rows[0]["StoreOutOrderId"].ToString());
+                }
+                model.Name = ds.Tables[0].Rows[0]["Name"].ToString();
+                if (ds.Tables[0].Rows[0]["Count"].ToString() != "")
+                {
+                    model.Count = decimal.Parse(ds.Tables[0].Rows[0]["Count"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["UnitPrice"].ToString() != "")
+                {
+                    model.UnitPrice = decimal.Parse(ds.Tables[0].Rows[0]["UnitPrice"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["TotalPrice"].ToString() != "")
+                {
+                    model.TotalPrice = decimal.Parse(ds.Tables[0].Rows[0]["TotalPrice"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["Status"].ToString() != "")
+                {
+                    model.Status = int.Parse(ds.Tables[0].Rows[0]["Status"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["PaidTime"].ToString() != "")
+                {
+                    model.PaidTime = DateTime.Parse(ds.Tables[0].Rows[0]["PaidTime"].ToString());
+                }
+                model.Admin = ds.Tables[0].Rows[0]["Admin"].ToString();
+                model.Customer = ds.Tables[0].Rows[0]["Customer"].ToString();
+                if (ds.Tables[0].Rows[0]["HasBeenInvoiced"].ToString() != "")
+                {
+                    if ((ds.Tables[0].Rows[0]["HasBeenInvoiced"].ToString() == "1") || (ds.Tables[0].Rows[0]["HasBeenInvoiced"].ToString().ToLower() == "true"))
+                    {
+                        model.HasBeenInvoiced = true;
+                    }
+                    else
+                    {
+                        model.HasBeenInvoiced = false;
+                    }
+                }
+                if (ds.Tables[0].Rows[0]["InvoicedTime"].ToString() != "")
+                {
+                    model.InvoicedTime = DateTime.Parse(ds.Tables[0].Rows[0]["InvoicedTime"].ToString());
+                }
+                model.InvoicedOperator = ds.Tables[0].Rows[0]["InvoicedOperator"].ToString();
+                model.Remark = ds.Tables[0].Rows[0]["Remark"].ToString();
+
+                return model;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
 
         /// <summary>
         /// 获得数据列表
@@ -336,7 +418,19 @@ namespace DTcms.DAL
             return DbHelperSQL.Query(strSql.ToString());
         }
 
-
+        public DataSet GetSearchList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select A.Id as Id, B.StoreInOrderId, A.Name, A.UnitPrice, A.Count, A.TotalPrice, A.Status, A.PaidTime, A.Admin, A.Customer, A.HasBeenInvoiced, A.Remark as Remark, C.AccountNumber ");
+            strSql.Append(" from StoreOutCost A, StoreOutOrder B, StoreInOrder C ");
+            strSql.Append(" where A.StoreOutOrderId = B.Id and B.StoreInOrderId = C.Id ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(strWhere);
+            }
+            recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
+            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
+        }
     }
 }
 

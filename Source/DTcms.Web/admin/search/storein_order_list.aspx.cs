@@ -30,7 +30,7 @@ namespace DTcms.Web.admin.search
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
             {
-                ChkAdminLevel("store_in_order", DTEnums.ActionEnum.View.ToString()); //检查权限
+                ChkAdminLevel("storein_order", DTEnums.ActionEnum.View.ToString()); //检查权限
                 TreeBind("");
                 RptBind(CombSqlTxt(this.customer_id, this.keyword, this.beginTime, this.endTime), "A.CreateTime DESC");
             }
@@ -66,7 +66,7 @@ namespace DTcms.Web.admin.search
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}&page={4}",
+            string pageUrl = Utils.CombUrlTxt("storein_order_list.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}&page={4}",
                 this.customer_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime, "__id__");
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
         }
@@ -116,14 +116,14 @@ namespace DTcms.Web.admin.search
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
+            Response.Redirect(Utils.CombUrlTxt("storein_order_list.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
                 this.customer_id.ToString(), txtKeyWord.Text, txtBeginTime.Text, txtEndTime.Text));
         }
 
         //待入库状态
         protected void ddlCustomer_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
+            Response.Redirect(Utils.CombUrlTxt("storein_order_list.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
                 ddlCustomer.SelectedValue, this.keyword, this.beginTime, this.endTime));
         }
 
@@ -138,14 +138,14 @@ namespace DTcms.Web.admin.search
                     Utils.WriteCookie("store_in_order_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("user_list.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
+            Response.Redirect(Utils.CombUrlTxt("storein_order_list.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
                 this.customer_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime));
         }
 
         //批量删除
         protected void btnDelete_Click(object sender, EventArgs e)
         {
-            ChkAdminLevel("store_in_order", DTEnums.ActionEnum.Delete.ToString()); //检查权限
+            ChkAdminLevel("storein_order", DTEnums.ActionEnum.Delete.ToString()); //检查权限
             int sucCount = 0;
             int errorCount = 0;
             BLL.StoreInOrder bll = new BLL.StoreInOrder();
@@ -166,13 +166,13 @@ namespace DTcms.Web.admin.search
                 }
             }
             AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除待入库成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
-            JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
+            JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("storein_order_list.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
                 this.customer_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime));
         }
 
         protected void btnAudit_Click(object sender, EventArgs e)
         {
-            ChkAdminLevel("store_in_order", DTEnums.ActionEnum.Confirm.ToString()); //检查权限
+            ChkAdminLevel("storein_order", DTEnums.ActionEnum.Confirm.ToString()); //检查权限
             int sucCount = 0;
             int errorCount = 0;
             BLL.StoreInOrder bll = new BLL.StoreInOrder();
@@ -193,7 +193,7 @@ namespace DTcms.Web.admin.search
                 }
             }
             AddAdminLog(DTEnums.ActionEnum.Audit.ToString(), "入库单审核成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
-            JscriptMsg("入库单审核成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
+            JscriptMsg("入库单审核成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("storein_order_list.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
                 this.customer_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime));
         }
 

@@ -57,7 +57,7 @@
                         <td><%#Eval("StoredInCount")%></td>
                         <td><%#Eval("StoredOutCount")%></td>
                         <td align="center">
-                            <a href="javascript:void(0);" onclick="showVehicleDialog(<%#Eval("StoreOutWaitingGoodsId") %>, '<%#Eval("GoodsName") %>');">车辆</a>
+                            <a href="javascript:void(0);" onclick="showVehicleDialog(<%#Eval("StoreOutWaitingGoodsId") %>, '<%#Eval("GoodsName") %>');">运输车辆</a>
                         </td>
                     </tr>
                 </ItemTemplate>

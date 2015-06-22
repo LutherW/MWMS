@@ -34,7 +34,7 @@
                         <tr>
                             <td align="center">
                             </td>
-                            <td><%#Eval("Admin")%></td>
+                            <td><a href="<%#Eval("FilePath") %>" target="_blank"><%#Eval("Admin")%></a></td>
                             <td><%#Eval("CreateTime")%></td>
                             <td><%#Eval("Remark")%></td>
                         </tr>

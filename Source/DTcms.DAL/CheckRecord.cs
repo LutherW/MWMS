@@ -392,7 +392,7 @@ namespace DTcms.DAL
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select A.Id as Id, B.Name as CustomerName, C.Name as GoodsName, D.PlateNumber as VehiclePlateNumber, A.InspectionNumber, A.CaseNumber, A.CheckResult, A.RealName, A.LinkTel, A.Admin, A.Remark as Remark, E.Name as HandlingModeName ");
+            strSql.Append("select A.Id as Id, B.Name as CustomerName, C.Name as GoodsName, D.PlateNumber as VehiclePlateNumber, A.InspectionNumber, A.CaseNumber, A.CheckResult, A.RealName, A.LinkTel, A.Admin, A.Remark as Remark, A.CheckTime, E.Name as HandlingModeName ");
             strSql.Append("from CheckRecord A, Customer B, Goods C, Vehicle D, HandlingMode E ");
             strSql.Append("where A.CustomerId = B.Id and A.GoodsId = C.Id and A.VehicleId = D.Id and A.HandlingModeId  = E.Id ");
             if (strWhere.Trim() != "")

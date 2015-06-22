@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using DTcms.Common;
 using DTcms.Model;
+using System.Text;
 
 namespace DTcms.Web.admin.business
 {
@@ -36,7 +37,7 @@ namespace DTcms.Web.admin.business
             }
             if (!Page.IsPostBack)
             {
-                ChkAdminLevel("storeout_storage_order", DTEnums.ActionEnum.View.ToString()); //检查权限
+                ChkAdminLevel("store_out_order", DTEnums.ActionEnum.View.ToString()); //检查权限
                 
                 TreeBind("Status = 2 "); //绑定类别
                 if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
@@ -70,30 +71,79 @@ namespace DTcms.Web.admin.business
 
         protected void ddlStoreInOrder_SelectedIndexChanged(object sender, EventArgs e)
         {
+            UnitPriceBind(ddlStoreInOrder.SelectedValue);
+
             int StoreOutOrderId;
             if (int.TryParse(ddlStoreInOrder.SelectedValue, out StoreOutOrderId))
             {
-                StoreInInfoBind(StoreOutOrderId);
+                CustomerBind(StoreOutOrderId);
             }
         }
 
-        private void StoreInInfoBind(int StoreInOrderId)
+        private void CustomerBind(int StoreInOrderId)
         {
-            BLL.StoreInUnitPrice unitPriceBLL = new BLL.StoreInUnitPrice();
-            DataTable unitPriceDT = unitPriceBLL.GetList(1, " StoreInOrderId = " + StoreInOrderId + " and BeginTime <= '" + DateTime.Now + "' and EndTime >= '" + DateTime.Now + "'", "BeginTime asc").Tables[0];
-            if (unitPriceDT.Rows.Count == 1)
-            {
-                hidUnitPrice.Value = unitPriceDT.Rows[0]["Price"].ToString();
-                labUnitPrice.Text = unitPriceDT.Rows[0]["Price"].ToString();
-                txtTotalMoney.Text = string.Format("{0:N2}" ,Convert.ToDecimal(hidUnitPrice.Value) * Convert.ToDecimal(txtChargingCount.Text));
-            }
-
             BLL.Customer customerBLL = new BLL.Customer();
             Customer customer = customerBLL.GetModelByStoreInOrder(StoreInOrderId);
             if (customer != null)
             {
                 hidCustomerId.Value = customer.Id.ToString();
                 labCustomerName.Text = customer.Name;
+            }
+        }
+
+        private void UnitPriceBind(string storeInOrderId)
+        {
+            int _storeInOrderId;
+            DateTime _chargingTime;
+            decimal _chargingCount;
+            DateTime _receivedEndTime = DateTime.Now;
+            DateTime _receivedBeginTime = DateTime.Now;
+            if (int.TryParse(storeInOrderId, out _storeInOrderId)
+                && DateTime.TryParse(txtStoredOutTime.Text, out _chargingTime)
+                && Decimal.TryParse(txtChargingCount.Text, out _chargingCount))
+            {
+                BLL.StoreInUnitPrice unitPriceBLL = new BLL.StoreInUnitPrice();
+                DataTable unitPriceDT = unitPriceBLL.GetList(0, "StoreInOrderId = " + _storeInOrderId + "  and EndTime <= '" + _chargingTime + "' ", "BeginTime asc").Tables[0];
+                int rowsCount = unitPriceDT.Rows.Count;
+                StringBuilder unitPriceText = new StringBuilder();
+                decimal totalPrice = 0.00M;
+                for (int i = 0; i < rowsCount; i++)
+                {
+                    DateTime beginTime = Convert.ToDateTime(unitPriceDT.Rows[i]["BeginTime"]);
+                    DateTime endTime = Convert.ToDateTime(unitPriceDT.Rows[i]["EndTime"]);
+                    decimal totalUnitPrice = 0.00M;
+                    if (i == 0)
+                    {
+                        beginTime = _chargingTime;
+                        _receivedBeginTime = beginTime;
+                    }
+                    if (i == rowsCount - 1)
+                    {
+                        DateTime et = DateTime.Now.AddDays(1);
+                        endTime = new DateTime(et.Year, et.Month, et.Day);
+                        _receivedEndTime = endTime;
+                    }
+
+                    totalUnitPrice = Convert.ToDecimal(unitPriceDT.Rows[i]["Price"]) * (endTime - beginTime).Days * _chargingCount;
+
+                    unitPriceText.AppendFormat("{0}、时间：{1}-{2}，天数：{3}，单价：{4}，数量：{5}，费用：{6}\r\n",
+                        i + 1, beginTime, endTime,
+                        (endTime - beginTime).Days,
+                        Convert.ToDecimal(unitPriceDT.Rows[i]["Price"]),
+                        _chargingCount,
+                        string.Format("{0:N2}", totalUnitPrice));
+
+                    totalPrice += totalUnitPrice;
+                }
+                txtTotalMoney.Text = string.Format("{0:N2}", totalPrice);
+                txtInvoiceMoney.Text = string.Format("{0:N2}", totalPrice);
+                hidReceivedBeginTime.Value = _receivedBeginTime.ToString();
+                hidReceivedEndTime.Value = _receivedEndTime.ToString();
+                txtUnitPriceDetails.Text = unitPriceText.ToString();
+            }
+            else
+            {
+                txtUnitPriceDetails.Text = "该入库单下没有单价，无法进行结账。";
             }
         }
 
@@ -106,13 +156,14 @@ namespace DTcms.Web.admin.business
             Model.StoreOutOrder model = bll.GetModel(_id);
 
             ddlStoreInOrder.SelectedValue = model.StoreInOrderId.ToString();
-            hidUnitPrice.Value = model.UnitPrice.ToString();
+            hidReceivedBeginTime.Value = model.BeginChargingTime.ToString();
+            hidReceivedEndTime.Value = model.EndChargingTime.ToString();
+            txtUnitPriceDetails.Text = model.UnitPriceDetails;
             hidCustomerId.Value = model.CustomerId.ToString();
             labCustomerName.Text = GetCustomerName(model.CustomerId);
             txtChargingCount.Text = model.Count.ToString("0.00");
             txtTotalMoney.Text = model.TotalMoney.ToString("0.00");
             txtInvoiceMoney.Text = model.InvoiceMoney.ToString("0.00");
-            labUnitPrice.Text = model.UnitPrice.ToString("0.00");
             txtStoredOutTime.Text = model.StoredOutTime.HasValue ? model.StoredOutTime.Value.ToString("yyyy-MM-dd") : "";
             txtAdmin.Text = model.Admin;
             txtRemark.Text = model.Remark;
@@ -175,11 +226,13 @@ namespace DTcms.Web.admin.business
             model.Count = decimal.Parse(txtChargingCount.Text);
             model.TotalMoney = decimal.Parse(txtTotalMoney.Text);
             model.InvoiceMoney = decimal.Parse(txtInvoiceMoney.Text);
-            model.UnitPrice = decimal.Parse(hidUnitPrice.Value);
+            model.BeginChargingTime = DateTime.Parse(hidReceivedBeginTime.Value);
+            model.EndChargingTime = DateTime.Parse(hidReceivedEndTime.Value);
+            model.UnitPriceDetails = txtUnitPriceDetails.Text;
             model.HasBeenInvoiced = false;
             model.Admin = txtAdmin.Text;
             model.Remark = txtRemark.Text;
-            model.Status = 0;
+            model.Status = 1;
             model.CreateTime = DateTime.Now;
 
             #region 费用
@@ -252,7 +305,9 @@ namespace DTcms.Web.admin.business
             model.Count = decimal.Parse(txtChargingCount.Text);
             model.TotalMoney = decimal.Parse(txtTotalMoney.Text);
             model.InvoiceMoney = decimal.Parse(txtInvoiceMoney.Text);
-            model.UnitPrice = decimal.Parse(hidUnitPrice.Value);
+            model.BeginChargingTime = DateTime.Parse(hidReceivedBeginTime.Value);
+            model.EndChargingTime = DateTime.Parse(hidReceivedEndTime.Value);
+            model.UnitPriceDetails = txtUnitPriceDetails.Text;
             model.HasBeenInvoiced = false;
             model.Admin = txtAdmin.Text;
             model.Remark = txtRemark.Text;
@@ -320,7 +375,7 @@ namespace DTcms.Web.admin.business
         {
             if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
             {
-                ChkAdminLevel("storeout_storage_order", DTEnums.ActionEnum.Edit.ToString()); //检查权限
+                ChkAdminLevel("store_out_order", DTEnums.ActionEnum.Edit.ToString()); //检查权限
                 if (!DoEdit(this.id))
                 {
                     JscriptMsg("保存过程中发生错误！", "");
@@ -330,7 +385,7 @@ namespace DTcms.Web.admin.business
             }
             else //添加
             {
-                ChkAdminLevel("storeout_storage_order", DTEnums.ActionEnum.Add.ToString()); //检查权限
+                ChkAdminLevel("store_out_order", DTEnums.ActionEnum.Add.ToString()); //检查权限
                 if (!DoAdd())
                 {
                     JscriptMsg("保存过程中发生错误！", "");

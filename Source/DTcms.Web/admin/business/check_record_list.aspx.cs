@@ -115,11 +115,11 @@ namespace DTcms.Web.admin.business
             }
             if (_goods_id > 0)
             {
-                strTemp.Append(" and A.GoodsId>=" + _customer_id + "");
+                strTemp.Append(" and A.GoodsId=" + _goods_id + "");
             }
             if (_vehicle_id > 0)
             {
-                strTemp.Append(" and A.VehicleId>=" + _vehicle_id + "");
+                strTemp.Append(" and A.VehicleId=" + _vehicle_id + "");
             }
             if (!string.IsNullOrEmpty(beginTime))
             {

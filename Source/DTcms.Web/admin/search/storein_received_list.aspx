@@ -22,7 +22,7 @@
             var invoicedDialog = top.dialog({
                 id: 'vehicleDialogId',
                 title: "发票信息",
-                url: '/admin/dialog/dialog_storein_cost_invoiced.aspx?id=' + id,
+                url: '/admin/dialog/dialog_storein_received_invoiced.aspx?id=' + id,
                 width: 500
             }).showModal();
         }
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <div class="r-list">
-                        <span class="lable">入库时间</span>
+                        <span class="lable">收款时间</span>
                         <asp:TextBox ID="txtBeginTime" runat="server" CssClass="keyword" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'txtEndTime\',{d:-1})}'})"/>
                         <span class="lable">-</span>
                         <asp:TextBox ID="txtEndTime" runat="server" Text="" CssClass="keyword" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'txtBeginTime\',{d:0})}'})"/>
@@ -77,34 +77,44 @@
                 <HeaderTemplate>
                     <table width="100%" bgoods="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
-                            <th width="5%"></th>
+                            <th width="3%"></th>
                             <th align="left">名称</th>
+                            <th align="left" width="10%">入库单</th>
+                            <th align="left">客户</th>
                             <th align="left" width="15%">计费时间</th>
-                            <th align="left">收款时间</th>
-                            <th align="left" width="10%">收款金额</th>
-                            <th align="left" width="8%">操作人</th>
-                            <th align="left" width="8%">客户</th>
-                            <th width="8%" >入库单</th>
+                            <th align="left" width="8%">收款时间</th>
+                            <th align="left" width="15%">价格/实收(元)</th>
+                            <th width="8%" >操作员</th>
+                            <th width="8%" >状态</th>
                             <th width="8%">发票</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
                         <td align="center"></td>
-                        <td><%#Eval("GoodsName")%></td>
-                        <td><%#Eval("StoreName")%></td>
+                        <td><%#Eval("Name")%></td>
                         <td><%#Eval("AccountNumber")%></td>
-                        <td><%#Convert.ToDateTime(Eval("StoredInTime")).ToString("yyyy-MM-dd")%></td>
-                        <td><%#Eval("Count")%></td>
                         <td><%#Eval("CustomerName")%></td>
-                        <td align="center"><a href="javascript:void(0);" onclick="showRemarkDialog( '<%#Eval("Remark") %>');">备注</a></td>
+                        <td>
+                            <%#Convert.ToDateTime(Eval("BeginChargingTime")).ToString("yyyy-MM-dd")%>
+                            -
+                            <%#Convert.ToDateTime(Eval("EndChargingTime")).ToString("yyyy-MM-dd")%>
+                        </td>
+                        <td><%#Convert.ToDateTime(Eval("ReceivedTime")).ToString("yyyy-MM-dd")%></td>
+                        <td>
+                            <%#Eval("TotalPrice")%>
+                            /
+                            <%#Eval("InvoicedPrice")%>
+                        </td>
+                        <td align="center"><%#Eval("Admin")%></td>
+                        <td align="center"><%#Eval("Status").ToString().Equals("1") ? "已付款" : "未付款"%></td>
                         <td align="center">
                             <%#Eval("HasBeenInvoiced").ToString().Equals("True") ? "<a href=\"javascript:void(0);\" onclick=\"showInvoicedDialog("+Eval("Id")+");\">发票详情</a>" : "未开发票" %>
                         </td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"9\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"10\">暂无记录</td></tr>" : ""%>
 </table>
                 </FooterTemplate>
             </asp:Repeater>

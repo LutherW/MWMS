@@ -42,13 +42,13 @@ namespace DTcms.DAL
                 {
                     //try
                     //{
-                        StringBuilder strSql = new StringBuilder();
-                        strSql.Append("insert into ReceivedMoney(");
-                        strSql.Append("StoreInOrderId,CustomerId,Name,EndChargingTime,BeginChargingTime,ReceivedTime,ChargingCount,TotalPrice,InvoicedPrice,CreateTime,Admin,Remark,Status,HasBeenInvoiced,InvoicedTime,InvoicedOperator,UnitPriceDetails)");
-                        strSql.Append(" values (");
-                        strSql.Append("@StoreInOrderId,@CustomerId,@Name,@EndChargingTime,@BeginChargingTime,@ReceivedTime,@ChargingCount,@TotalPrice,@InvoicedPrice,@CreateTime,@Admin,@Remark,@Status,@HasBeenInvoiced,@InvoicedTime,@InvoicedOperator,@UnitPriceDetails)");
-                        strSql.Append(";select @@IDENTITY");
-                        SqlParameter[] parameters = {
+                    StringBuilder strSql = new StringBuilder();
+                    strSql.Append("insert into ReceivedMoney(");
+                    strSql.Append("StoreInOrderId,CustomerId,Name,EndChargingTime,BeginChargingTime,ReceivedTime,ChargingCount,TotalPrice,InvoicedPrice,CreateTime,Admin,Remark,Status,HasBeenInvoiced,InvoicedTime,InvoicedOperator,UnitPriceDetails)");
+                    strSql.Append(" values (");
+                    strSql.Append("@StoreInOrderId,@CustomerId,@Name,@EndChargingTime,@BeginChargingTime,@ReceivedTime,@ChargingCount,@TotalPrice,@InvoicedPrice,@CreateTime,@Admin,@Remark,@Status,@HasBeenInvoiced,@InvoicedTime,@InvoicedOperator,@UnitPriceDetails)");
+                    strSql.Append(";select @@IDENTITY");
+                    SqlParameter[] parameters = {
 					        new SqlParameter("@StoreInOrderId", SqlDbType.Int,4),
 					        new SqlParameter("@CustomerId", SqlDbType.Int,4),
 					        new SqlParameter("@Name", SqlDbType.VarChar,254),
@@ -66,31 +66,31 @@ namespace DTcms.DAL
 					        new SqlParameter("@InvoicedTime", SqlDbType.DateTime),
 					        new SqlParameter("@InvoicedOperator", SqlDbType.VarChar,254),
 					        new SqlParameter("@UnitPriceDetails", SqlDbType.VarChar,1000)};
-                        parameters[0].Value = model.StoreInOrderId;
-                        parameters[1].Value = model.CustomerId;
-                        parameters[2].Value = model.Name;
-                        parameters[3].Value = model.EndChargingTime;
-                        parameters[4].Value = model.BeginChargingTime;
-                        parameters[5].Value = model.ReceivedTime;
-                        parameters[6].Value = model.ChargingCount;
-                        parameters[7].Value = model.TotalPrice;
-                        parameters[8].Value = model.InvoicedPrice;
-                        parameters[9].Value = model.CreateTime;
-                        parameters[10].Value = model.Admin;
-                        parameters[11].Value = model.Remark;
-                        parameters[12].Value = model.Status;
-                        parameters[13].Value = model.HasBeenInvoiced;
-                        parameters[14].Value = model.InvoicedTime;
-                        parameters[15].Value = model.InvoicedOperator;
-                        parameters[16].Value = model.UnitPriceDetails;
+                    parameters[0].Value = model.StoreInOrderId;
+                    parameters[1].Value = model.CustomerId;
+                    parameters[2].Value = model.Name;
+                    parameters[3].Value = model.EndChargingTime;
+                    parameters[4].Value = model.BeginChargingTime;
+                    parameters[5].Value = model.ReceivedTime;
+                    parameters[6].Value = model.ChargingCount;
+                    parameters[7].Value = model.TotalPrice;
+                    parameters[8].Value = model.InvoicedPrice;
+                    parameters[9].Value = model.CreateTime;
+                    parameters[10].Value = model.Admin;
+                    parameters[11].Value = model.Remark;
+                    parameters[12].Value = model.Status;
+                    parameters[13].Value = model.HasBeenInvoiced;
+                    parameters[14].Value = model.InvoicedTime;
+                    parameters[15].Value = model.InvoicedOperator;
+                    parameters[16].Value = model.UnitPriceDetails;
 
-                        object obj = DbHelperSQL.GetSingle(conn, trans, strSql.ToString(), parameters); //带事务
-                        model.Id = Convert.ToInt32(obj);
+                    object obj = DbHelperSQL.GetSingle(conn, trans, strSql.ToString(), parameters); //带事务
+                    model.Id = Convert.ToInt32(obj);
 
-                        new StoreInOrder().UpdateField(conn, trans, model.StoreInOrderId, "ChargingTime = '" + model.ReceivedTime + "'");
-   
+                    new StoreInOrder().UpdateField(conn, trans, model.StoreInOrderId, "ChargingTime = '" + model.ReceivedTime + "'");
 
-                        trans.Commit();
+
+                    trans.Commit();
                     //}
                     //catch
                     //{
@@ -114,27 +114,27 @@ namespace DTcms.DAL
                 {
                     //try
                     //{
-                        StringBuilder strSql = new StringBuilder();
-                        strSql.Append("update ReceivedMoney set ");
-                        strSql.Append("StoreInOrderId=@StoreInOrderId,");
-                        strSql.Append("CustomerId=@CustomerId,");
-                        strSql.Append("Name=@Name,");
-                        strSql.Append("EndChargingTime=@EndChargingTime,");
-                        strSql.Append("BeginChargingTime=@BeginChargingTime,");
-                        strSql.Append("ReceivedTime=@ReceivedTime,");
-                        strSql.Append("ChargingCount=@ChargingCount,");
-                        strSql.Append("TotalPrice=@TotalPrice,");
-                        strSql.Append("InvoicedPrice=@InvoicedPrice,");
-                        strSql.Append("CreateTime=@CreateTime,");
-                        strSql.Append("Admin=@Admin,");
-                        strSql.Append("Remark=@Remark,");
-                        strSql.Append("Status=@Status,");
-                        strSql.Append("HasBeenInvoiced=@HasBeenInvoiced,");
-                        strSql.Append("InvoicedTime=@InvoicedTime,");
-                        strSql.Append("InvoicedOperator=@InvoicedOperator,");
-                        strSql.Append("UnitPriceDetails=@UnitPriceDetails");
-                        strSql.Append(" where Id=@Id");
-                        SqlParameter[] parameters = {
+                    StringBuilder strSql = new StringBuilder();
+                    strSql.Append("update ReceivedMoney set ");
+                    strSql.Append("StoreInOrderId=@StoreInOrderId,");
+                    strSql.Append("CustomerId=@CustomerId,");
+                    strSql.Append("Name=@Name,");
+                    strSql.Append("EndChargingTime=@EndChargingTime,");
+                    strSql.Append("BeginChargingTime=@BeginChargingTime,");
+                    strSql.Append("ReceivedTime=@ReceivedTime,");
+                    strSql.Append("ChargingCount=@ChargingCount,");
+                    strSql.Append("TotalPrice=@TotalPrice,");
+                    strSql.Append("InvoicedPrice=@InvoicedPrice,");
+                    strSql.Append("CreateTime=@CreateTime,");
+                    strSql.Append("Admin=@Admin,");
+                    strSql.Append("Remark=@Remark,");
+                    strSql.Append("Status=@Status,");
+                    strSql.Append("HasBeenInvoiced=@HasBeenInvoiced,");
+                    strSql.Append("InvoicedTime=@InvoicedTime,");
+                    strSql.Append("InvoicedOperator=@InvoicedOperator,");
+                    strSql.Append("UnitPriceDetails=@UnitPriceDetails");
+                    strSql.Append(" where Id=@Id");
+                    SqlParameter[] parameters = {
 					            new SqlParameter("@StoreInOrderId", SqlDbType.Int,4),
 					            new SqlParameter("@CustomerId", SqlDbType.Int,4),
 					            new SqlParameter("@Name", SqlDbType.VarChar,254),
@@ -153,30 +153,30 @@ namespace DTcms.DAL
 					            new SqlParameter("@InvoicedOperator", SqlDbType.VarChar,254),
 					            new SqlParameter("@UnitPriceDetails", SqlDbType.VarChar,1000),
 					            new SqlParameter("@Id", SqlDbType.Int,4)};
-                        parameters[0].Value = model.StoreInOrderId;
-                        parameters[1].Value = model.CustomerId;
-                        parameters[2].Value = model.Name;
-                        parameters[3].Value = model.EndChargingTime;
-                        parameters[4].Value = model.BeginChargingTime;
-                        parameters[5].Value = model.ReceivedTime;
-                        parameters[6].Value = model.ChargingCount;
-                        parameters[7].Value = model.TotalPrice;
-                        parameters[8].Value = model.InvoicedPrice;
-                        parameters[9].Value = model.CreateTime;
-                        parameters[10].Value = model.Admin;
-                        parameters[11].Value = model.Remark;
-                        parameters[12].Value = model.Status;
-                        parameters[13].Value = model.HasBeenInvoiced;
-                        parameters[14].Value = model.InvoicedTime;
-                        parameters[15].Value = model.InvoicedOperator;
-                        parameters[16].Value = model.UnitPriceDetails;
-                        parameters[17].Value = model.Id;
+                    parameters[0].Value = model.StoreInOrderId;
+                    parameters[1].Value = model.CustomerId;
+                    parameters[2].Value = model.Name;
+                    parameters[3].Value = model.EndChargingTime;
+                    parameters[4].Value = model.BeginChargingTime;
+                    parameters[5].Value = model.ReceivedTime;
+                    parameters[6].Value = model.ChargingCount;
+                    parameters[7].Value = model.TotalPrice;
+                    parameters[8].Value = model.InvoicedPrice;
+                    parameters[9].Value = model.CreateTime;
+                    parameters[10].Value = model.Admin;
+                    parameters[11].Value = model.Remark;
+                    parameters[12].Value = model.Status;
+                    parameters[13].Value = model.HasBeenInvoiced;
+                    parameters[14].Value = model.InvoicedTime;
+                    parameters[15].Value = model.InvoicedOperator;
+                    parameters[16].Value = model.UnitPriceDetails;
+                    parameters[17].Value = model.Id;
 
-                        DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+                    DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
 
-                        new StoreInOrder().UpdateField(conn, trans, model.StoreInOrderId, "ChargingTime = '" + model.ReceivedTime + "'");
+                    new StoreInOrder().UpdateField(conn, trans, model.StoreInOrderId, "ChargingTime = '" + model.ReceivedTime + "'");
 
-                        trans.Commit();
+                    trans.Commit();
                     //}
                     //catch
                     //{
@@ -474,7 +474,7 @@ namespace DTcms.DAL
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select A.Id as Id, A.Remark as Remark, A.StoreInOrderId, A.CustomerId, A.Name as Name, A.ReceivedTime, A.ChargingCount, A.TotalPrice, A.InvoicedPrice, A.Admin, A.HasBeenInvoiced, A.UnitPriceDetails, A.InvoicedTime, A.InvoicedOperator, B.AccountNumber, C.Name as CustomerName ");
+            strSql.Append("select A.Id as Id, A.Remark as Remark, A.StoreInOrderId, A.CustomerId, A.Name as Name, A.ReceivedTime, A.ChargingCount, A.TotalPrice, A.InvoicedPrice, A.Admin, A.HasBeenInvoiced, A.UnitPriceDetails, A.InvoicedTime, A.InvoicedOperator, A.BeginChargingTime, A.EndChargingTime, A.Status as Status, B.AccountNumber, C.Name as CustomerName ");
             strSql.Append("from ReceivedMoney A, StoreInOrder B, Customer C ");
             strSql.Append("where A.StoreInOrderId = B.Id and A.CustomerId = C.Id ");
             if (strWhere.Trim() != "")
@@ -484,6 +484,7 @@ namespace DTcms.DAL
             recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
             return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
         }
+
     }
 }
 

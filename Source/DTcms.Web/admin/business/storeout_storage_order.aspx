@@ -78,6 +78,7 @@
                     <a class="menu-btn"></a>
                     <div class="l-list">
                         <ul class="icon-list">
+                            <li><a class="add" href="storeout_storage_order_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>新增</span></a></li>
                             <li><asp:LinkButton ID="btnOK" runat="server" CssClass="lock" OnClientClick="return ExePostBack('btnOK','确认信息无误后点击确定！');" onclick="btnOK_Click"><i></i><span>确认</span></asp:LinkButton></li>
                             <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
                             <%--<li>

@@ -43,7 +43,7 @@ namespace DTcms.Web.admin.search
         private void TreeBind(string strWhere)
         {
             BLL.StoreInOrder storeInOrderBLL = new BLL.StoreInOrder();
-            DataTable storeInOrderDT = storeInOrderBLL.GetList(0, strWhere, "Id desc").Tables[0];
+            DataTable storeInOrderDT = storeInOrderBLL.GetList(0, "Status > 1", "Id desc").Tables[0];
 
             this.ddlStoreInOrder.Items.Clear();
             this.ddlStoreInOrder.Items.Add(new ListItem("选择入库单", ""));
@@ -173,7 +173,7 @@ namespace DTcms.Web.admin.search
                     Utils.WriteCookie("storein_cost_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("user_list.aspx", "storein_order_id={0}&type={1}&status={2}&keyword={3}&beginTime={4}&endTime={5}",
+            Response.Redirect(Utils.CombUrlTxt("storein_cost_list.aspx", "storein_order_id={0}&type={1}&status={2}&keyword={3}&beginTime={4}&endTime={5}",
                 this.storein_order_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime));
         }
     }

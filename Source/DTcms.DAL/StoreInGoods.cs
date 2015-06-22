@@ -297,7 +297,7 @@ namespace DTcms.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select StoreInOrderId, Id, StoreId, StoreWaitingGoodsId, CustomerId, Status, Count, StoredInTime, Remark  ");
+            strSql.Append("select StoreInOrderId, Id, StoreId, GoodsId, StoreWaitingGoodsId, CustomerId, Status, Count, StoredInTime, Remark  ");
             strSql.Append("  from StoreInGoods ");
             strSql.Append(" where Id=@Id");
             SqlParameter[] parameters = {
@@ -322,6 +322,10 @@ namespace DTcms.DAL
                 if (ds.Tables[0].Rows[0]["StoreId"].ToString() != "")
                 {
                     model.StoreId = int.Parse(ds.Tables[0].Rows[0]["StoreId"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["GoodsId"].ToString() != "")
+                {
+                    model.GoodsId = int.Parse(ds.Tables[0].Rows[0]["GoodsId"].ToString());
                 }
                 if (ds.Tables[0].Rows[0]["StoreWaitingGoodsId"].ToString() != "")
                 {
@@ -399,9 +403,9 @@ namespace DTcms.DAL
             {
                 strSql.Append(" top " + Top.ToString());
             }
-            strSql.Append(" A.Id, A.Count as StoredInCount, A.GoodsId, B.Name as GoodsName, C.Name as CustomerName ");
-            strSql.Append(" from StoreInGoods A, Goods B, Customer C ");
-            strSql.Append(" where A.GoodsId = B.Id and A.CustomerId = C.Id ");
+            strSql.Append(" A.Id, A.Count as StoredInCount, A.GoodsId, B.Name as GoodsName, C.Name as CustomerName, E.Name as StoreName ");
+            strSql.Append(" from StoreInGoods A, Goods B, Customer C, Store E ");
+            strSql.Append(" where A.GoodsId = B.Id and A.CustomerId = C.Id and A.StoreId = E.Id ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(strWhere);

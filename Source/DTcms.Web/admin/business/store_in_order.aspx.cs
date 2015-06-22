@@ -16,6 +16,7 @@ namespace DTcms.Web.admin.business
         protected int pageSize;
 
         protected int customer_id;
+        protected int status;
         protected string keyword;
         protected string beginTime = string.Empty;
         protected string endTime = string.Empty;
@@ -23,6 +24,7 @@ namespace DTcms.Web.admin.business
         protected void Page_Load(object sender, EventArgs e)
         {
             this.customer_id = DTRequest.GetQueryInt("customer_id");
+            this.status = DTRequest.GetQueryInt("status");
             this.keyword = DTRequest.GetQueryString("keyword");
             this.beginTime = DTRequest.GetQueryString("beginTime");
             this.endTime = DTRequest.GetQueryString("endTime");
@@ -32,7 +34,7 @@ namespace DTcms.Web.admin.business
             {
                 ChkAdminLevel("store_in_order", DTEnums.ActionEnum.View.ToString()); //检查权限
                 TreeBind("");
-                RptBind(CombSqlTxt(this.customer_id, this.keyword, this.beginTime, this.endTime), "A.CreateTime DESC");
+                RptBind(CombSqlTxt(this.customer_id, status, this.keyword, this.beginTime, this.endTime), "A.CreateTime DESC");
             }
         }
 
@@ -57,6 +59,10 @@ namespace DTcms.Web.admin.business
             {
                 this.ddlCustomer.SelectedValue = this.customer_id.ToString();
             }
+            if (this.status > -1)
+            {
+                this.ddlStatus.SelectedValue = this.status.ToString();
+            }
             txtKeyWord.Text = this.keyword;
             txtBeginTime.Text = this.beginTime;
             txtEndTime.Text = this.endTime;
@@ -66,19 +72,23 @@ namespace DTcms.Web.admin.business
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}&page={4}",
-                this.customer_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime, "__id__");
+            string pageUrl = Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&status={1}&keyword={2}&beginTime={3}&endTime={4}&page={5}",
+                this.customer_id.ToString(), this.status.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime, "__id__");
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
         }
         #endregion
 
         #region 组合SQL查询语句==========================
-        protected string CombSqlTxt(int _customer_id, string _keyword, string _beginTime, string _endTime)
+        protected string CombSqlTxt(int _customer_id, int _status, string _keyword, string _beginTime, string _endTime)
         {
             StringBuilder strTemp = new StringBuilder();
             if (_customer_id > 0)
             {
                 strTemp.Append(" and A.CustomerId=" + _customer_id);
+            }
+            if (_status > -1)
+            {
+                strTemp.Append(" and A.Status=" + _status);
             }
             if (!string.IsNullOrEmpty(_keyword))
             {
@@ -116,15 +126,21 @@ namespace DTcms.Web.admin.business
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
-                this.customer_id.ToString(), txtKeyWord.Text, txtBeginTime.Text, txtEndTime.Text));
+            Response.Redirect(Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&status={1}&keyword={2}&beginTime={3}&endTime={4}",
+                this.customer_id.ToString(), this.status.ToString(), txtKeyWord.Text, txtBeginTime.Text, txtEndTime.Text));
         }
 
         //待入库状态
         protected void ddlCustomer_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
-                ddlCustomer.SelectedValue, this.keyword, this.beginTime, this.endTime));
+            Response.Redirect(Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&status={1}&keyword={2}&beginTime={3}&endTime={4}",
+                ddlCustomer.SelectedValue, this.status.ToString(), this.keyword, this.beginTime, this.endTime));
+        }
+
+        protected void ddlStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Response.Redirect(Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&status={1}&keyword={2}&beginTime={3}&endTime={4}",
+                this.customer_id.ToString(), ddlStatus.SelectedValue, this.keyword, this.beginTime, this.endTime));
         }
 
         //设置分页数量
@@ -138,8 +154,8 @@ namespace DTcms.Web.admin.business
                     Utils.WriteCookie("store_in_order_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("user_list.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
-                this.customer_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime));
+            Response.Redirect(Utils.CombUrlTxt("user_list.aspx", "customer_id={0}&status={1}&keyword={2}&beginTime={3}&endTime={4}",
+                this.customer_id.ToString(), this.status.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime));
         }
 
         //批量删除
@@ -166,8 +182,8 @@ namespace DTcms.Web.admin.business
                 }
             }
             AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除待入库成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
-            JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
-                this.customer_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime));
+            JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&status={1}&keyword={2}&beginTime={3}&endTime={4}",
+                this.customer_id.ToString(), this.status.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime));
         }
 
         protected void btnAudit_Click(object sender, EventArgs e)
@@ -193,8 +209,8 @@ namespace DTcms.Web.admin.business
                 }
             }
             AddAdminLog(DTEnums.ActionEnum.Audit.ToString(), "入库单审核成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
-            JscriptMsg("入库单审核成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&keyword={1}&beginTime={2}&endTime={3}",
-                this.customer_id.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime));
+            JscriptMsg("入库单审核成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("store_in_order.aspx", "customer_id={0}&status={1}&keyword={2}&beginTime={3}&endTime={4}",
+                this.customer_id.ToString(), this.status.ToString(), this.keyword.ToString(), this.beginTime.ToString(), this.endTime));
         }
 
         protected string GetStatus(string status)
