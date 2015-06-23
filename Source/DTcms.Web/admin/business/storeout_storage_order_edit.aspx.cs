@@ -102,8 +102,13 @@ namespace DTcms.Web.admin.business
                 && DateTime.TryParse(txtStoredOutTime.Text, out _chargingTime)
                 && Decimal.TryParse(txtChargingCount.Text, out _chargingCount))
             {
+                Model.StoreInOrder storeInOrder = new BLL.StoreInOrder().GetModel(_storeInOrderId);
+                if (storeInOrder == null)
+                {
+                    return;
+                }
                 BLL.StoreInUnitPrice unitPriceBLL = new BLL.StoreInUnitPrice();
-                DataTable unitPriceDT = unitPriceBLL.GetList(0, "StoreInOrderId = " + _storeInOrderId + "  and EndTime <= '" + _chargingTime + "' ", "BeginTime asc").Tables[0];
+                DataTable unitPriceDT = unitPriceBLL.GetList(0, "StoreInOrderId = " + _storeInOrderId + " and BeginTime <= '" + storeInOrder.ChargingTime + "' and (EndTime <= '" + _chargingTime + "' or year(EndTime) == 9999)  ", "BeginTime asc").Tables[0];
                 int rowsCount = unitPriceDT.Rows.Count;
                 StringBuilder unitPriceText = new StringBuilder();
                 decimal totalPrice = 0.00M;
@@ -114,12 +119,12 @@ namespace DTcms.Web.admin.business
                     decimal totalUnitPrice = 0.00M;
                     if (i == 0)
                     {
-                        beginTime = _chargingTime;
+                        beginTime = storeInOrder.ChargingTime;
                         _receivedBeginTime = beginTime;
                     }
                     if (i == rowsCount - 1)
                     {
-                        DateTime et = DateTime.Now.AddDays(1);
+                        DateTime et = _chargingTime.AddDays(1);
                         endTime = new DateTime(et.Year, et.Month, et.Day);
                         _receivedEndTime = endTime;
                     }
