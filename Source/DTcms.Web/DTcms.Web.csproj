@@ -74,6 +74,8 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="admin\business\storein_cost_list.aspx" />
+    <Content Include="admin\business\storeout_cost_list.aspx" />
     <Content Include="admin\business\store_in_order.aspx" />
     <Content Include="admin\business\store_in_order_edit.aspx" />
     <Content Include="admin\business\storeout_waiting_goods.aspx" />
@@ -772,6 +774,20 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="admin\business\storein_cost_list.aspx.cs">
+      <DependentUpon>storein_cost_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\business\storein_cost_list.aspx.designer.cs">
+      <DependentUpon>storein_cost_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\business\storeout_cost_list.aspx.cs">
+      <DependentUpon>storeout_cost_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\business\storeout_cost_list.aspx.designer.cs">
+      <DependentUpon>storeout_cost_list.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\business\store_in_order.aspx.cs">
       <DependentUpon>store_in_order.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
