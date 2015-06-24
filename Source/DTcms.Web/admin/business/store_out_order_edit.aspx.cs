@@ -109,7 +109,7 @@ namespace DTcms.Web.admin.business
                     return;
                 }
                 BLL.StoreInUnitPrice unitPriceBLL = new BLL.StoreInUnitPrice();
-                DataTable unitPriceDT = unitPriceBLL.GetList(0, "StoreInOrderId = " + _storeInOrderId + " and BeginTime <= '" + storeInOrder.ChargingTime + "' and  (EndTime <= '" + _chargingTime + "' or year(EndTime) = 9999)  ", "BeginTime asc").Tables[0];
+                DataTable unitPriceDT = unitPriceBLL.GetUnitPriceList(_storeInOrderId, storeInOrder.ChargingTime, _chargingTime).Tables[0];
                 int rowsCount = unitPriceDT.Rows.Count;
                 StringBuilder unitPriceText = new StringBuilder();
                 decimal totalPrice = 0.00M;

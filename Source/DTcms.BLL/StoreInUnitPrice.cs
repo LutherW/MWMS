@@ -95,6 +95,11 @@ namespace DTcms.BLL{
 		{
 			return dal.GetList(Top,strWhere,filedOrder);
 		}
+
+        public DataSet GetUnitPriceList(int storeInOrderId, DateTime beginTime, DateTime endTime)
+        {
+            return dal.GetUnitPriceList(storeInOrderId, beginTime, endTime);
+        }
 		/// <summary>
 		/// 获得数据列表
 		/// </summary>

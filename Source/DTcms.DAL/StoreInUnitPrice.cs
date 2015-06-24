@@ -257,6 +257,20 @@ namespace DTcms.DAL
         }
 
 
+        public DataSet GetUnitPriceList(int storeInOrderId, DateTime beginTime, DateTime endTime)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select ");
+            strSql.Append(" * ");
+            strSql.Append(" from StoreInUnitPrice ");
+            strSql.Append(" where ");
+            strSql.Append(" (BeginTime >= (SELECT BeginTime FROM StoreInUnitPrice WHERE (BeginTime <= '" + beginTime + "' and EndTime >= '" + beginTime + "'))) ");
+            strSql.Append(" or ");
+            strSql.Append(" (BeginTime <= (SELECT BeginTime FROM StoreInUnitPrice WHERE (BeginTime <= '" + endTime + "' and EndTime >= '" + endTime + "'))) ");
+            strSql.Append(" order by BeginTime asc");
+            return DbHelperSQL.Query(strSql.ToString());
+        }
+
     }
 }
 
