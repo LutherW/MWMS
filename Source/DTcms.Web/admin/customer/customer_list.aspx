@@ -64,16 +64,16 @@
                 <HeaderTemplate>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
-                            <th width="8%">选择</th>
+                            <th width="5%">选择</th>
                             <th width="10%" align="left">编号</th>
-                            <th width="10%">名称</th>
-                            <th width="10%">联系人</th>
-                            <th width="10%">联系电话</th>
-                            <th width="15%">联系地址</th>
-                            <th width="10%">电子邮箱</th>
-                            <th width="10%">传真</th>
-                            <th width="5%">状态</th>
-                            <th width="10%">操作</th>
+                            <th align="left">名称</th>
+                            <th width="10%" align="left">联系人</th>
+                            <th width="10%" align="left">联系电话</th>
+                            <th width="15%" align="left">联系地址</th>
+                            <th width="10%" align="left">电子邮箱</th>
+                            <th width="10%" align="left">传真</th>
+                            <th width="5%" align="left">状态</th>
+                            <th width="5%" align="left">操作</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
@@ -85,14 +85,14 @@
                         <td>
                             <a href="customer_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>"><%#Eval("Code")%></a>
                         </td>
-                        <td align="center"><%#Eval("Name")%></td>
-                        <td align="center"><%#Eval("LinkMan")%></td>
-                        <td align="center"><%#Eval("LinkTel")%></td>
-                        <td align="center"><%#Eval("LinkAddress")%></td>
-                        <td align="center"><%#Eval("Email")%></td>
-                        <td align="center"><%#Eval("Fax")%></td>
-                        <td align="center"><%#Eval("Status").ToString().Equals("1") ? "禁用" : "启用"%></td>
-                        <td align="center">
+                        <td><%#Eval("Name")%></td>
+                        <td><%#Eval("LinkMan")%></td>
+                        <td><%#Eval("LinkTel")%></td>
+                        <td><%#Eval("LinkAddress")%></td>
+                        <td><%#Eval("Email")%></td>
+                        <td><%#Eval("Fax")%></td>
+                        <td><%#Eval("Status").ToString().Equals("1") ? "禁用" : "启用"%></td>
+                        <td>
                             <a href="customer_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
                         </td>
                     </tr>

@@ -46,6 +46,7 @@ namespace DTcms.Web.admin.business
                 else if (action == DTEnums.ActionEnum.Add.ToString())
                 {
                     Model.manager manager = GetAdminInfo();
+                    txtBeginChargingTime.Text = DateTime.Now.ToString("yyyy-MM-dd");
                     txtAdmin.Text = manager == null ? "" : manager.user_name;
                 }
             }
@@ -128,6 +129,11 @@ namespace DTcms.Web.admin.business
         private bool DoAdd()
         {
             bool result = false;
+            if (string.IsNullOrWhiteSpace(txtBeginChargingTime.Text))
+            {
+                JscriptMsg("实际入库时间不能为空！", "");
+                return false;
+            }
             Model.StoreInOrder model = new Model.StoreInOrder();
             BLL.StoreInOrder bll = new BLL.StoreInOrder();
 
@@ -233,6 +239,11 @@ namespace DTcms.Web.admin.business
         private bool DoEdit(int _id)
         {
             bool result = false;
+            if (string.IsNullOrWhiteSpace(txtBeginChargingTime.Text))
+            {
+                JscriptMsg("实际入库时间不能为空！", "");
+                return false;
+            }
             BLL.StoreInOrder bll = new BLL.StoreInOrder();
             Model.StoreInOrder model = bll.GetModel(_id);
 

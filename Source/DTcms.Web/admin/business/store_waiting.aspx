@@ -24,7 +24,7 @@
                 id: 'attachDialogId',
                 title: name + "的附件",
                 url: '/admin/dialog/dialog_goods_attach_list.aspx?goodsId=' + id,
-                width: 500,
+                width: 600,
                 height: 180,
                 onclose: function () {
 

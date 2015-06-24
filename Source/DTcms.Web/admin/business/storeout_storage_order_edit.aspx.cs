@@ -37,7 +37,7 @@ namespace DTcms.Web.admin.business
             }
             if (!Page.IsPostBack)
             {
-                ChkAdminLevel("store_out_order", DTEnums.ActionEnum.View.ToString()); //检查权限
+                ChkAdminLevel("storeout_storage_order", DTEnums.ActionEnum.View.ToString()); //检查权限
                 
                 TreeBind("Status = 2 "); //绑定类别
                 if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
@@ -47,6 +47,7 @@ namespace DTcms.Web.admin.business
                 else if (action == DTEnums.ActionEnum.Add.ToString())
                 {
                     Model.manager manager = GetAdminInfo();
+                    txtStoredOutTime.Text = DateTime.Now.ToString("yyyy-MM-dd");
                     txtAdmin.Text = manager == null ? "" : manager.user_name;
                 }
             }
@@ -108,7 +109,7 @@ namespace DTcms.Web.admin.business
                     return;
                 }
                 BLL.StoreInUnitPrice unitPriceBLL = new BLL.StoreInUnitPrice();
-                DataTable unitPriceDT = unitPriceBLL.GetList(0, "StoreInOrderId = " + _storeInOrderId + " and BeginTime <= '" + storeInOrder.ChargingTime + "' and (EndTime <= '" + _chargingTime + "' or year(EndTime) == 9999)  ", "BeginTime asc").Tables[0];
+                DataTable unitPriceDT = unitPriceBLL.GetList(0, "StoreInOrderId = " + _storeInOrderId + " and BeginTime <= '" + storeInOrder.ChargingTime + "' and (EndTime <= '" + _chargingTime + "' or year(EndTime) = 9999)  ", "BeginTime asc").Tables[0];
                 int rowsCount = unitPriceDT.Rows.Count;
                 StringBuilder unitPriceText = new StringBuilder();
                 decimal totalPrice = 0.00M;
@@ -222,6 +223,11 @@ namespace DTcms.Web.admin.business
         private bool DoAdd()
         {
             bool result = false;
+            if (string.IsNullOrWhiteSpace(txtStoredOutTime.Text))
+            {
+                JscriptMsg("出库时间不能为空！", "");
+                return false;
+            }
             Model.StoreOutOrder model = new Model.StoreOutOrder();
             BLL.StoreOutOrder bll = new BLL.StoreOutOrder();
 
@@ -301,6 +307,11 @@ namespace DTcms.Web.admin.business
         private bool DoEdit(int _id)
         {
             bool result = false;
+            if (string.IsNullOrWhiteSpace(txtStoredOutTime.Text))
+            {
+                JscriptMsg("出库时间不能为空！", "");
+                return false;
+            }
             BLL.StoreOutOrder bll = new BLL.StoreOutOrder();
             Model.StoreOutOrder model = bll.GetModel(_id);
 
@@ -380,13 +391,13 @@ namespace DTcms.Web.admin.business
         {
             if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
             {
-                ChkAdminLevel("store_out_order", DTEnums.ActionEnum.Edit.ToString()); //检查权限
+                ChkAdminLevel("storeout_storage_order", DTEnums.ActionEnum.Edit.ToString()); //检查权限
                 if (!DoEdit(this.id))
                 {
                     JscriptMsg("保存过程中发生错误！", "");
                     return;
                 }
-                JscriptMsg("修改出库单成功！", "store_out_order.aspx");
+                JscriptMsg("修改出库单成功！", "storeout_storage_order.aspx");
             }
             else //添加
             {
@@ -396,7 +407,7 @@ namespace DTcms.Web.admin.business
                     JscriptMsg("保存过程中发生错误！", "");
                     return;
                 }
-                JscriptMsg("添加出库单成功！", "store_out_order.aspx");
+                JscriptMsg("添加出库单成功！", "storeout_storage_order.aspx");
             }
         }
 

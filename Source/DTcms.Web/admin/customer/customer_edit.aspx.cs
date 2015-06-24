@@ -33,7 +33,7 @@ namespace DTcms.Web.admin.customer
             }
             if (!Page.IsPostBack)
             {
-                ChkAdminLevel("customer_manage", DTEnums.ActionEnum.View.ToString()); //检查权限
+                ChkAdminLevel("customer_list", DTEnums.ActionEnum.View.ToString()); //检查权限
                 if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
                 {
                     ShowInfo(this.id);
@@ -115,7 +115,7 @@ namespace DTcms.Web.admin.customer
         {
             if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
             {
-                ChkAdminLevel("customer_manage", DTEnums.ActionEnum.Edit.ToString()); //检查权限
+                ChkAdminLevel("customer_list", DTEnums.ActionEnum.Edit.ToString()); //检查权限
                 if (!DoEdit(this.id))
                 {
                     JscriptMsg("保存过程中发生错误！", "");
@@ -125,7 +125,7 @@ namespace DTcms.Web.admin.customer
             }
             else //添加
             {
-                ChkAdminLevel("customer_manage", DTEnums.ActionEnum.Add.ToString()); //检查权限
+                ChkAdminLevel("customer_list", DTEnums.ActionEnum.Add.ToString()); //检查权限
                 if (!DoAdd())
                 {
                     JscriptMsg("保存过程中发生错误！", "");

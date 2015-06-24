@@ -109,7 +109,7 @@
                 </dd>
             </dl>
             <dl>
-                <dt>台账号：</dt>
+                <dt>入库单号：</dt>
                 <dd>
                     <asp:TextBox ID="txtAccountNumber" runat="server" CssClass="input normal" datatype="*1-100" sucmsg=" " minlength="2" MaxLength="100"></asp:TextBox>
                     <span class="Validform_checktip">*</span>

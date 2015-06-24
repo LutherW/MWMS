@@ -74,8 +74,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="admin\business\storein_cost_list.aspx" />
-    <Content Include="admin\business\storeout_cost_list.aspx" />
     <Content Include="admin\business\store_in_order.aspx" />
     <Content Include="admin\business\store_in_order_edit.aspx" />
     <Content Include="admin\business\storeout_waiting_goods.aspx" />
@@ -190,6 +188,7 @@
     <Content Include="admin\skin\default\order_speed.gif" />
     <Content Include="admin\skin\default\skin_icons.png" />
     <Content Include="admin\skin\default\style.css" />
+    <Content Include="admin\skin\default\textbg.gif" />
     <Content Include="admin\skin\default\valid_icons.png" />
     <Content Include="admin\skin\layout.css" />
     <Content Include="admin\store\store_domain_edit.aspx" />
@@ -774,20 +773,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="admin\business\storein_cost_list.aspx.cs">
-      <DependentUpon>storein_cost_list.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\business\storein_cost_list.aspx.designer.cs">
-      <DependentUpon>storein_cost_list.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="admin\business\storeout_cost_list.aspx.cs">
-      <DependentUpon>storeout_cost_list.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\business\storeout_cost_list.aspx.designer.cs">
-      <DependentUpon>storeout_cost_list.aspx</DependentUpon>
-    </Compile>
     <Compile Include="admin\business\store_in_order.aspx.cs">
       <DependentUpon>store_in_order.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1812,6 +1797,7 @@
     <Content Include="xmlconfig\alipaypc.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\配置文件1.pubxml" />
     <None Include="templates\mobile\jqmobi\css\src\afui.less" />
     <None Include="templates\mobile\jqmobi\plugins\README.md" />
     <None Include="templates\mobile\jqmobi\ui\README.md" />

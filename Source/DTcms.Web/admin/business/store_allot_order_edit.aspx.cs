@@ -48,6 +48,7 @@ namespace DTcms.Web.admin.business
                 else if (action == DTEnums.ActionEnum.Add.ToString())
                 {
                     Model.manager manager = GetAdminInfo();
+                    txtAllotTime.Text = DateTime.Now.ToString("yyyy-MM-dd");
                     txtAdmin.Text = manager == null ? "" : manager.user_name;
                 }
             }
@@ -98,6 +99,11 @@ namespace DTcms.Web.admin.business
         private bool DoAdd()
         {
             bool result = false;
+            if (string.IsNullOrWhiteSpace(txtAllotTime.Text))
+            {
+                JscriptMsg("调拨时间不能为空！", "");
+                return false;
+            }
             Model.AllotOrder model = new Model.AllotOrder();
             BLL.AllotOrder bll = new BLL.AllotOrder();
 
@@ -146,6 +152,11 @@ namespace DTcms.Web.admin.business
         private bool DoEdit(int _id)
         {
             bool result = false;
+            if (string.IsNullOrWhiteSpace(txtAllotTime.Text))
+            {
+                JscriptMsg("调拨时间不能为空！", "");
+                return false;
+            }
             BLL.AllotOrder bll = new BLL.AllotOrder();
             Model.AllotOrder model = bll.GetModel(_id);
 

@@ -41,7 +41,7 @@
 </div>
 
 <div class="copy-right">
-  <p>版权所有 宏盛创达软件有限公司 Copyright © 2009 - 2015 dtsoft.net Inc. All Rights Reserved.</p>
+  <p>版权所有 飞扬信息技术有限公司 Copyright © 2009 - <%=DateTime.Now.Year %> qdyucheng.com Inc. All Rights Reserved.</p>
 </div>
 </form>
 </body>

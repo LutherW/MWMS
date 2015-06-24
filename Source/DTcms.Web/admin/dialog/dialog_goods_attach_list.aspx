@@ -18,14 +18,14 @@
 
 <body>
     <form id="form1" runat="server">
-        <div style="width: 500px; height: 280px; overflow: auto;">
+        <div style="width: 600px; height: 280px; overflow: auto;">
             <div class="div-content">
                 <asp:Repeater ID="rptList" runat="server">
                     <HeaderTemplate>
                         <table width="100%" bgoods="0" cellspacing="0" cellpadding="0" class="ltable">
                             <tr>
-                                <th width="5%"></th>
-                                <th align="left" width="20%">名称</th>
+                                <th width="2%"></th>
+                                <th align="left" width="30%">名称</th>
                                 <th align="left" width="20%">上传时间</th>
                                 <th align="left">备注</th>
                             </tr>

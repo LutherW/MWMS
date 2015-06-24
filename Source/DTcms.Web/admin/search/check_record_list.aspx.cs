@@ -34,7 +34,7 @@ namespace DTcms.Web.admin.search
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
             {
-                ChkAdminLevel("check_record", DTEnums.ActionEnum.View.ToString()); //检查权限
+                ChkAdminLevel("check_record_list", DTEnums.ActionEnum.View.ToString()); //检查权限
                 TreeBind("");
                 RptBind(CombSqlTxt(this.customer_id, this.goods_id, this.vehicle_id, this.beginTime, this.endTime, this.keywords), "A.CheckTime DESC");
             }

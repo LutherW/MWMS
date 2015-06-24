@@ -11,7 +11,7 @@ $(function(){
 	$(".rule-single-checkbox").ruleSingleCheckbox();
 	$(".rule-multi-checkbox").ruleMultiCheckbox();
 	$(".rule-multi-radio").ruleMultiRadio();
-	$(".rule-single-select").ruleSingleSelect();
+	//$(".rule-single-select").ruleSingleSelect();
 	$(".rule-multi-porp").ruleMultiPorp();
 	$(".rule-date-input").ruleDateInput();
 });

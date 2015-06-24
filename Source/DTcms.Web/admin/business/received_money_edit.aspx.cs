@@ -48,6 +48,7 @@ namespace DTcms.Web.admin.business
                 else if (action == DTEnums.ActionEnum.Add.ToString())
                 {
                     Model.manager manager = GetAdminInfo();
+                    txtReceivedTime.Text = DateTime.Now.ToString("yyyy-MM-dd");
                     txtAdmin.Text = manager == null ? "" : manager.user_name;
                 }
             }
@@ -195,6 +196,11 @@ namespace DTcms.Web.admin.business
         private bool DoAdd()
         {
             bool result = false;
+            if (string.IsNullOrWhiteSpace(txtReceivedTime.Text))
+            {
+                JscriptMsg("收款时间不能为空！", "");
+                return false;
+            }
             string[] storeInOrderValues = ddlSotreInOrder.SelectedValue.Split('|');
             Model.ReceivedMoney model = new Model.ReceivedMoney();
             BLL.ReceivedMoney bll = new BLL.ReceivedMoney();
@@ -233,6 +239,11 @@ namespace DTcms.Web.admin.business
         private bool DoEdit(int _id)
         {
             bool result = false;
+            if (string.IsNullOrWhiteSpace(txtReceivedTime.Text))
+            {
+                JscriptMsg("收款时间不能为空！", "");
+                return false;
+            }
             string[] storeInOrderValues = ddlSotreInOrder.SelectedValue.Split('|');
             BLL.ReceivedMoney bll = new BLL.ReceivedMoney();
             Model.ReceivedMoney model = bll.GetModel(_id);

@@ -47,6 +47,7 @@ namespace DTcms.Web.admin.business
                 else if (action == DTEnums.ActionEnum.Add.ToString())
                 {
                     Model.manager manager = GetAdminInfo();
+                    txtStoredOutTime.Text = DateTime.Now.ToString("yyyy-MM-dd");
                     txtAdmin.Text = manager == null ? "" : manager.user_name;
                 }
             }
@@ -222,6 +223,11 @@ namespace DTcms.Web.admin.business
         private bool DoAdd()
         {
             bool result = false;
+            if (string.IsNullOrWhiteSpace(txtStoredOutTime.Text))
+            {
+                JscriptMsg("出库时间不能为空！", "");
+                return false;
+            }
             Model.StoreOutOrder model = new Model.StoreOutOrder();
             BLL.StoreOutOrder bll = new BLL.StoreOutOrder();
 
@@ -301,6 +307,11 @@ namespace DTcms.Web.admin.business
         private bool DoEdit(int _id)
         {
             bool result = false;
+            if (string.IsNullOrWhiteSpace(txtStoredOutTime.Text))
+            {
+                JscriptMsg("出库时间不能为空！", "");
+                return false;
+            }
             BLL.StoreOutOrder bll = new BLL.StoreOutOrder();
             Model.StoreOutOrder model = bll.GetModel(_id);
 
