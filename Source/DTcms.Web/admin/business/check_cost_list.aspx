@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="storeout_cost_list.aspx.cs" Inherits="DTcms.Web.admin.business.storeout_cost_list" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="check_cost_list.aspx.cs" Inherits="DTcms.Web.admin.business.check_cost_list" %>
 
 <%@ Import Namespace="DTcms.Common" %>
 
@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>出库费用列表</title>
+    <title>查验费用列表</title>
     <link href="../../scripts/artdialog/ui-dialog.css" rel="stylesheet" type="text/css" />
     <link href="../skin/default/style.css" rel="stylesheet" type="text/css" />
     <link href="../../css/pagination.css" rel="stylesheet" type="text/css" />
@@ -22,7 +22,7 @@
             var invoicedDialog = top.dialog({
                 id: 'vehicleDialogId',
                 title: "发票信息",
-                url: '/admin/dialog/dialog_storeout_cost_invoiced.aspx?id=' + id,
+                url: '/admin/dialog/dialog_check_cost_invoiced.aspx?id=' + id,
                 width: 500
             }).showModal();
         }
@@ -36,7 +36,7 @@
             <a href="javascript:history.back(-1);" class="back"><i></i><span>返回上一页</span></a>
             <a href="../center.aspx" class="home"><i></i><span>首页</span></a>
             <i class="arrow"></i>
-            <span>出库费用列表</span>
+            <span>查验费用列表</span>
         </div>
         <!--/导航栏-->
 
@@ -47,10 +47,6 @@
                     <a class="menu-btn"></a>
                     <div class="l-list">
                         <div class="menu-list">
-                            <div class="rule-single-select">
-                                <asp:DropDownList ID="ddlStoreInOrder" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlStoreInOrder_SelectedIndexChanged">
-                                </asp:DropDownList>
-                            </div>
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlType_SelectedIndexChanged">
                                     <asp:ListItem Text="选择类型" Value=""></asp:ListItem>
@@ -89,10 +85,10 @@
                         <tr>
                             <th width="5%"></th>
                             <th align="left">收费名称</th>
-                            <th align="left" width="10%">出库单</th>
                             <th align="left" width="10%">客户名称</th>
                             <th align="left">单价</th>
                             <th align="left" width="10%">数量</th>
+                            <th align="left" width="8%">类型</th>
                             <th align="left" width="8%">总价</th>
                             <th align="left" width="8%">付款时间</th>
                             <th width="8%" >操作人</th>
@@ -105,11 +101,11 @@
                     <tr>
                         <td align="center"></td>
                         <td><%#Eval("Name")%></td>
-                        <td><%#Eval("AccountNumber")%></td>
                         <td><%#Eval("Customer")%></td>
-                        <td><%#Eval("UnitPrice")%></td>
+                        <td><%#Math.Abs(Convert.ToDecimal(Eval("UnitPrice")))%></td>
                         <td><%#Eval("Count")%></td>
-                        <td><%#Eval("TotalPrice")%></td>
+                        <td><%#Convert.ToDecimal(Eval("TotalPrice")) >= 0 ? "收入" : "支出"%></td>
+                        <td><%#Math.Abs(Convert.ToDecimal(Eval("TotalPrice")))%></td>
                         <td><%#string.IsNullOrWhiteSpace(Eval("PaidTime").ToString()) ? "--" : Convert.ToDateTime(Eval("PaidTime")).ToString("yyyy-MM-dd")%></td>
                         <td><%#Eval("Admin")%></td>
                         <td><%#Eval("Status").ToString().Equals("1") ? "已付款" : "未付款"%></td>
@@ -117,7 +113,7 @@
                             <%#Eval("HasBeenInvoiced").ToString().Equals("True") ? "<a href=\"javascript:void(0);\" onclick=\"showInvoicedDialog("+Eval("Id")+");\">发票详情</a>" : "未开发票" %>
                         </td>
                         <td align="center">
-                            <a href="storeout_cost_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
+                            <a href="check_cost_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
                         </td>
                     </tr>
                 </ItemTemplate>

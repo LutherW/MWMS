@@ -22,7 +22,7 @@
             var invoicedDialog = top.dialog({
                 id: 'vehicleDialogId',
                 title: "发票信息",
-                url: '/admin/dialog/dialog_storeout_cost_invoiced.aspx?id=' + id,
+                url: '/admin/dialog/dialog_check_cost_invoiced.aspx?id=' + id,
                 width: 500
             }).showModal();
         }

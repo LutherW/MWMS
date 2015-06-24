@@ -23,6 +23,11 @@ namespace DTcms.BLL
             return dal.Exists(CheckRecordId);
         }
 
+        public bool ExistsById(int id)
+        {
+            return dal.ExistsById(id);
+        }
+
         /// <summary>
         /// 增加一条数据
         /// </summary>
@@ -57,6 +62,17 @@ namespace DTcms.BLL
 
             return dal.GetModel(CheckRecordId);
         }
+
+        public DTcms.Model.CheckCost GetModelById(int id)
+        {
+            return dal.GetModelById(id);
+        }
+
+        public bool Update(DTcms.Model.CheckCost model, int id)
+        {
+            return dal.Update(model, id);
+        }
+
 
         /// <summary>
         /// 得到一个对象实体，从缓存中

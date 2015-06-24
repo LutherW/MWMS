@@ -23,8 +23,19 @@ namespace DTcms.DAL
 
 			return DbHelperSQL.Exists(strSql.ToString(),parameters);
 		}
-		
-				
+
+        public bool ExistsById(int id)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select count(1) from CheckCost");
+            strSql.Append(" where ");
+            strSql.Append(" Id = @Id  ");
+            SqlParameter[] parameters = {
+					new SqlParameter("@Id", SqlDbType.Int,4)			};
+            parameters[0].Value = id;
+
+            return DbHelperSQL.Exists(strSql.ToString(), parameters);
+        }	
 		
 		/// <summary>
 		/// 增加一条数据
@@ -180,6 +191,59 @@ SqlParameter[] parameters = {
 				return false;
 			}
 		}
+
+        public bool Update(DTcms.Model.CheckCost model, int id)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update CheckCost set ");
+            strSql.Append(" Name = @Name , ");
+            strSql.Append(" Status = @Status , ");
+            strSql.Append(" PaidTime = @PaidTime , ");
+            strSql.Append(" Admin = @Admin , ");
+            strSql.Append(" HasBeenInvoiced = @HasBeenInvoiced , ");
+            strSql.Append(" InvoicedTime = @InvoicedTime , ");
+            strSql.Append(" InvoicedOperator = @InvoicedOperator , ");
+            strSql.Append(" Remark = @Remark,  ");
+            strSql.Append(" TotalPrice = @TotalPrice, ");
+            strSql.Append(" Customer = @Customer  ");
+            strSql.Append(" where Id=@Id  ");
+
+            SqlParameter[] parameters = {
+			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
+                        new SqlParameter("@Name", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@Status", SqlDbType.Int,4) ,            
+                        new SqlParameter("@PaidTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@Admin", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@HasBeenInvoiced", SqlDbType.Bit,1) ,            
+                        new SqlParameter("@InvoicedTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@InvoicedOperator", SqlDbType.VarChar,254) ,   
+                        new SqlParameter("@TotalPrice", SqlDbType.Decimal) ,  
+                        new SqlParameter("@Customer", SqlDbType.VarChar,254) ,  
+                        new SqlParameter("@Remark", SqlDbType.VarChar,254)               
+              
+            };
+
+            parameters[0].Value = id;
+            parameters[1].Value = model.Name;
+            parameters[2].Value = model.Status;
+            parameters[3].Value = model.PaidTime;
+            parameters[4].Value = model.Admin;
+            parameters[5].Value = model.HasBeenInvoiced;
+            parameters[6].Value = model.InvoicedTime;
+            parameters[7].Value = model.InvoicedOperator;
+            parameters[8].Value = model.TotalPrice;
+            parameters[9].Value = model.Customer;
+            parameters[10].Value = model.Remark;
+            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
+            if (rows > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 		
 		
 		/// <summary>
@@ -300,6 +364,76 @@ SqlParameter[] parameters = {
 				return null;
 			}
 		}
+
+        public DTcms.Model.CheckCost GetModelById(int id)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select CheckRecordId, Name, Count, UnitPrice, TotalPrice, Status, PaidTime, Admin, Customer, HasBeenInvoiced, InvoicedTime, InvoicedOperator, Remark  ");
+            strSql.Append("  from CheckCost ");
+            strSql.Append(" where Id=@Id ");
+            SqlParameter[] parameters = {
+					new SqlParameter("@Id", SqlDbType.Int,4)			};
+            parameters[0].Value = id;
+
+
+            DTcms.Model.CheckCost model = new DTcms.Model.CheckCost();
+            DataSet ds = DbHelperSQL.Query(strSql.ToString(), parameters);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                if (ds.Tables[0].Rows[0]["CheckRecordId"].ToString() != "")
+                {
+                    model.CheckRecordId = int.Parse(ds.Tables[0].Rows[0]["CheckRecordId"].ToString());
+                }
+                model.Name = ds.Tables[0].Rows[0]["Name"].ToString();
+                if (ds.Tables[0].Rows[0]["Count"].ToString() != "")
+                {
+                    model.Count = decimal.Parse(ds.Tables[0].Rows[0]["Count"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["UnitPrice"].ToString() != "")
+                {
+                    model.UnitPrice = decimal.Parse(ds.Tables[0].Rows[0]["UnitPrice"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["TotalPrice"].ToString() != "")
+                {
+                    model.TotalPrice = decimal.Parse(ds.Tables[0].Rows[0]["TotalPrice"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["Status"].ToString() != "")
+                {
+                    model.Status = int.Parse(ds.Tables[0].Rows[0]["Status"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["PaidTime"].ToString() != "")
+                {
+                    model.PaidTime = DateTime.Parse(ds.Tables[0].Rows[0]["PaidTime"].ToString());
+                }
+                model.Admin = ds.Tables[0].Rows[0]["Admin"].ToString();
+                model.Customer = ds.Tables[0].Rows[0]["Customer"].ToString();
+                if (ds.Tables[0].Rows[0]["HasBeenInvoiced"].ToString() != "")
+                {
+                    if ((ds.Tables[0].Rows[0]["HasBeenInvoiced"].ToString() == "1") || (ds.Tables[0].Rows[0]["HasBeenInvoiced"].ToString().ToLower() == "true"))
+                    {
+                        model.HasBeenInvoiced = true;
+                    }
+                    else
+                    {
+                        model.HasBeenInvoiced = false;
+                    }
+                }
+                if (ds.Tables[0].Rows[0]["InvoicedTime"].ToString() != "")
+                {
+                    model.InvoicedTime = DateTime.Parse(ds.Tables[0].Rows[0]["InvoicedTime"].ToString());
+                }
+                model.InvoicedOperator = ds.Tables[0].Rows[0]["InvoicedOperator"].ToString();
+                model.Remark = ds.Tables[0].Rows[0]["Remark"].ToString();
+
+                return model;
+            }
+            else
+            {
+                return null;
+            }
+        }
 		
 		
 		/// <summary>

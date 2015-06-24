@@ -98,6 +98,7 @@
                             <th width="8%" >操作人</th>
                             <th width="8%" >状态</th>
                             <th width="12%">发票</th>
+                            <th width="8%">操作</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
@@ -114,12 +115,14 @@
                         <td><%#Eval("Status").ToString().Equals("1") ? "已付款" : "未付款"%></td>
                         <td align="center">
                             <%#Eval("HasBeenInvoiced").ToString().Equals("True") ? "<a href=\"javascript:void(0);\" onclick=\"showInvoicedDialog("+Eval("Id")+");\">发票详情</a>" : "未开发票" %>
-                            
+                        </td>
+                        <td align="center">
+                            <a href="storein_cost_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
                         </td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"11\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"12\">暂无记录</td></tr>" : ""%>
 </table>
                 </FooterTemplate>
             </asp:Repeater>

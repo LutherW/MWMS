@@ -10,7 +10,7 @@
 namespace DTcms.Web.admin.business {
     
     
-    public partial class storeout_cost_list {
+    public partial class check_cost_edit {
         
         /// <summary>
         /// form1 控件。
@@ -22,13 +22,22 @@ namespace DTcms.Web.admin.business {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// ddlStoreInOrder 控件。
+        /// txtCustomer 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlStoreInOrder;
+        protected global::System.Web.UI.WebControls.TextBox txtCustomer;
+        
+        /// <summary>
+        /// labCount 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label labCount;
         
         /// <summary>
         /// ddlType 控件。
@@ -40,75 +49,93 @@ namespace DTcms.Web.admin.business {
         protected global::System.Web.UI.WebControls.DropDownList ddlType;
         
         /// <summary>
-        /// ddlStatus 控件。
+        /// txtTotalPrice 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlStatus;
+        protected global::System.Web.UI.WebControls.TextBox txtTotalPrice;
         
         /// <summary>
-        /// txtBeginTime 控件。
+        /// txtName 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBeginTime;
+        protected global::System.Web.UI.WebControls.TextBox txtName;
         
         /// <summary>
-        /// txtEndTime 控件。
+        /// rblStatus 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEndTime;
+        protected global::System.Web.UI.WebControls.CheckBox rblStatus;
         
         /// <summary>
-        /// txtKeyWord 控件。
+        /// txtPaidTime 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtKeyWord;
+        protected global::System.Web.UI.WebControls.TextBox txtPaidTime;
         
         /// <summary>
-        /// lbtnSearch 控件。
+        /// rblHasBeenInvoiced 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnSearch;
+        protected global::System.Web.UI.WebControls.CheckBox rblHasBeenInvoiced;
         
         /// <summary>
-        /// rptList 控件。
+        /// txtInvoicedTime 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptList;
+        protected global::System.Web.UI.WebControls.TextBox txtInvoicedTime;
         
         /// <summary>
-        /// txtPageNum 控件。
+        /// txtInvoicedOperator 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPageNum;
+        protected global::System.Web.UI.WebControls.TextBox txtInvoicedOperator;
         
         /// <summary>
-        /// PageContent 控件。
+        /// txtAdmin 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl PageContent;
+        protected global::System.Web.UI.WebControls.TextBox txtAdmin;
+        
+        /// <summary>
+        /// txtRemark 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtRemark;
+        
+        /// <summary>
+        /// btnSubmit 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSubmit;
     }
 }

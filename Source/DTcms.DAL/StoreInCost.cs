@@ -191,6 +191,59 @@ namespace DTcms.DAL
             }
         }
 
+        public bool Update(DTcms.Model.StoreInCost model, int id)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update StoreInCost set ");
+            strSql.Append(" Name = @Name , ");
+            strSql.Append(" Status = @Status , ");
+            strSql.Append(" PaidTime = @PaidTime , ");
+            strSql.Append(" Admin = @Admin , ");
+            strSql.Append(" HasBeenInvoiced = @HasBeenInvoiced , ");
+            strSql.Append(" InvoicedTime = @InvoicedTime , ");
+            strSql.Append(" InvoicedOperator = @InvoicedOperator , ");
+            strSql.Append(" Remark = @Remark,  ");
+            strSql.Append(" TotalPrice = @TotalPrice, ");
+            strSql.Append(" Customer = @Customer  ");
+            strSql.Append(" where Id=@Id  ");
+
+            SqlParameter[] parameters = {
+			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
+                        new SqlParameter("@Name", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@Status", SqlDbType.Int,4) ,            
+                        new SqlParameter("@PaidTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@Admin", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@HasBeenInvoiced", SqlDbType.Bit,1) ,            
+                        new SqlParameter("@InvoicedTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@InvoicedOperator", SqlDbType.VarChar,254) ,   
+                        new SqlParameter("@TotalPrice", SqlDbType.Decimal) ,  
+                        new SqlParameter("@Customer", SqlDbType.VarChar,254) ,  
+                        new SqlParameter("@Remark", SqlDbType.VarChar,254)             
+              
+            };
+
+            parameters[0].Value = id;
+            parameters[1].Value = model.Name;
+            parameters[2].Value = model.Status;
+            parameters[3].Value = model.PaidTime;
+            parameters[4].Value = model.Admin;
+            parameters[5].Value = model.HasBeenInvoiced;
+            parameters[6].Value = model.InvoicedTime;
+            parameters[7].Value = model.InvoicedOperator;
+            parameters[8].Value = model.TotalPrice;
+            parameters[9].Value = model.Customer;
+            parameters[10].Value = model.Remark;
+            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
+            if (rows > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
 
         /// <summary>
         /// 删除一条数据

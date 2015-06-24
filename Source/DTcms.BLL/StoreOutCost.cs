@@ -45,6 +45,11 @@ namespace DTcms.BLL
             return dal.Update(model);
         }
 
+        public bool Update(DTcms.Model.StoreOutCost model, int id)
+        {
+            return dal.Update(model, id);
+        }
+
         /// <summary>
         /// 删除一条数据
         /// </summary>
