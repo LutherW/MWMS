@@ -141,8 +141,8 @@ namespace DTcms.Web.admin.business
 
                     totalPrice += totalUnitPrice;
                 }
-                txtTotalMoney.Text = string.Format("{0:N2}", totalPrice);
-                txtInvoiceMoney.Text = string.Format("{0:N2}", totalPrice);
+                txtTotalMoney.Text = string.Format("{0}", totalPrice);
+                txtInvoiceMoney.Text = string.Format("{0}", totalPrice);
                 hidReceivedBeginTime.Value = _receivedBeginTime.ToString();
                 hidReceivedEndTime.Value = _receivedEndTime.ToString();
                 txtUnitPriceDetails.Text = unitPriceText.ToString();

@@ -764,7 +764,9 @@
     <Content Include="templates\mobile\_header.html" />
     <Content Include="templates\mobile\_nav.html" />
     <Content Include="watermark.png" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
