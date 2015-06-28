@@ -81,7 +81,7 @@
                 <HeaderTemplate>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="table_list">
                         <tr>
-                            <th width="8%">选择</th>
+                            <th width="5%">选择</th>
                             <th width="10%" align="left">车牌号码</th>
                             <th width="10%">司机</th>
                             <th width="10%">联系电话</th>

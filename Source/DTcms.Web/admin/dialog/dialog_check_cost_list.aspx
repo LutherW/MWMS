@@ -39,7 +39,7 @@
                             <td><%#Eval("Name")%></td>
                             <td><%#Eval("Count")%></td>
                             <td><%#Convert.ToDecimal(Eval("TotalPrice")) >= 0 ? "收入" : "支出"%></td>
-                            <td><%#Math.Abs(Convert.ToDecimal(Eval("TotalPrice")))%></td>
+                            <td>￥<%#Math.Abs(Convert.ToDecimal(Eval("TotalPrice")))%></td>
                             <td><%#Eval("Customer")%></td>
                         </tr>
                     </ItemTemplate>

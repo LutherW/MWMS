@@ -199,8 +199,8 @@
                         <td><%#Eval("ReceivedTime")%></td>
                         <td><%#Eval("ChargingCount")%></td>
                         <td><a href="javascript:void(0);" onclick="showContentDialog('单价明细','<%#Eval("UnitPriceDetails").ToString().Replace("\r\n", "")%>');">单价</a></td>
-                        <td><%#Eval("TotalPrice")%></td>
-                        <td><%#Eval("InvoicedPrice")%></td>
+                        <td>￥<%#Eval("TotalPrice")%></td>
+                        <td>￥<%#Eval("InvoicedPrice")%></td>
                         <td><%#Eval("Admin")%></td>
                         <td>
                             <a href="javascript:void(0);" onclick="showContentDialog('备注信息','<%#Eval("Remark").ToString()%>');">备注</a>

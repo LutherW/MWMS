@@ -28,7 +28,7 @@
                 + '<a href="javascript:;" onclick="delNode(this);" class="del" title="删除"></a>'
                 + '<div class="btns">开始时间：<input type="text" name="UnitpriceBeginTime" onfocus="WdatePicker({readonly:true, minDate:\'%y-%M-%d\'})" value="" style="width: 65%;" /></div>'
                 + '<div class="btns">结束时间：<input type="text" name="UnitpriceEndTime" onfocus="WdatePicker({readonly:true})" value="" style="width: 65%;" /></div>'
-                + '<div class="btns">价&nbsp;&nbsp;&nbsp;格：<input type="text" name="Unitprice" onkeydown="return checkForFloat(this, event);" value="0.00" style="width: 70%;" /></div>'
+                + '<div class="btns">价&nbsp;&nbsp;&nbsp;格：<input type="text" name="Unitprice" onkeydown="return checkForFloat(this, event);" value="0.00" style="width: 50%;" />元</div>'
                 + '<div class="btns">备&nbsp;&nbsp;&nbsp;注：<input type="text" name="UnitpriceRemark" value="" style="width:70%;"/></div>'
                 + '</li>';
 
@@ -40,9 +40,9 @@
                 var liHtml = '<li>'
                 + '<a href="javascript:;" onclick="delNode(this);" class="del" title="删除"></a>'
                 + '<div class="btns">名称：<input type="text" name="CostName" value="" style="width: 70%;" /></div>'
-                + '<div class="btns">数量：<input type="text" name="CostCount" onkeydown="return checkForFloat(this,event);" value="0.00" style="width: 70%;" /></div>'
+                + '<div class="btns">数量：<input type="text" name="CostCount" onkeydown="return checkForFloat(this,event);" value="0.00" style="width: 50%;" /></div>'
                 + '<div class="btns">类型：<select name="CostType"><option value="+" selected=\'selected\'>收入</option><option value="-">支出</option></select></div>'
-                + '<div class="btns">总价：<input type="text" name="CostTotalPrice" onkeydown="return checkForFloat(this,event);" value="0.00" style="width: 70%;" /></div>'
+                + '<div class="btns">总价：<input type="text" name="CostTotalPrice" onkeydown="return checkForFloat(this,event);" value="0.00" style="width: 50%;" />元</div>'
                 + '<div class="btns">客户：<input type="text" name="CostCustomer" value="" style="width: 70%;" /></div>'
                 + '</li>';
 
@@ -173,7 +173,7 @@
                                             结束时间：<input type="text" name="UnitpriceEndTime" onfocus="WdatePicker({readonly:true})" value="<%#Convert.ToDateTime(Eval("EndTime")).Year == 9999 ? "" : Convert.ToDateTime(Eval("EndTime")).ToString("yyyy-MM-dd") %>" style="width: 65%;" />
                                         </div>
                                         <div class="btns">
-                                            价&nbsp;&nbsp;&nbsp;格：<input type="text" name="Unitprice" onkeydown="return checkForFloat(this,event);" value="<%#Eval("Price") %>" style="width: 70%;" />
+                                            价&nbsp;&nbsp;&nbsp;格：<input type="text" name="Unitprice" onkeydown="return checkForFloat(this,event);" value="<%#Eval("Price") %>" style="width: 50%;" />元
                                         </div>
                                         <div class="btns">
                                             备&nbsp;&nbsp;&nbsp;注：<input type="text" name="UnitpriceRemark" value="<%#Eval("Remark") %>" style="width: 70%;" />

@@ -160,7 +160,8 @@ namespace DTcms.DAL
                         strSql.Append(" CheckResult = @CheckResult , ");
                         strSql.Append(" RealName = @RealName , ");
                         strSql.Append(" LinkTel = @LinkTel , ");
-                        strSql.Append(" Remark = @Remark  ");
+                        strSql.Append(" Remark = @Remark,  ");
+                        strSql.Append(" CheckTime = @CheckTime  ");
                         strSql.Append(" where Id=@Id ");
 
                         SqlParameter[] parameters = {
@@ -177,7 +178,8 @@ namespace DTcms.DAL
                                     new SqlParameter("@CheckResult", SqlDbType.VarChar,254) ,            
                                     new SqlParameter("@RealName", SqlDbType.VarChar,254) ,            
                                     new SqlParameter("@LinkTel", SqlDbType.VarChar,254) ,            
-                                    new SqlParameter("@Remark", SqlDbType.VarChar,254)             
+                                    new SqlParameter("@Remark", SqlDbType.VarChar,254)  ,            
+                                    new SqlParameter("@CheckTime", SqlDbType.DateTime)            
               
                         };
 
@@ -195,6 +197,7 @@ namespace DTcms.DAL
                         parameters[11].Value = model.RealName;
                         parameters[12].Value = model.LinkTel;
                         parameters[13].Value = model.Remark;
+                        parameters[14].Value = model.CheckTime;
 
                         DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
 
@@ -291,7 +294,7 @@ namespace DTcms.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select Id, VehicleId, CustomerId, HandlingModeId, GoodsId, Status, CreateTime, Admin, InspectionNumber, CaseNumber, CheckResult, RealName, LinkTel, Remark  ");
+            strSql.Append("select Id, VehicleId, CustomerId, HandlingModeId, GoodsId, Status, CreateTime, Admin, InspectionNumber, CaseNumber, CheckResult, RealName, LinkTel, Remark,CheckTime  ");
             strSql.Append("  from CheckRecord ");
             strSql.Append(" where Id=@Id");
             SqlParameter[] parameters = {
@@ -332,6 +335,10 @@ namespace DTcms.DAL
                 if (ds.Tables[0].Rows[0]["CreateTime"].ToString() != "")
                 {
                     model.CreateTime = DateTime.Parse(ds.Tables[0].Rows[0]["CreateTime"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["CheckTime"].ToString() != "")
+                {
+                    model.CheckTime = DateTime.Parse(ds.Tables[0].Rows[0]["CheckTime"].ToString());
                 }
                 model.Admin = ds.Tables[0].Rows[0]["Admin"].ToString();
                 model.InspectionNumber = ds.Tables[0].Rows[0]["InspectionNumber"].ToString();

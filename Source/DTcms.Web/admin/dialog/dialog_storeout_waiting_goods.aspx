@@ -118,7 +118,7 @@
                 <HeaderTemplate>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="table_list">
                         <tr>
-                            <th width="8%">选择</th>
+                            <th width="5%">选择</th>
                             <th align="left" width="10%">货物名称</th>
                             <th align="left" width="10%">仓库</th>
                             <th align="left" width="10%">库存量</th>

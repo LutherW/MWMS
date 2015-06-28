@@ -84,7 +84,7 @@
             <dl>
                 <dt>实收费用</dt>
                 <dd>
-                    <asp:TextBox ID="txtTotalPrice" runat="server" CssClass="input small" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0</asp:TextBox>
+                    <asp:TextBox ID="txtTotalPrice" runat="server" CssClass="input w100" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0</asp:TextBox>元
                     <span class="Validform_checktip">*</span>
                 </dd>
             </dl>

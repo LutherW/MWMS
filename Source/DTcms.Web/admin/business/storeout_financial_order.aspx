@@ -110,7 +110,7 @@
                 <HeaderTemplate>
                     <table width="100%" bgoods="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
-                            <th width="8%">选择</th>
+                            <th width="5%">选择</th>
                             <th align="left">入库单</th>
                             <th align="left" width="10%">总金额</th>
                             <th align="left" width="8%">单价</th>

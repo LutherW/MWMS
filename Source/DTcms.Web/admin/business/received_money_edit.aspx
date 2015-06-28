@@ -86,21 +86,21 @@
             <dl>
                 <dt>计费数量</dt>
                 <dd>
-                    <asp:TextBox ID="txtChargingCount" runat="server" CssClass="input txt" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " ReadOnly="true">0.00</asp:TextBox>
+                    <asp:TextBox ID="txtChargingCount" runat="server" CssClass="input w100" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " ReadOnly="true">0.00</asp:TextBox>
                     <span class="Validform_checktip">*</span>
                 </dd>
             </dl>
             <dl>
                 <dt>总价</dt>
                 <dd>
-                    <asp:TextBox ID="txtTotalMoney" runat="server" CssClass="input txt" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>
+                    <asp:TextBox ID="txtTotalMoney" runat="server" CssClass="input w100" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>元
                     <span class="Validform_checktip">*</span>
                 </dd>
             </dl>
             <dl>
                 <dt>实收金额</dt>
                 <dd>
-                    <asp:TextBox ID="txtInvoiceMoney" runat="server" CssClass="input txt" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>
+                    <asp:TextBox ID="txtInvoiceMoney" runat="server" CssClass="input w100" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>元
                     <span class="Validform_checktip">*</span>
                 </dd>
             </dl>

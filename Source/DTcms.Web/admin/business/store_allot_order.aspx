@@ -81,7 +81,7 @@
                 <HeaderTemplate>
                     <table width="100%" bgoods="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
-                            <th width="8%">选择</th>
+                            <th width="5%">选择</th>
                             <th align="left" width="20%">调拨时间</th>
                             <th align="left" width="10%">操作员</th>
                             <th width="8%">明细</th>

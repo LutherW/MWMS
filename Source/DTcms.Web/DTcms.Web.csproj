@@ -53,9 +53,8 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.JScript" />
-    <Reference Include="Senparc.Weixin.MP, Version=4.11.2.31351, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Senparc.Weixin.MP.dll</HintPath>
+    <Reference Include="Senparc.Weixin.MP">
+      <HintPath>..\..\..\..\Senparc.Weixin.MP.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -877,9 +876,6 @@
       <DependentUpon>store_out_order_edit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="admin\business\store_out_order_edit.aspx.designer.cs">
-      <DependentUpon>store_out_order_edit.aspx</DependentUpon>
-    </Compile>
     <Compile Include="admin\business\storeout_storage_order.aspx.cs">
       <DependentUpon>storeout_storage_order.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1373,9 +1369,6 @@
     <Compile Include="admin\search\storein_cost_list.aspx.cs">
       <DependentUpon>storein_cost_list.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="admin\search\storein_cost_list.aspx.designer.cs">
-      <DependentUpon>storein_cost_list.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\search\allot_goods_list.aspx.cs">
       <DependentUpon>allot_goods_list.aspx</DependentUpon>

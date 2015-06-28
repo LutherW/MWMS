@@ -143,8 +143,8 @@
                 <HeaderTemplate>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="table_list">
                         <tr>
-                            <%--<th width="8%">选择</th>--%>
-                            <th align="left" width="20%">货物名称</th>
+                            <%--<th width="5%">选择</th>--%>
+                            <th align="left" width="20%">&nbsp;&nbsp;货物名称</th>
                             <th align="left" width="20%">客户</th>
                             <th align="left" width="15%">计划入库时间</th>
                             <th align="left" width="10%">数量</th>
@@ -153,7 +153,7 @@
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
-                        <td><%#Eval("GoodsName")%></td>
+                        <td>&nbsp;&nbsp;<%#Eval("GoodsName")%></td>
                         <td><%#Eval("CustomerName")%></td>
                         <td><%#Convert.ToDateTime(Eval("StoredInTime")).ToString("yyyy-MM-dd")%></td>
                         <td><%#Eval("Count")%></td>

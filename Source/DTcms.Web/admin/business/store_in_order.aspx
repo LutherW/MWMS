@@ -119,7 +119,7 @@
                 <HeaderTemplate>
                     <table width="100%" bgoods="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
-                            <th width="8%">选择</th>
+                            <th width="5%">选择</th>
                             <th align="left">入库单号</th>
                             <th align="left" width="10%">报检号</th>
                             <th align="left">客户</th>

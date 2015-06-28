@@ -99,7 +99,7 @@
                 <HeaderTemplate>
                     <table width="100%" bgoods="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
-                            <th width="8%">选择</th>
+                            <th width="5%">选择</th>
                             <th align="left" width="10%">货物名称</th>
                             <th align="left" width="10%">客户</th>
                             <th align="left" width="15%">计划入库时间</th>
@@ -116,7 +116,7 @@
                         </td>
                         <td><a href="store_waiting_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>"><%#Eval("GoodsName")%></a></td>
                         <td><%#Eval("CustomerName")%></td>
-                        <td><%#Eval("StoringTime")%></td>
+                        <td><%#string.Format("{0:d}", Eval("StoringTime"))%></td>
                         <td><%#Eval("Admin")%></td>
                         <td align="center">
                             <a href="javascript:void(0);" onclick="showAttachDialog(<%#Eval("Id") %>, '<%#Eval("GoodsName") %>');">附件</a>&nbsp;|&nbsp;

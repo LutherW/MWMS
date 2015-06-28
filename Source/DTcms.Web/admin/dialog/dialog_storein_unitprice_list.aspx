@@ -37,7 +37,7 @@
                             </td>
                             <td><%#Convert.ToDateTime(Eval("BeginTime")).Year == 1753 ? "--" : Convert.ToDateTime(Eval("BeginTime")).ToString("yyyy-MM-dd") %></td>
                             <td><%#Convert.ToDateTime(Eval("EndTime")).Year == 9999 ? "--" : Convert.ToDateTime(Eval("EndTime")).ToString("yyyy-MM-dd") %></td>
-                            <td><%#Eval("Price")%></td>
+                            <td>￥<%#Eval("Price")%></td>
                             <td><%#Eval("Remark")%></td>
                         </tr>
                     </ItemTemplate>

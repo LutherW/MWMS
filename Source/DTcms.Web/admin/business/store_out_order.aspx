@@ -110,18 +110,17 @@
                 <HeaderTemplate>
                     <table width="100%" bgoods="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
-                            <th width="8%">选择</th>
-                            <th align="left">入库单</th>
-                            <th align="left" width="10%">总金额</th>
-                            <th align="left" width="8%">单价</th>
-                            <th align="left" width="8%">出库数量</th>
+                            <th width="5%">选择</th>
+                            <th align="left" width="10%">入库单</th>
+                            <th align="left" width="6%">总金额</th>
+                            <th align="left" width="6%">单价</th>
+                            <th align="left" width="6%">计费数量</th>
                             <th align="left">客户</th>
                             <th align="left" width="10%">出库时间</th>
-                            <th align="left" width="8%">操作员</th>
-                            <th align="left" width="8%">状态</th>
-                            <th width="8%" >备注</th>
-                            <th width="12%">明细</th>
-                            <th width="8%">操作</th>
+                            <th align="left" width="6%">操作员</th>
+                            <th align="left" width="6%">状态</th>
+                            <th width="10%">明细</th>
+                            <th width="6%">操作</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
@@ -131,17 +130,17 @@
                             <asp:HiddenField ID="hidId" Value='<%#Eval("Id")%>' runat="server" />
                         </td>
                         <td><%#Eval("AccountNumber")%></td>
-                        <td><%#Eval("TotalMoney")%></td>
-                        <td><%#Eval("UnitPrice")%></td>
+                        <td>￥<%#Eval("TotalMoney")%></td>
+                        <td>￥<%#Eval("UnitPrice")%></td>
                         <td><%#Eval("Count")%></td>
                         <td><%#Eval("CustomerName")%></td>
                         <td><%#Convert.ToDateTime(Eval("StoredOutTime")).ToString("yyyy-MM-dd")%></td>
                         <td><%#Eval("Admin")%></td>
                         <td><%#GetStatus(Eval("Status").ToString())%></td>
-                        <td align="center"><a href="javascript:void(0);" onclick="showRemarkDialog( '<%#Eval("Remark") %>');">备注</a></td>
                         <td align="center">
                             <a href="javascript:void(0);" onclick="showGoodsDialog(<%#Eval("Id") %>);">出库货物</a>&nbsp;|&nbsp;
-                            <a href="javascript:void(0);" onclick="showCostDialog(<%#Eval("Id") %>);">费用项</a>
+                            <a href="javascript:void(0);" onclick="showCostDialog(<%#Eval("Id") %>);">费用项</a>&nbsp;|&nbsp;
+                            <a href="javascript:void(0);" onclick="showRemarkDialog( '<%#Eval("Remark") %>');">备注</a>
                         </td>
                         <td align="center">
                             <a href="store_out_order_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>

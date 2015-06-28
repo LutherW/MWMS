@@ -11,6 +11,23 @@
 <script type="text/javascript" charset="utf-8" src="../scripts/jquery/jquery-1.11.2.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/layindex.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/common.js"></script>
+    <style type="text/css">
+        .process{padding:30px 50px;}
+        .process span{display:inline-block;width:64px;height:64px;line-height:56px;background:url("skin/default/color.png") no-repeat 0 -575px scroll; text-align:center;}
+        .process a{color:#fff;font-size:12px;}
+        .process .arr{background-position:20px -808px;height:48px;}
+        .process .bg1{background-position:0 0;}
+        .process .bg2{background-position:0 -67px;}
+        .process .bg3{background-position:0 -135px;}
+        .process .bg4{background-position:0 -200px;}
+        .process .bg5{background-position:0 -266px;}
+        .process .bg6{background-position:0 -401px;}
+        .process .bg7{background-position:0 -468px;}
+        .process .bg8{background-position:0 -536px;}
+        .process .bg9{background-position:0 -603px;}
+        .process .bg10{background-position:0 -669px;}
+        .process .bg11{background-position:0 -736px;}
+    </style>
 </head>
 
 <body class="mainbody">
@@ -26,38 +43,77 @@
 
 <!--内容-->
 <div class="line10"></div>
-<div class="nlist-1">
+<div class="nlist-2">
+  <h3><i></i>登录记录</h3>
   <ul>
     <li>本次登录IP：<asp:Literal ID="litIP" runat="server" Text="-" /></li>
     <li>上次登录IP：<asp:Literal ID="litBackIP" runat="server" Text="-" /></li>
     <li>上次登录时间：<asp:Literal ID="litBackTime" runat="server" Text="-" /></li>
   </ul>
 </div>
-<div class="line10"></div>
-
+<div class="line20"></div>
 <div class="nlist-2">
-  <h3><i></i>站点信息</h3>
-  <ul>
-    <li>站点名称：<%=siteConfig.webname %></li>
-    <li>公司名称：<%=siteConfig.webcompany %></li>
-    <li>网站域名：<%=siteConfig.weburl %></li>
-    <li>安装目录：<%=siteConfig.webpath %></li>
-    <li>网站管理目录：<%=siteConfig.webmanagepath %></li>
-    <li>附件上传目录：<%=siteConfig.filepath %></li>
-    <li>服务器名称：<%=Server.MachineName%></li>
-    <li>服务器IP：<%=Request.ServerVariables["LOCAL_ADDR"] %></li>
-    <li>NET框架版本：<%=Environment.Version.ToString()%></li>
-    <li>操作系统：<%=Environment.OSVersion.ToString()%></li>
-    <li>IIS环境：<%=Request.ServerVariables["SERVER_SOFTWARE"]%></li>
-    <li>服务器端口：<%=Request.ServerVariables["SERVER_PORT"]%></li>
-    <li>目录物理路径：<%=Request.ServerVariables["APPL_PHYSICAL_PATH"]%></li>
-    <li>系统版本：V<%=Utils.GetVersion()%></li>
-    <li>升级通知：<asp:Literal ID="LitUpgrade" runat="server"/></li>
-  </ul>
+  <h3><i></i>入库操作流程</h3>
+    <div class="process">
+        <table border="0">
+            <tr>
+                <td><span class="bg3"><a href="business/store_waiting.aspx">待入库货物</a></span></td>
+                <td><span class="arr"></span></td>
+                <td><span class="bg6"><a href="business/storein_storage_order.aspx">仓库入库</a></span></td>
+                <td><span class="arr"></span></td>
+                <td><span class="bg4"><a href="business/store_in_order.aspx">办公室审核</a></span></td>
+                <td><span class="arr"></span></td>
+                <td><span class="bg1"><a href="javascript:;">入库完成</a></span></td>
+            </tr>
+        </table>
+        <div class="line20"></div>
+        <table border="0">
+            <tr>
+                <td><span class="bg3"><a href="business/store_waiting.aspx">待入库货物</a></span></td>
+                <td><span class="arr"></span></td>
+                <td><span class="bg7"><a href="business/store_in_order.aspx">办公室入库</a></span></td>
+                <td><span class="arr"></span></td>
+                <td><span class="bg10"><a href="business/storein_storage_order.aspx">仓库确认</a></span></td>
+                <td><span class="arr"></span></td>
+                <td><span class="bg4"><a href="business/store_in_order.aspx">办公室审核</a></span></td>
+                <td><span class="arr"></span></td>
+                <td><span class="bg1"><a href="javascript:;">入库完成</a></span></td>
+            </tr>
+        </table>
+    </div>
 </div>
 <div class="line20"></div>
-
-<div class="nlist-3">
+<div class="nlist-2">
+  <h3><i></i>出库操作流程</h3>
+    <div class="process">
+        <table border="0">
+            <tr>
+                <td><span class="bg8"><a href="business/storeout_waiting_goods.aspx">待出库货物</a></span></td>
+                <td><span class="arr"></span></td>
+                <td><span class="bg2"><a href="business/storeout_storage_order.aspx">仓库出库</a></span></td>
+                <td><span class="arr"></span></td>
+                <td><span class="bg11"><a href="business/storeout_financial_order.aspx">财务确认</a></span></td>
+                <td><span class="arr"></span></td>
+                <td><span class="bg1"><a href="javascript:;">出库完成</a></span></td>
+            </tr>
+        </table>
+        <div class="line20"></div>
+        <table border="0">
+            <tr>
+                <td><span class="bg8"><a href="business/storeout_waiting_goods.aspx">待出库货物</a></span></td>
+                <td><span class="arr"></span></td>
+                <td><span class="bg5"><a href="business/store_out_order.aspx">办公室出库</a></span></td>
+                <td><span class="arr"></span></td>
+                <td><span class="bg9"><a href="business/store_out_order.aspx">仓库完善</a></span></td>
+                <td><span class="arr"></span></td>
+                <td><span class="bg11"><a href="business/storeout_financial_order.aspx">财务确认</a></span></td>
+                <td><span class="arr"></span></td>
+                <td><span class="bg1"><a href="javascript:;">出库完成</a></span></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<%--<div class="nlist-3">
   <ul>
     <li><a onclick="parent.linkMenuTree(true, 'sys_config');" class="icon-setting" href="javascript:;"></a><span>系统设置</span></li>
     <li><a onclick="parent.linkMenuTree(true, 'sys_site_manage');" class="icon-channel" href="javascript:;"></a><span>站点管理</span></li>
@@ -81,7 +137,7 @@
   <ul>
     <asp:Literal ID="LitNotice" runat="server"/>
   </ul>
-</div>
+</div>--%>
 <!--/内容-->
 
 </form>

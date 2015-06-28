@@ -32,9 +32,9 @@ namespace DTcms.Web.admin
                         litBackTime.Text = model2.add_time.ToString();
                     }
                 }
-                LitUpgrade.Text = Utils.GetDomainStr(DTKeys.CACHE_OFFICIAL_UPGRADE, DESEncrypt.Decrypt(DTKeys.FILE_URL_UPGRADE_CODE, "DT"));
-                LitNotice.Text = Utils.GetDomainStr(DTKeys.CACHE_OFFICIAL_NOTICE, DESEncrypt.Decrypt(DTKeys.FILE_URL_NOTICE_CODE, "DT"));
-                Utils.GetDomainStr("dt_cache_domain_info", "http://wwwDTcms.net/upgrade.ashx?u=" + Request.Url.DnsSafeHost + "&i=" + Request.ServerVariables["LOCAL_ADDR"]);
+                //LitUpgrade.Text = Utils.GetDomainStr(DTKeys.CACHE_OFFICIAL_UPGRADE, DESEncrypt.Decrypt(DTKeys.FILE_URL_UPGRADE_CODE, "DT"));
+                //LitNotice.Text = Utils.GetDomainStr(DTKeys.CACHE_OFFICIAL_NOTICE, DESEncrypt.Decrypt(DTKeys.FILE_URL_NOTICE_CODE, "DT"));
+                //Utils.GetDomainStr("dt_cache_domain_info", "http://wwwDTcms.net/upgrade.ashx?u=" + Request.Url.DnsSafeHost + "&i=" + Request.ServerVariables["LOCAL_ADDR"]);
             }
         }
     }

@@ -102,9 +102,9 @@
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
-                <dt>出库数量</dt>
+                <dt>计费数量</dt>
                 <dd>
-                    <asp:TextBox ID="txtChargingCount" runat="server" CssClass="input txt" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>
+                    <asp:TextBox ID="txtChargingCount" runat="server" CssClass="input w100" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>
                     <span class="Validform_checktip">*</span>
                 </dd>
             </dl>
@@ -134,14 +134,14 @@
             <dl>
                 <dt>总价</dt>
                 <dd>
-                    <asp:TextBox ID="txtTotalMoney" runat="server" CssClass="input txt" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>
+                    <asp:TextBox ID="txtTotalMoney" runat="server" CssClass="input w100" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>元
                     <span class="Validform_checktip">*</span>
                 </dd>
             </dl>
             <dl>
                 <dt>发票金额</dt>
                 <dd>
-                    <asp:TextBox ID="txtInvoiceMoney" runat="server" CssClass="input txt" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>
+                    <asp:TextBox ID="txtInvoiceMoney" runat="server" CssClass="input w100" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">0.00</asp:TextBox>元
                     <span class="Validform_checktip">*</span>
                 </dd>
             </dl>
@@ -185,7 +185,7 @@
                                             </select>
                                         </div>
                                         <div class="btns">
-                                            总价：<input type="text" name="CostTotalPrice" onkeydown="return checkForFloat(this,event);" value="<%#Math.Abs(Convert.ToDecimal(Eval("TotalPrice"))) %>" style="width: 70%;" />
+                                            总价：<input type="text" name="CostTotalPrice" onkeydown="return checkForFloat(this,event);" value="<%#Math.Abs(Convert.ToDecimal(Eval("TotalPrice"))) %>" style="width: 50%;" />元
                                         </div>
                                         <div class="btns">
                                             客户：<input type="text" name="CostCustomer" value="<%#Eval("Customer") %>" style="width: 70%;" />

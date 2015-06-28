@@ -40,8 +40,8 @@
                 <HeaderTemplate>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="table_list">
                         <tr>
-                            <%--<th width="8%">选择</th>--%>
-                            <th align="left" width="20%">入库单</th>
+                            <%--<th width="5%">选择</th>--%>
+                            <th align="left" width="20%">&nbsp;&nbsp;入库单</th>
                             <th align="left" width="20%">货物</th>
                             <th align="left" width="15%">仓库</th>
                             <th align="left" width="10%">库存量</th>
@@ -51,7 +51,7 @@
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
-                        <td><%#Eval("AccountNumber")%></td>
+                        <td>&nbsp;&nbsp;<%#Eval("AccountNumber")%></td>
                         <td><%#Eval("GoodsName")%></td>
                         <td><%#Eval("StoreName")%></td>
                         <td><%#Eval("StoredInCount")%></td>

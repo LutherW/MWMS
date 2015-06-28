@@ -44,7 +44,7 @@
             <table width="800" border="0" align="center" cellpadding="3" cellspacing="0" style="font-size: 12px; font-family: '微软雅黑'; background: #fff;">
                 <tr>
                     <td width="346" height="50" style="font-size: 16px;"><%=model.Name%>发票信息</td>
-                    <td width="216">开票金额：<%=string.Format("{0:N2}", model.InvoicedPrice)%><br />
+                    <td width="216">开票金额：￥<%=string.Format("{0:N2}", model.InvoicedPrice)%><br />
                         日&nbsp;&nbsp; 期：<%=model.InvoicedTime.Value.ToString("yyyy-MM-dd")%></td>
                     <td width="220">操&nbsp; 作 人：<%=model.InvoicedOperator%><br />
                         打印时间：<%=DateTime.Now%></td>

@@ -26,8 +26,8 @@
                             <tr>
                                 <th width="5%"></th>
                                 <th align="left" width="20%">名称</th>
-                                <th align="left" width="20%">数量</th>
-                                <th align="left" width="20%">类型</th>
+                                <th align="left" width="15%">数量</th>
+                                <th align="left" width="15%">类型</th>
                                 <th align="left" width="20%">价格</th>
                                 <th align="left">客户</th>
                             </tr>
@@ -39,7 +39,7 @@
                             <td><%#Eval("Name")%></td>
                             <td><%#Eval("Count")%></td>
                             <td><%#Convert.ToDecimal(Eval("TotalPrice")) >= 0 ? "收入" : "支出"%></td>
-                            <td><%#Math.Abs(Convert.ToDecimal(Eval("TotalPrice")))%></td>
+                            <td>￥<%#Math.Abs(Convert.ToDecimal(Eval("TotalPrice")))%></td>
                             <td><%#Eval("Customer")%></td>
                         </tr>
                     </ItemTemplate>
