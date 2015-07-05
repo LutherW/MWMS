@@ -40,8 +40,8 @@ namespace DTcms.DAL
                 conn.Open();
                 using (SqlTransaction trans = conn.BeginTransaction())
                 {
-                    //try
-                    //{
+                    try
+                    {
                     StringBuilder strSql = new StringBuilder();
                     strSql.Append("insert into ReceivedMoney(");
                     strSql.Append("StoreInOrderId,CustomerId,Name,EndChargingTime,BeginChargingTime,ReceivedTime,ChargingCount,TotalPrice,InvoicedPrice,CreateTime,Admin,Remark,Status,HasBeenInvoiced,InvoicedTime,InvoicedOperator,UnitPriceDetails)");
@@ -91,12 +91,12 @@ namespace DTcms.DAL
 
 
                     trans.Commit();
-                    //}
-                    //catch
-                    //{
-                    //    trans.Rollback();
-                    //    return false;
-                    //}
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
                 }
             }
 
@@ -112,8 +112,8 @@ namespace DTcms.DAL
                 conn.Open();
                 using (SqlTransaction trans = conn.BeginTransaction())
                 {
-                    //try
-                    //{
+                    try
+                    {
                     StringBuilder strSql = new StringBuilder();
                     strSql.Append("update ReceivedMoney set ");
                     strSql.Append("StoreInOrderId=@StoreInOrderId,");
@@ -177,12 +177,12 @@ namespace DTcms.DAL
                     new StoreInOrder().UpdateField(conn, trans, model.StoreInOrderId, "ChargingTime = '" + model.ReceivedTime + "'");
 
                     trans.Commit();
-                    //}
-                    //catch
-                    //{
-                    //    trans.Rollback();
-                    //    return false;
-                    //}
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
                 }
             }
 

@@ -59,8 +59,8 @@ namespace DTcms.DAL
                 conn.Open();
                 using (SqlTransaction trans = conn.BeginTransaction())
                 {
-                    //try
-                    //{
+                    try
+                    {
                         StringBuilder strSql = new StringBuilder();
                         strSql.Append("insert into CheckRecord(");
                         strSql.Append("VehicleId,CustomerId,HandlingModeId,GoodsId,Status,CreateTime,Admin,InspectionNumber,CaseNumber,CheckResult,RealName,LinkTel,Remark,CheckTime");
@@ -117,12 +117,12 @@ namespace DTcms.DAL
                         #endregion
 
                         trans.Commit();
-                    //}
-                    //catch
-                    //{
-                    //    trans.Rollback();
-                    //    return false;
-                    //}
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
                 }
             }
 
@@ -144,8 +144,8 @@ namespace DTcms.DAL
                 conn.Open();
                 using (SqlTransaction trans = conn.BeginTransaction())
                 {
-                    //try
-                    //{
+                    try
+                    {
                         StringBuilder strSql = new StringBuilder();
                         strSql.Append("update CheckRecord set ");
                         strSql.Append(" VehicleId = @VehicleId , ");
@@ -216,12 +216,12 @@ namespace DTcms.DAL
                         #endregion
 
                         trans.Commit();
-                    //}
-                    //catch
-                    //{
-                    //    trans.Rollback();
-                    //    return false;
-                    //}
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
                 }
 
 
