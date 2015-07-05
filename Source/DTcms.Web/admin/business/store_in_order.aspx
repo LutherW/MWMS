@@ -154,7 +154,8 @@
                             <a href="javascript:void(0);" onclick="showCostDialog(<%#Eval("Id") %>);">费用项</a>
                         </td>
                         <td align="center">
-                            <a href="store_in_order_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a>
+                            <%#Eval("Status").ToString().Equals("2") ? "修改" : "<a href=\"store_in_order_edit.aspx?action="+DTEnums.ActionEnum.Edit+"&id="+Eval("Id")+"\">修改</a>" %>
+                            
                         </td>
                     </tr>
                 </ItemTemplate>

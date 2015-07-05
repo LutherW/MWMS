@@ -40,6 +40,7 @@
                 var liHtml = '<li>'
                 + '<a href="javascript:;" onclick="delNode(this);" class="del" title="删除"></a>'
                 + '<div class="btns">名称：<input type="text" name="CostName" value="" style="width: 70%;" /></div>'
+                + '<div class="btns">单价：<input type="text" name="CostUnitPrice" onkeydown="return checkForFloat(this,event);" value="0.00" style="width: 50%;" /></div>'
                 + '<div class="btns">数量：<input type="text" name="CostCount" onkeydown="return checkForFloat(this,event);" value="0.00" style="width: 50%;" /></div>'
                 + '<div class="btns">类型：<select name="CostType"><option value="+" selected=\'selected\'>收入</option><option value="-">支出</option></select></div>'
                 + '<div class="btns">总价：<input type="text" name="CostTotalPrice" onkeydown="return checkForFloat(this,event);" value="0.00" style="width: 50%;" />元</div>'
@@ -201,6 +202,9 @@
                                         <a href="javascript:;" onclick="delNode(this);" class="del" title="删除"></a>
                                         <div class="btns">
                                             名称：<input type="text" name="CostName" value="<%#Eval("Name")%>" style="width: 70%;" />
+                                        </div>
+                                        <div class="btns">
+                                            单价：<input type="text" name="CostUnitPrice" onkeydown="return checkForFloat(this,event);" value="<%#Eval("UnitPrice") %>" style="width: 70%;" />
                                         </div>
                                         <div class="btns">
                                             数量：<input type="text" name="CostCount" onkeydown="return checkForFloat(this,event);" value="<%#Eval("Count") %>" style="width: 70%;" />

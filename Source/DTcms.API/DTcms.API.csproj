@@ -40,7 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Senparc.Weixin.MP">
-      <HintPath>..\..\..\..\Senparc.Weixin.MP.dll</HintPath>
+      <HintPath>..\DTcms.Common\bin\Debug\Senparc.Weixin.MP.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

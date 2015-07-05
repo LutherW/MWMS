@@ -113,6 +113,7 @@
                             <th width="5%">选择</th>
                             <th align="left">入库单</th>
                             <th align="left" width="10%">总金额</th>
+                            <th align="left" width="10%">发票金额</th>
                             <th align="left" width="8%">单价</th>
                             <th align="left" width="8%">出库数量</th>
                             <th align="left">客户</th>
@@ -132,6 +133,7 @@
                         </td>
                         <td><%#Eval("AccountNumber")%></td>
                         <td><%#Eval("TotalMoney")%></td>
+                        <td><%#Eval("InvoiceMoney")%></td>
                         <td><%#Eval("UnitPrice")%></td>
                         <td><%#Eval("Count")%></td>
                         <td><%#Eval("CustomerName")%></td>

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="storein_cost_list.aspx.cs" Inherits="DTcms.Web.admin.search.storein_cost_list" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="storein_cost_list.aspx.cs" Inherits="DTcms.Web.admin.business.storein_cost_list" %>
 
 <%@ Import Namespace="DTcms.Common" %>
 

@@ -8,13 +8,13 @@ namespace DTcms.Model
     public class CheckCost
     {
         public CheckCost() { }
-        public CheckCost(string name, decimal count, decimal totalprice, string customer, string remark)
+        public CheckCost(string name, decimal unitPrice, decimal count, decimal totalprice, string customer, string remark)
         {
             _name = name;
             _count = count;
             _totalprice = totalprice;
             _customer = customer;
-            _unitprice = _count > 0 ? _totalprice / _count : 0;
+            _unitprice = unitPrice;
             _status = 0;
             _remark = remark;
             _hasbeeninvoiced = false;

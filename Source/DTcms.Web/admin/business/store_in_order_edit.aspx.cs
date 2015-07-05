@@ -101,7 +101,7 @@ namespace DTcms.Web.admin.business
             this.rptGoodsList.DataBind();
         }
 
-        protected string GetStoreOptions(string storeId) 
+        protected string GetStoreOptions(string storeId)
         {
             string storeOptions = "";
             storeOptions += "<option value='0'>选择仓库</option>";
@@ -113,7 +113,7 @@ namespace DTcms.Web.admin.business
                     {
                         storeOptions += "<option value='" + dr["Id"] + "' selected='selected'>" + dr["Name"] + "</option>";
                     }
-                    else 
+                    else
                     {
                         storeOptions += "<option value='" + dr["Id"] + "'>" + dr["Name"] + "</option>";
                     }
@@ -178,19 +178,22 @@ namespace DTcms.Web.admin.business
             string[] costType = Request.Form.GetValues("CostType");
             string[] costTotalPrice = Request.Form.GetValues("CostTotalPrice");
             string[] costCustomer = Request.Form.GetValues("CostCustomer");
-            if (costName != null && costCount != null && costType != null && costTotalPrice != null && costCustomer != null
-                && costName.Length > 0 && costCount.Length > 0 && costType.Length > 0 && costTotalPrice.Length > 0 && costCustomer.Length > 0)
+            string[] costUnitPrices = Request.Form.GetValues("CostUnitPrice");
+            if (costName != null && costCount != null && costType != null && costTotalPrice != null && costCustomer != null && costUnitPrices != null
+                && costName.Length > 0 && costCount.Length > 0 && costType.Length > 0 && costTotalPrice.Length > 0 && costCustomer.Length > 0 && costUnitPrices.Length > 0)
             {
                 for (int i = 0; i < costName.Length; i++)
                 {
-                    decimal count, totalPrice;
-                    if (decimal.TryParse(costCount[i], out count) && decimal.TryParse(costTotalPrice[i], out totalPrice))
+                    decimal count, totalPrice, unitPrice;
+                    if (decimal.TryParse(costCount[i], out count) 
+                        && decimal.TryParse(costTotalPrice[i], out totalPrice)
+                        && decimal.TryParse(costUnitPrices[i], out unitPrice))
                     {
                         if (costType[i].ToString().Equals("-"))
                         {
                             totalPrice *= -1;
                         }
-                        model.AddStoreInCost(new StoreInCost(costName[i], count, totalPrice, costCustomer[i], ""));
+                        model.AddStoreInCost(new StoreInCost(costName[i], unitPrice, count, totalPrice, costCustomer[i], ""));
                     }
                 }
             }
@@ -284,19 +287,22 @@ namespace DTcms.Web.admin.business
             string[] costType = Request.Form.GetValues("CostType");
             string[] costTotalPrice = Request.Form.GetValues("CostTotalPrice");
             string[] costCustomer = Request.Form.GetValues("CostCustomer");
-            if (costName != null && costCount != null && costType != null && costTotalPrice != null && costCustomer != null
-                && costName.Length > 0 && costCount.Length > 0 && costType.Length > 0 && costTotalPrice.Length > 0 && costCustomer.Length > 0)
+            string[] costUnitPrices = Request.Form.GetValues("CostUnitPrice");
+            if (costName != null && costCount != null && costType != null && costTotalPrice != null && costCustomer != null && costUnitPrices != null
+                && costName.Length > 0 && costCount.Length > 0 && costType.Length > 0 && costTotalPrice.Length > 0 && costCustomer.Length > 0 && costUnitPrices.Length > 0)
             {
                 for (int i = 0; i < costName.Length; i++)
                 {
-                    decimal count, totalPrice;
-                    if (decimal.TryParse(costCount[i], out count) && decimal.TryParse(costTotalPrice[i], out totalPrice))
+                    decimal count, totalPrice, unitPrice;
+                    if (decimal.TryParse(costCount[i], out count)
+                        && decimal.TryParse(costTotalPrice[i], out totalPrice)
+                        && decimal.TryParse(costUnitPrices[i], out unitPrice))
                     {
                         if (costType[i].ToString().Equals("-"))
                         {
                             totalPrice *= -1;
                         }
-                        model.AddStoreInCost(new StoreInCost(costName[i], count, totalPrice, costCustomer[i], ""));
+                        model.AddStoreInCost(new StoreInCost(costName[i], unitPrice, count, totalPrice, costCustomer[i], ""));
                     }
                 }
             }

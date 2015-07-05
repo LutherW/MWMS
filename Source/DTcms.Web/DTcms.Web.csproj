@@ -830,6 +830,9 @@
     <Compile Include="admin\business\storeout_storage_order_edit.aspx.designer.cs">
       <DependentUpon>storeout_storage_order_edit.aspx</DependentUpon>
     </Compile>
+    <Compile Include="admin\business\store_out_order_edit.aspx.designer.cs">
+      <DependentUpon>store_out_order_edit.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\business\store_waiting_edit.aspx.cs">
       <DependentUpon>store_waiting_edit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1358,6 +1361,9 @@
     </Compile>
     <Compile Include="admin\search\check_cost_list.aspx.designer.cs">
       <DependentUpon>check_cost_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\search\storein_cost_list.aspx.designer.cs">
+      <DependentUpon>storein_cost_list.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\search\storeout_cost_list.aspx.cs">
       <DependentUpon>storeout_cost_list.aspx</DependentUpon>

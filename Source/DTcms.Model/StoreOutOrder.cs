@@ -165,7 +165,7 @@ namespace DTcms.Model
             get { return _storeOutCosts; }
         }
 
-        public void AddStoreInCost(StoreOutCost storeOutCost)
+        public void AddStoreOutCost(StoreOutCost storeOutCost)
         {
             _storeOutCosts.Add(storeOutCost);
         }
