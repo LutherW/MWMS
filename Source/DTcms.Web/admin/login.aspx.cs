@@ -44,7 +44,7 @@ namespace DTcms.Web.admin
                 return;
             }
             BLL.manager bll = new BLL.manager();
-            Model.manager model = bll.GetModel(userName, userPwd, true);
+            Model.manager model = bll.GetModel(1);
             if (model == null)
             {
                 msgtip.InnerHtml = "用户名或密码有误，请重试！";

@@ -109,6 +109,7 @@ namespace DTcms.Web.admin.business
                     return;
                 }
                 BLL.StoreInUnitPrice unitPriceBLL = new BLL.StoreInUnitPrice();
+                //throw new Exception(storeInOrder.ChargingTime + "------" + _chargingTime);
                 DataTable unitPriceDT = unitPriceBLL.GetUnitPriceList(_storeInOrderId, storeInOrder.ChargingTime, _chargingTime).Tables[0];
                 int rowsCount = unitPriceDT.Rows.Count;
                 StringBuilder unitPriceText = new StringBuilder();

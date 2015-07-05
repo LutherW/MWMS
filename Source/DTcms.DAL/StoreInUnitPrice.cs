@@ -266,7 +266,7 @@ namespace DTcms.DAL
             strSql.Append(" where ");
             strSql.Append(" ((BeginTime >= (SELECT TOP 1 BeginTime FROM StoreInUnitPrice WHERE (BeginTime <= '" + beginTime + "' and EndTime >= '" + beginTime + "'))) ");
             strSql.Append(" or ");
-            strSql.Append(" (BeginTime <= (SELECT TOP 1 BeginTime FROM StoreInUnitPrice WHERE (BeginTime <= '" + endTime + "' and EndTime >= '" + endTime + "')))) ");
+            strSql.Append(" (EndTime <= (SELECT TOP 1 BeginTime FROM StoreInUnitPrice WHERE (BeginTime <= '" + endTime + "' and EndTime >= '" + endTime + "')))) ");
             strSql.Append(" and StoreInOrderId = " + storeInOrderId + " ");
             strSql.Append(" order by BeginTime asc");
             return DbHelperSQL.Query(strSql.ToString());
